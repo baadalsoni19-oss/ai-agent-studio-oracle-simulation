@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Agent Studio Sandbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Libre+Caslon+Text:wght@400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* VOICE: practice console for agent builders, calm, exact, dark Redwood-like
+   IDEA: a working replica of the AI Agent Studio navigation you can break safely
+   PICTURE: the studio itself: lists, editors, run trace, monitoring tables
+   COLOUR and TYPE: black rail, deep teal canvas, gold active tab, green status; Inter + Caslon hero
+   LAYOUT: fixed left rail, one page at a time, tabs per page; rail becomes a top strip on phones */
+:root{color-scheme:dark;--rail:#000;--bg:#0a3442;--bg2:#072a35;--card:#0e4658;--card2:#0b3c4c;--line:#1f5c70;--ink:#f3f1ec;--mute:#a8c2cb;
+--gold:#f0b93a;--ok:#7cbd5a;--okbg:#2f5a1f;--seed:#78bfd6;--warn:#f0b04a;--bad:#ff8a7a;--acc:#78bfd6;--btn:#134e61;--pri:#f3efe7;--prink:#0a3442}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;overflow-x:clip}
+.shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
+.shell.col{grid-template-columns:64px minmax(0,1fr)}
+aside{background:var(--rail);position:sticky;top:0;height:100vh;overflow-y:auto;padding:14px 0}
+.rtop{display:flex;justify-content:space-between;align-items:center;padding:0 14px 14px}
+.logo{display:flex;gap:10px;align-items:center;font-weight:700}
+.col .logo span,.col aside a span,.col .sim{display:none}
+aside a{display:flex;gap:14px;align-items:center;color:var(--ink);text-decoration:none;padding:13px 18px;font-weight:600;border-left:3px solid transparent;font-size:15.5px}
+aside a:hover{background:#0b2730}aside a.on{background:#0a3442;border-left-color:var(--seed)}
+aside svg{flex:none}
+.sim{margin:14px 18px;font-size:12px;color:var(--mute);border:1px solid #333;border-radius:8px;padding:8px}
+main{padding:26px clamp(14px,3vw,40px) 60px;max-width:1400px;width:100%}
+.topbar{height:6px;background:linear-gradient(90deg,#c9a66b,#d5796a,#78bfd6,#e3c86b,#c97b5a);margin:-26px calc(-1*clamp(14px,3vw,40px)) 20px}
+h1{font-size:clamp(24px,2.6vw,32px);line-height:1.1;margin:0 0 14px}
+h2{font-size:19px;margin:0 0 10px}h3{font-size:15.5px;margin:0 0 4px}
+.sub{color:var(--mute);margin:-6px 0 16px;max-width:80ch}
+.ask{display:flex;gap:12px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:18px;max-width:1220px}
+.ask input{background:transparent;border:0;color:var(--ink);font-size:17px;padding:8px 0}
+.ask input:focus-visible{outline:none}.ask:focus-within{outline:2px solid var(--seed)}
+.ring{width:22px;height:13px;border:2.5px solid var(--seed);border-radius:99px;flex:none}
+.hero{position:relative;border-radius:14px;overflow:hidden;padding:clamp(24px,5vw,60px);background:#062631;margin-bottom:18px;min-height:340px}
+.hero svg.art{position:absolute;inset:0;width:100%;height:100%}
+.hero>*:not(svg){position:relative}
+.hero .hi{font-size:clamp(20px,2.4vw,30px);font-weight:300;margin:60px 0 4px}
+.hero h1{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(34px,5vw,64px);line-height:1.05;margin:0 0 20px;max-width:16ch}
+.hero .ask{background:#04202acc;min-height:110px;align-items:flex-start}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border-radius:99px;border:1px solid var(--line);background:#0d3e4ecc;color:var(--ink);padding:8px 16px;font-weight:500;min-height:40px;cursor:pointer;font:inherit}
+.chip.w{background:#fff;color:#0a3442;border-color:#fff}
+button,.btn{font:inherit;font-weight:600;min-height:42px;padding:9px 18px;border-radius:8px;border:1px solid transparent;background:var(--btn);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+button.pri{background:var(--pri);color:var(--prink)}
+button.link{background:none;color:var(--seed);padding:4px 8px;min-height:34px}
+button.danger{background:transparent;border-color:var(--bad);color:var(--bad)}
+button.icon{background:none;padding:6px;min-width:42px;justify-content:center}
+button:disabled{opacity:.45;cursor:default}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-height:42px}
+textarea{min-height:90px;resize:vertical}
+label{display:block;font-size:13px;font-weight:600;color:var(--mute);margin:10px 0 4px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{flex:1}
+.tabs{display:flex;gap:2px;overflow-x:auto;margin:-4px 0 18px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border-radius:0;color:var(--ink);opacity:.85;border-bottom:3px solid transparent;flex:none;font-size:16px}
+.tabs button.on{color:var(--gold);opacity:1;border-color:var(--gold)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
+.two{display:grid;gap:14px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
+@media(max-width:1000px){.two{grid-template-columns:minmax(0,1fr)}}
+.list>.li{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,.8fr) auto;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
+.li .k{font-size:13px;color:var(--mute)}.li .v{overflow-wrap:anywhere}
+@media(max-width:900px){.list>.li{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.li>:first-child{grid-column:1/-1}}
+.tag{display:inline-block;font-size:12.5px;font-weight:600;padding:2px 10px;border-radius:99px;white-space:nowrap;background:#1d5568;color:var(--ink)}
+.t-pub{background:var(--ok);color:#10240a}.t-seed{background:var(--seed);color:#062631}.t-draft{background:#5a5a52;color:#fff}.t-warn{background:var(--warn);color:#2b1a00}.t-bad{background:var(--bad);color:#2b0700}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600;white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.scroll{overflow-x:auto}
+pre,code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px}
+pre{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;max-height:420px;margin:0;white-space:pre-wrap}
+.kpi{font-size:clamp(24px,2.6vw,32px);font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}.kl{font-size:13px;color:var(--mute)}
+.chat{display:flex;flex-direction:column;height:min(72vh,660px)}
+.msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px}
+.m{max-width:90%;padding:10px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.m.u{align-self:flex-end;background:var(--pri);color:var(--prink)}.m.a{align-self:flex-start;background:var(--card2);border:1px solid var(--line)}
+.m .meta{display:block;font-size:12px;color:var(--mute);margin-top:6px}
+.trace{max-height:min(72vh,660px);overflow:auto;display:flex;flex-direction:column;gap:8px}
+.step{border-left:3px solid var(--line);padding:4px 0 4px 10px}.step.llm{border-color:var(--seed)}.step.tool{border-color:var(--gold)}.step.err{border-color:var(--bad)}.step.meter{border-color:var(--ok)}.step.pol{border-color:#c58af0}
+.step b{font-size:13px}.step pre{max-height:180px;margin-top:4px}
+.bar{height:12px;background:var(--bg2);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--seed)}
+.brow{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) auto;gap:10px;align-items:center;margin:6px 0;font-size:14px}
+.node{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--card2);margin-bottom:8px}
+.num{width:30px;height:30px;border-radius:50%;background:var(--seed);color:#062631;display:grid;place-items:center;font-weight:700}
+.box{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--card2)}
+.chk{display:flex;flex-wrap:wrap;gap:6px}
+.chk label{display:flex;gap:6px;align-items:center;margin:0;font-weight:500;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+.chk input,input[type=checkbox]{width:auto;min-height:0;accent-color:var(--gold)}
+.note{font-size:13px;color:var(--mute)}
+.ok{color:var(--ok)}.bad{color:var(--bad)}
+.addc{display:flex;justify-content:space-between;gap:12px;cursor:pointer;min-height:150px;text-align:left;align-items:flex-start;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;color:var(--ink);font:inherit}
+.addc span.plus{font-size:32px;line-height:1;align-self:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.seg button{border-radius:0;background:none;min-height:38px}.seg button.on{background:var(--btn);color:var(--gold)}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--pri);color:var(--prink);padding:10px 16px;border-radius:8px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;font-weight:600}
+.toast.on{opacity:1}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);max-width:min(640px,95vw);width:100%;padding:20px;max-height:90vh}
+dialog::backdrop{background:#000a}
+@media(max-width:820px){.shell,.shell.col{grid-template-columns:minmax(0,1fr)}aside{position:sticky;height:auto;overflow-x:auto;padding:0;z-index:30}#nav{display:flex}aside a{white-space:nowrap}.rtop,.sim{display:none}aside a{flex:none;padding:12px 14px;border-left:0;border-bottom:3px solid transparent}aside a.on{border-bottom-color:var(--seed)}.col aside a span{display:inline}
+.topbar{margin-top:-26px}}
+@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;color:var(--mute);font-size:12px}.stack td:empty{display:none}.brow{grid-template-columns:minmax(0,1fr) auto}.brow .bar{grid-column:1/-1;grid-row:2}.hero .hi{margin-top:10px}}
+@media(prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<div class="shell" id="shell">
+<aside>
+  <div class="rtop"><div class="logo"><svg width="26" height="26" viewBox="0 0 26 26" aria-hidden="true"><rect x="1" y="1" width="24" height="24" rx="7" fill="#78bfd6"/><path d="M7 17l4-8 3 5 2-3 3 6" stroke="#062631" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Studio Sandbox</span></div><button class="icon" id="colb" aria-label="Collapse navigation">«</button></div>
+  <nav id="nav"></nav>
+  <div class="sim">Simulated environment. Synthetic data. Not Oracle software.<br><label for="rtmode" style="margin:8px 0 4px">Runtime</label><select id="rtmode"><option value="live">Live LLM (Claude)</option><option value="mock">Deterministic mock</option></select></div>
+</aside>
+<main><div class="topbar"></div><div id="view"></div></main>
+</div>
+<dialog id="dlg"><div id="dlgbody"></div></dialog>
+<div class="toast" id="toast" role="status"></div>
+<script>
+/* Dummy Fusion-like database. All data is synthetic. Seeded so every load is identical. */
+(function () {
+  let s = 20261125;
+  const rnd = () => { s |= 0; s = (s + 0x6D2B79F5) | 0; let t = Math.imul(s ^ (s >>> 15), 1 | s); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const pick = a => a[Math.floor(rnd() * a.length)];
+  const int = (a, b) => a + Math.floor(rnd() * (b - a + 1));
+  const money = (a, b) => Math.round((a + rnd() * (b - a)) * 100) / 100;
+  const day = (offset) => { const d = new Date(Date.UTC(2026, 10, 25)); d.setUTCDate(d.getUTCDate() + offset); return d.toISOString().slice(0, 10); };
+
+  const organizations = [
+    { OrganizationId: 300100, OrganizationCode: 'MEL1', OrganizationName: 'Melbourne Manufacturing', BusinessUnit: 'AU Operations', Type: 'Manufacturing', Currency: 'AUD' },
+    { OrganizationId: 300101, OrganizationCode: 'SYD2', OrganizationName: 'Sydney Distribution Centre', BusinessUnit: 'AU Operations', Type: 'Distribution', Currency: 'AUD' },
+    { OrganizationId: 300102, OrganizationCode: 'DXB3', OrganizationName: 'Dubai Service Depot', BusinessUnit: 'ME Operations', Type: 'Service', Currency: 'AED' }
+  ];
+  const uoms = ['Ea', 'Kg', 'Box', 'L'];
+  const itemNames = ['Lead-acid battery 12V 70Ah', 'AGM battery 12V 100Ah', 'Battery terminal kit', 'Lithium module 48V', 'Separator sheet PE', 'Electrolyte solution', 'Plastic casing small', 'Plastic casing large', 'Copper busbar', 'Charger 10A', 'Charger 40A', 'Hydraulic pump seal', 'Conveyor belt 2m', 'Bearing 6205', 'Gearbox oil 20L', 'Pallet wrap film', 'Shipping carton A4', 'Label roll thermal', 'Sensor - temperature', 'Sensor - pressure', 'PLC controller', 'Torque wrench', 'Safety gloves', 'Air filter element', 'Fan motor 240V', 'Valve 2 inch', 'Steel bracket', 'Fastener pack M8', 'Lead ingot', 'Acid-proof hose'];
+  const categories = ['Finished Goods', 'Finished Goods', 'Components', 'Finished Goods', 'Raw Material', 'Raw Material', 'Components', 'Components', 'Components', 'Finished Goods', 'Finished Goods', 'MRO Spares', 'MRO Spares', 'MRO Spares', 'MRO Spares', 'Packaging', 'Packaging', 'Packaging', 'Components', 'Components', 'Components', 'Tools', 'Consumables', 'MRO Spares', 'MRO Spares', 'MRO Spares', 'Components', 'Components', 'Raw Material', 'MRO Spares'];
+  const items = itemNames.map((n, i) => ({
+    ItemId: 100000 + i, ItemNumber: 'AS' + String(1001 + i), ItemDescription: n, ItemCategory: categories[i],
+    PrimaryUOMCode: i === 4 || i === 28 ? 'Kg' : i === 5 || i === 14 ? 'L' : 'Ea', ItemStatus: i === 13 ? 'Obsolete' : i === 22 ? 'Pending' : 'Active',
+    MakeOrBuy: categories[i] === 'Finished Goods' ? 'Make' : 'Buy', ListPrice: money(4, 900), LeadTimeDays: int(3, 45),
+    MinQty: int(20, 120), MaxQty: int(300, 900), LotControlled: rnd() > 0.6 ? 'Y' : 'N', SerialControlled: i === 3 || i === 20 ? 'Y' : 'N'
+  }));
+  const subinvs = { MEL1: ['FG', 'RM', 'WIP', 'MRO'], SYD2: ['STORES', 'STAGING'], DXB3: ['SPARES', 'QUAR'] };
+  const onhand = [];
+  items.forEach(it => organizations.forEach(o => {
+    if (o.Type === 'Service' && !['MRO Spares', 'Tools', 'Consumables'].includes(it.ItemCategory) && rnd() > 0.3) return;
+    const q = rnd() < 0.15 ? 0 : int(0, it.MaxQty);
+    onhand.push({ OrganizationCode: o.OrganizationCode, ItemNumber: it.ItemNumber, Subinventory: pick(subinvs[o.OrganizationCode]), OnhandQuantity: q, ReservedQuantity: Math.min(q, int(0, 60)), UOM: it.PrimaryUOMCode, MinQty: it.MinQty, BelowMin: q < it.MinQty ? 'Y' : 'N' });
+  }));
+  const supNames = ['Pacific Lead Metals', 'Southern Plastics Pty', 'Gulf Industrial Supplies', 'Apex Electronics', 'Murray Packaging', 'Kestrel Bearings', 'BlueLine Chemicals', 'Harbour Freight AU', 'Eastgate Tools', 'Coral Hydraulics'];
+  const suppliers = supNames.map((n, i) => ({ SupplierId: 500 + i, SupplierNumber: 'SUP' + (2001 + i), Supplier: n, Country: i === 2 || i === 9 ? 'AE' : 'AU', Status: i === 7 ? 'Inactive' : 'Active', OnTimeDeliveryPct: int(71, 99), QualityRejectPct: Math.round(rnd() * 60) / 10, PaymentTerms: pick(['Net 30', 'Net 45', 'Net 60', '2/10 Net 30']), Rating: pick(['A', 'A', 'B', 'B', 'C']) }));
+  const buyers = ['Priya Nair', 'Tom Walsh', 'Aisha Rahman', 'Liam Chen'];
+  const purchaseOrders = [];
+  for (let i = 0; i < 28; i++) {
+    const sup = pick(suppliers), it = pick(items.filter(x => x.MakeOrBuy === 'Buy')), qty = int(10, 400), ordered = day(-int(2, 70));
+    const promised = day(int(-20, 30)), status = pick(['Open', 'Open', 'Open', 'Closed', 'Approved', 'Pending Approval', 'Partially Received']);
+    const rec = status === 'Closed' ? qty : status === 'Partially Received' ? Math.floor(qty / 2) : 0;
+    purchaseOrders.push({ POHeaderId: 9000 + i, OrderNumber: 'PO' + (45000 + i), Supplier: sup.Supplier, SupplierNumber: sup.SupplierNumber, Buyer: pick(buyers), ShipToOrganization: pick(organizations).OrganizationCode, ItemNumber: it.ItemNumber, Quantity: qty, QuantityReceived: rec, UnitPrice: Math.round(it.ListPrice * 0.6 * 100) / 100, Amount: Math.round(qty * it.ListPrice * 0.6 * 100) / 100, Currency: 'AUD', OrderedDate: ordered, PromisedDate: promised, Status: status, Late: status !== 'Closed' && promised < day(0) ? 'Y' : 'N' });
+  }
+  const customers = ['Metro Auto Parts', 'Outback Fleet Services', 'Coastal Marine', 'GreenGrid Energy', 'Sunrise Mining', 'Al Noor Trading'];
+  const salesOrders = [];
+  for (let i = 0; i < 26; i++) {
+    const it = pick(items.filter(x => x.ItemCategory === 'Finished Goods')), qty = int(5, 150);
+    salesOrders.push({ HeaderId: 7000 + i, OrderNumber: 'SO' + (88000 + i), Customer: pick(customers), ItemNumber: it.ItemNumber, OrderedQuantity: qty, Amount: Math.round(qty * it.ListPrice * 100) / 100, Currency: 'AUD', RequestedShipDate: day(int(-5, 25)), FulfillOrganization: pick(['MEL1', 'SYD2']), Status: pick(['Booked', 'Awaiting Shipping', 'Shipped', 'Closed', 'On Hold']), HoldReason: '' });
+  }
+  salesOrders.forEach(so => { if (so.Status === 'On Hold') so.HoldReason = pick(['Credit check', 'Pricing review', 'Item shortage']); });
+  const workOrders = [];
+  for (let i = 0; i < 16; i++) {
+    const it = pick(items.filter(x => x.MakeOrBuy === 'Make')), qty = int(50, 600), st = pick(['Released', 'Released', 'Unreleased', 'Completed', 'On Hold', 'Closed']);
+    workOrders.push({ WorkOrderId: 6000 + i, WorkOrderNumber: 'WO' + (33000 + i), OrganizationCode: 'MEL1', ItemNumber: it.ItemNumber, PlannedQuantity: qty, CompletedQuantity: st === 'Completed' || st === 'Closed' ? qty : st === 'Released' ? int(0, qty) : 0, PlannedStartDate: day(int(-15, 10)), PlannedCompletionDate: day(int(0, 25)), Status: st, WorkCenter: pick(['Assembly', 'Formation', 'Charging', 'Packing']), ShortageFlag: rnd() > 0.7 ? 'Y' : 'N' });
+  }
+  const invoices = [];
+  purchaseOrders.slice(0, 22).forEach((po, i) => {
+    const variance = rnd() > 0.75 ? money(-180, 420) : 0;
+    invoices.push({ InvoiceId: 40000 + i, InvoiceNumber: 'INV-' + (7100 + i), Supplier: po.Supplier, PONumber: po.OrderNumber, InvoiceAmount: Math.round((po.Amount + variance) * 100) / 100, POAmount: po.Amount, Variance: variance, InvoiceDate: day(-int(1, 40)), DueDate: day(int(-10, 40)), MatchStatus: variance !== 0 ? 'Price variance' : po.QuantityReceived === 0 ? 'Not received' : 'Matched', ValidationStatus: variance !== 0 || po.QuantityReceived === 0 ? 'Needs revalidation' : 'Validated', PaymentStatus: pick(['Unpaid', 'Unpaid', 'Paid', 'Partially paid']), HoldName: variance !== 0 ? 'Price hold' : po.QuantityReceived === 0 ? 'Quantity received hold' : '' });
+  });
+  const assets = [];
+  ['Formation line 1', 'Formation line 2', 'Casting machine', 'Forklift 07', 'Forklift 12', 'Air compressor', 'Packing robot', 'Charging rack A', 'HVAC unit roof', 'Wastewater pump'].forEach((n, i) => assets.push({ AssetId: 800 + i, AssetNumber: 'AST-' + (110 + i), AssetDescription: n, OrganizationCode: i > 7 ? 'DXB3' : 'MEL1', Criticality: pick(['High', 'Medium', 'Low']), Status: i === 4 ? 'Out of service' : 'In service', MeterReading: int(1200, 48000), MeterUOM: 'Hours', LastPMDate: day(-int(5, 120)) }));
+  const maintenanceWorkOrders = [];
+  for (let i = 0; i < 14; i++) {
+    const a = pick(assets);
+    maintenanceWorkOrders.push({ WorkOrderNumber: 'MWO-' + (5100 + i), AssetNumber: a.AssetNumber, AssetDescription: a.AssetDescription, OrganizationCode: a.OrganizationCode, WorkOrderType: pick(['Preventive', 'Preventive', 'Corrective', 'Inspection']), Priority: pick(['1-Urgent', '2-High', '3-Normal']), Status: pick(['Released', 'Unreleased', 'Completed', 'Waiting for parts']), ScheduledStart: day(int(-10, 20)), EstimatedHours: int(1, 16), MaterialItem: pick(items.filter(x => x.ItemCategory === 'MRO Spares')).ItemNumber });
+  }
+  const workers = ['Priya Nair|Buyer|Procurement', 'Tom Walsh|Buyer|Procurement', 'Aisha Rahman|Category Manager|Procurement', 'Liam Chen|Buyer|Procurement', 'Grace Okafor|AP Specialist|Finance', 'Daniel Rossi|Plant Manager|Operations', 'Mei Tanaka|Production Planner|Operations', 'Omar Haddad|Maintenance Supervisor|Maintenance', 'Sophie Martin|Warehouse Lead|Logistics', 'Arjun Patel|Supply Planner|Planning', 'Hannah Brooks|HR Partner|HR', 'Noah Kim|Controller|Finance'].map((w, i) => { const [n, j, d] = w.split('|'); return { PersonNumber: String(10010 + i), DisplayName: n, JobName: j, Department: d, Email: n.toLowerCase().replace(' ', '.') + '@example.com', Manager: i === 5 ? 'Noah Kim' : d === 'Procurement' ? 'Aisha Rahman' : 'Daniel Rossi', LeaveBalanceDays: int(2, 24) }; });
+
+  const documents = [
+    { id: 'DOC-1', title: 'Procurement policy - approval limits', text: 'Purchase orders up to AUD 10,000 can be approved by the buyer. Orders between AUD 10,000 and AUD 50,000 need category manager approval. Orders above AUD 50,000 need controller approval. Emergency MRO purchases may be raised after the fact within 2 business days. Sole-source purchases above AUD 25,000 require a written justification.' },
+    { id: 'DOC-2', title: 'AP invoice tolerance policy', text: 'Invoices are auto-validated when the price variance is within 2 percent or AUD 50, whichever is lower. Quantity received holds release automatically after receipt. Price holds above tolerance must be reviewed by the buyer within 5 business days. Duplicate invoice numbers from the same supplier are rejected.' },
+    { id: 'DOC-3', title: 'Inventory replenishment standard', text: 'Min-max planning runs nightly for all buy items. When on-hand falls below min quantity, a requisition is raised for the max quantity less on-hand. Obsolete items are excluded from replenishment. Critical MRO spares keep a safety stock of 2 units at each service depot.' },
+    { id: 'DOC-4', title: 'Preventive maintenance guideline', text: 'High-criticality assets get preventive maintenance every 30 days or 500 meter hours, whichever comes first. Medium assets every 90 days. Work orders waiting for parts more than 7 days are escalated to the maintenance supervisor. Forklifts out of service must be tagged and isolated.' },
+    { id: 'DOC-5', title: 'Supplier performance scorecard', text: 'Suppliers are rated A when on-time delivery is at least 95 percent and quality rejects are below 1 percent. Rating B is 85 to 95 percent on-time. Rating C is below 85 percent on-time or rejects above 3 percent; C suppliers are reviewed quarterly and may be placed on hold for new orders.' }
+  ];
+
+  window.FDB = {
+    organizations, items, onhand, suppliers, purchaseOrders, salesOrders, workOrders, invoices, assets, maintenanceWorkOrders, workers, documents,
+    resources: {
+      organizations: { path: '/fscmRestApi/resources/11.13.18.05/inventoryOrganizations', key: 'OrganizationCode', area: 'Inventory' },
+      items: { path: '/fscmRestApi/resources/11.13.18.05/itemsV2', key: 'ItemNumber', area: 'Product Management' },
+      onhand: { path: '/fscmRestApi/resources/11.13.18.05/inventoryOnhandBalances', key: 'ItemNumber', area: 'Inventory' },
+      suppliers: { path: '/fscmRestApi/resources/11.13.18.05/suppliers', key: 'SupplierNumber', area: 'Procurement' },
+      purchaseOrders: { path: '/fscmRestApi/resources/11.13.18.05/purchaseOrders', key: 'OrderNumber', area: 'Procurement' },
+      salesOrders: { path: '/fscmRestApi/resources/11.13.18.05/salesOrdersForOrderHub', key: 'OrderNumber', area: 'Order Management' },
+      workOrders: { path: '/fscmRestApi/resources/11.13.18.05/workOrders', key: 'WorkOrderNumber', area: 'Manufacturing' },
+      invoices: { path: '/fscmRestApi/resources/11.13.18.05/invoices', key: 'InvoiceNumber', area: 'Payables' },
+      assets: { path: '/fscmRestApi/resources/11.13.18.05/maintenanceAssets', key: 'AssetNumber', area: 'Maintenance' },
+      maintenanceWorkOrders: { path: '/fscmRestApi/resources/11.13.18.05/maintenanceWorkOrders', key: 'WorkOrderNumber', area: 'Maintenance' },
+      workers: { path: '/hcmRestApi/resources/11.13.18.05/workers', key: 'PersonNumber', area: 'HCM' }
+    }
+  };
+
+  /* q-filter parser: Field=Val;Field>10;Field LIKE '*abc*' (Fusion REST style, simplified) */
+  const cond = (row, c) => {
+    const m = c.match(/^\s*(\w+)\s*(>=|<=|!=|=|>|<|\sLIKE\s)\s*'?(.*?)'?\s*$/i);
+    if (!m) throw new Error('Bad q expression: ' + c);
+    const [, f, opRaw, v] = m, op = opRaw.trim().toUpperCase(), x = row[f];
+    if (x === undefined) throw new Error('Unknown attribute ' + f);
+    const num = typeof x === 'number', vv = num ? Number(v) : String(v);
+    switch (op) {
+      case '=': return num ? x === vv : String(x).toLowerCase() === vv.toLowerCase();
+      case '!=': return num ? x !== vv : String(x).toLowerCase() !== vv.toLowerCase();
+      case '>': return x > vv; case '<': return x < vv; case '>=': return x >= vv; case '<=': return x <= vv;
+      case 'LIKE': return new RegExp('^' + vv.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i').test(String(x));
+    }
+  };
+  FDB.query = (res, { q = '', limit = 25, offset = 0, fields = '' } = {}) => {
+    const t = FDB[res]; if (!t) throw new Error('Resource not found: ' + res);
+    let rows = t.filter(r => !q || q.split(';').filter(Boolean).every(c => cond(r, c)));
+    const total = rows.length;
+    rows = rows.slice(offset, offset + Math.min(Number(limit) || 25, 500));
+    if (fields) { const fl = fields.split(',').map(x => x.trim()); rows = rows.map(r => Object.fromEntries(fl.filter(k => k in r).map(k => [k, r[k]]))); }
+    return { items: rows, count: rows.length, totalResults: total, hasMore: offset + rows.length < total, limit: Number(limit) || 25, offset };
+  };
+  FDB.update = (res, key, patch) => {
+    const meta = FDB.resources[res], row = FDB[res].find(r => String(r[meta.key]) === String(key));
+    if (!row) throw new Error(res + ' ' + key + ' not found');
+    Object.keys(patch).forEach(k => { if (!(k in row)) throw new Error('Unknown attribute ' + k); row[k] = patch[k]; });
+    return row;
+  };
+  FDB.searchDocs = (query, k = 2) => {
+    const terms = String(query).toLowerCase().split(/\W+/).filter(w => w.length > 2);
+    const chunks = [];
+    FDB.documents.forEach(d => d.text.split(/(?<=\.)\s+/).forEach(sn => chunks.push({ doc: d.title, id: d.id, text: sn })));
+    return chunks.map(c => ({ ...c, score: terms.reduce((a, t) => a + (c.text.toLowerCase().includes(t) ? 1 : 0) + (c.doc.toLowerCase().includes(t) ? 0.5 : 0), 0) }))
+      .filter(c => c.score > 0).sort((a, b) => b.score - a.score).slice(0, k * 2);
+  };
+})();
+
+</script>
+<script>
+/* Sandbox core: state, policies, tool layer, runtimes, deployment. Exposes window.CORE */
+(function () {
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const uid = p => p + '_' + Math.random().toString(36).slice(2, 8);
+const clone = o => JSON.parse(JSON.stringify(o));
+const fmt = n => Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 0 });
+const usd = n => '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const TODAY = '2026-11-25';
+const codeOf = (name, seeded) => (seeded ? 'SIM_' : 'CUST_') + String(name).toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '');
+const KEY = 'fsim-v2';
+
+const TOOL_TYPES = { business_object: 'Business object', document: 'Document (RAG)', deep_link: 'Deeplink', calculator: 'Function: calculator', external_rest: 'External REST (connector)', mcp: 'MCP (connector)', email: 'Email', human_approval: 'Human approval', docgen: 'Document template' };
+const AGENT_TYPES = { seeded: 'Oracle seeded', modified: 'Modified seeded', custom: 'Fully custom', marketplace: 'Marketplace partner' };
+const FAMILIES = { SCM: ['Inventory', 'Procurement', 'Manufacturing', 'Maintenance', 'Order Management'], ERP: ['Payables', 'General Ledger', 'Expenses'], HCM: ['Core HR', 'Talent'], CX: ['Service', 'Sales'] };
+
+const seed = () => ({
+  tools: [
+    { id: 't_items', name: 'Items', type: 'business_object', resource: 'items', ops: ['GET'], description: 'Item master: number, description, category, status, lead time, min/max.' },
+    { id: 't_onhand', name: 'On-hand balances', type: 'business_object', resource: 'onhand', ops: ['GET'], description: 'On-hand and reserved quantity by org and subinventory, with below-min flag.' },
+    { id: 't_po', name: 'Purchase orders', type: 'business_object', resource: 'purchaseOrders', ops: ['GET', 'PATCH'], description: 'POs: supplier, buyer, quantities, promised date, status, late flag.' },
+    { id: 't_sup', name: 'Suppliers', type: 'business_object', resource: 'suppliers', ops: ['GET'], description: 'Supplier master with on-time %, reject %, rating, payment terms.' },
+    { id: 't_so', name: 'Sales orders', type: 'business_object', resource: 'salesOrders', ops: ['GET'], description: 'Sales orders with status and hold reason.' },
+    { id: 't_wo', name: 'Work orders', type: 'business_object', resource: 'workOrders', ops: ['GET'], description: 'Manufacturing work orders, planned vs completed, shortage flag.' },
+    { id: 't_inv', name: 'AP invoices', type: 'business_object', resource: 'invoices', ops: ['GET', 'PATCH'], description: 'Payables invoices with PO match status, variance, holds, validation status.' },
+    { id: 't_ast', name: 'Maintenance assets', type: 'business_object', resource: 'assets', ops: ['GET'], description: 'Assets with criticality, status, meter reading, last PM date.' },
+    { id: 't_mwo', name: 'Maintenance work orders', type: 'business_object', resource: 'maintenanceWorkOrders', ops: ['GET', 'PATCH'], description: 'Maintenance work orders by asset, type, priority, status.' },
+    { id: 't_wrk', name: 'Workers', type: 'business_object', resource: 'workers', ops: ['GET'], description: 'Worker directory with job, department, manager, leave balance.' },
+    { id: 't_docs', name: 'Policy documents', type: 'document', docIds: ['DOC-1', 'DOC-2', 'DOC-3', 'DOC-4', 'DOC-5'], description: 'Semantic search over uploaded policy documents.' },
+    { id: 't_calc', name: 'Calculator', type: 'calculator', description: 'Evaluates arithmetic expressions.' },
+    { id: 't_link', name: 'Redwood deeplinks', type: 'deep_link', description: 'Returns a deeplink to a Redwood page for a record.' },
+    { id: 't_mail', name: 'Notify by email', type: 'email', description: 'Sends an email through the configured email account (sandbox outbox).' },
+    { id: 't_fx', name: 'Exchange rates', type: 'external_rest', connectorId: 'c_fx', description: 'Daily FX rates from an external REST connector.' },
+    { id: 't_mcp', name: 'Carrier tracking', type: 'mcp', connectorId: 'c_track', description: 'Shipment tracking status from a third-party MCP server.' },
+    { id: 't_appr', name: 'Approval request', type: 'human_approval', processId: 'ap_po', description: 'Creates a human-in-the-loop approval task.' },
+    { id: 't_dg', name: 'Generate expedite letter', type: 'docgen', templateId: 'dt_exp', description: 'Fills the PO expedite email template with live data.' }
+  ],
+  topics: [
+    { id: 'tp_scope', name: 'Stay in scope', instructions: 'Only answer questions about this organisation\'s supply chain, finance, maintenance and HR data. Politely decline anything else.' },
+    { id: 'tp_cite', name: 'Cite records', instructions: 'Always quote record numbers (item, PO, invoice, work order) and name the tool the data came from. Never invent records.' },
+    { id: 'tp_write', name: 'Confirm before update', instructions: 'Never update a record unless the user explicitly asked for that exact change in this turn. State before and after values.' },
+    { id: 'tp_policy', name: 'Answer policy from documents', instructions: 'Answer policy questions only from the document tool. If the documents do not cover it, say so.' },
+    { id: 'tp_fmt', name: 'Concise format', instructions: 'Keep answers short. Plain lists of at most 10 rows. No markdown tables.' }
+  ],
+  agents: [
+    { id: 'a_inv', name: 'Inventory Analyst', role: 'Finds shortages and explains stock positions', instructions: 'Check on-hand against min quantity and open work orders. Flag items below min and obsolete items.', tools: ['t_items', 't_onhand', 't_wo', 't_calc'], topics: ['tp_scope', 'tp_cite', 'tp_fmt'] },
+    { id: 'a_proc', name: 'Procurement Assistant', role: 'Tracks purchase orders and supplier performance', instructions: 'Report late or open POs, supplier ratings and approval rules. Offer a deeplink to the PO. Draft expedite letters when asked.', tools: ['t_po', 't_sup', 't_docs', 't_calc', 't_link', 't_mail', 't_dg'], topics: ['tp_scope', 'tp_cite', 'tp_write', 'tp_policy'] },
+    { id: 'a_ap', name: 'AP Invoice Validator', role: 'Explains invoice holds and variances', instructions: 'Compare invoice amount with PO amount, apply the tolerance policy, and recommend release or review.', tools: ['t_inv', 't_po', 't_docs', 't_fx', 't_calc'], topics: ['tp_cite', 'tp_write', 'tp_policy'] },
+    { id: 'a_mnt', name: 'Maintenance Planner', role: 'Plans and expedites maintenance work', instructions: 'Find overdue PM, work orders waiting for parts, and check spare part stock.', tools: ['t_ast', 't_mwo', 't_onhand', 't_docs'], topics: ['tp_scope', 'tp_cite', 'tp_policy', 'tp_fmt'] },
+    { id: 'a_ord', name: 'Order Status Agent', role: 'Answers customer order questions', instructions: 'Give sales order status, hold reasons and shipment tracking.', tools: ['t_so', 't_onhand', 't_mcp'], topics: ['tp_scope', 'tp_cite', 'tp_fmt'] },
+    { id: 'a_pol', name: 'Policy Advisor', role: 'Answers policy questions from documents', instructions: 'Search the policy documents and answer with the document title.', tools: ['t_docs'], topics: ['tp_policy', 'tp_fmt'] },
+    { id: 'a_hr', name: 'Employee Helper', role: 'Directory and leave lookups', instructions: 'Find workers, managers and leave balances.', tools: ['t_wrk', 't_link'], topics: ['tp_scope', 'tp_fmt'] }
+  ],
+  workflows: [
+    { id: 'wf_short', name: 'Item Shortage Advisor', seeded: true, description: 'Finds items below min and checks supply coverage on open and late POs.', type: 'supervisor', llmId: 'l_prem', agentType: 'seeded', family: 'SCM', product: 'Inventory', status: 'Published', version: 1, agents: ['a_inv', 'a_proc'], nodes: [], minutesSaved: 12, starters: ['Which items are below min at MEL1?', 'Are there late POs for AS1006?', 'What approval is needed for a AUD 30,000 PO?'] },
+    { id: 'wf_mnt', name: 'Maintenance Work Order Assistant', seeded: true, description: 'Helps planners find overdue PM and parts-constrained work orders.', type: 'supervisor', llmId: 'l_basic', agentType: 'seeded', family: 'SCM', product: 'Maintenance', status: 'Published', version: 1, agents: ['a_mnt'], nodes: [], minutesSaved: 8, starters: ['Which maintenance work orders are waiting for parts?', 'Which assets are out of service?'] },
+    { id: 'wf_inv', name: 'Invoice Validation Workflow', seeded: false, description: 'Finds invoices on hold, checks tolerance, routes for approval, generates a summary and notifies AP.', type: 'workflow', llmId: 'l_prem', agentType: 'custom', family: 'ERP', product: 'Payables', status: 'Draft', version: 0, agents: ['a_ap'], minutesSaved: 20,
+      nodes: [{ id: 'n1', type: 'agent', agentId: 'a_ap', prompt: 'List invoices that need revalidation and explain each variance against the tolerance policy.' }, { id: 'n2', type: 'condition', expr: 'contains:variance' }, { id: 'n3', type: 'approval', processId: 'ap_inv' }, { id: 'n4', type: 'docgen', templateId: 'dt_inv' }, { id: 'n5', type: 'email', to: 'ap-team@example.com' }],
+      starters: ['Run the validation for this week'] },
+    { id: 'wf_pol', name: 'Policy Q&A', seeded: false, description: 'Document-grounded answers over procurement, AP, inventory and maintenance policies.', type: 'supervisor', llmId: 'l_basic', agentType: 'custom', family: 'SCM', product: 'Procurement', status: 'Draft', version: 0, agents: ['a_pol'], nodes: [], minutesSaved: 5, starters: ['What is the AP invoice tolerance?', 'How often do high criticality assets get PM?'] },
+    { id: 'wf_ord', name: 'Order Status Assistant', seeded: false, description: 'Order status, holds and carrier tracking. Uses a BYO LLM that still needs a credential.', type: 'supervisor', llmId: 'l_byo', agentType: 'custom', family: 'SCM', product: 'Order Management', status: 'Draft', version: 0, agents: ['a_ord', 'a_hr'], nodes: [], minutesSaved: 6, starters: ['Which sales orders are on hold?', 'Track shipment for SO88003'] }
+  ],
+  applications: [
+    { id: 'app_inv', name: 'Inventory balance analyst', family: 'SCM', product: 'Inventory', description: 'Workspace that surfaces shortages and supply risk, then lets planners ask follow-ups.', workflows: ['wf_short'], prompt: 'Which items are below min at MEL1?', status: 'Draft', version: 0,
+      insights: [{ label: 'Lines below min', res: 'onhand', q: 'BelowMin=Y', agg: 'count' }, { label: 'Late POs', res: 'purchaseOrders', q: 'Late=Y', agg: 'count' }, { label: 'Work orders with shortage', res: 'workOrders', q: 'ShortageFlag=Y', agg: 'count' }] },
+    { id: 'app_spend', name: 'Spend anomaly radar', family: 'ERP', product: 'Payables', description: 'Flags invoice variances and routes them through approval.', workflows: ['wf_inv'], prompt: 'Run the validation for this week', status: 'Draft', version: 0,
+      insights: [{ label: 'Invoices needing revalidation', res: 'invoices', q: 'ValidationStatus=Needs revalidation', agg: 'count' }, { label: 'Total variance (AUD)', res: 'invoices', q: 'MatchStatus=Price variance', agg: 'sum:Variance' }, { label: 'Unpaid invoices', res: 'invoices', q: 'PaymentStatus=Unpaid', agg: 'count' }] },
+    { id: 'app_mnt', name: 'Maintenance planner workspace', family: 'SCM', product: 'Maintenance', description: 'Backlog and parts constraints for maintenance supervisors.', workflows: ['wf_mnt'], prompt: 'Which maintenance work orders are waiting for parts?', status: 'Draft', version: 0,
+      insights: [{ label: 'Waiting for parts', res: 'maintenanceWorkOrders', q: 'Status=Waiting for parts', agg: 'count' }, { label: 'Assets out of service', res: 'assets', q: 'Status=Out of service', agg: 'count' }, { label: 'Urgent work orders', res: 'maintenanceWorkOrders', q: 'Priority=1-Urgent', agg: 'count' }] }
+  ],
+  connectorDefs: [
+    { id: 'cd_rest', name: 'REST API', kind: 'REST', fields: 'Base URL, auth connection, operations' },
+    { id: 'cd_mcp', name: 'MCP server', kind: 'MCP', fields: 'Server URL, auth connection, exposed tools' },
+    { id: 'cd_web', name: 'Web pages', kind: 'Web', fields: 'Seed URLs, crawl depth, refresh schedule' },
+    { id: 'cd_oic', name: 'Integration flow', kind: 'OIC', fields: 'Integration endpoint, auth connection' },
+    { id: 'cd_files', name: 'Document library', kind: 'Files', fields: 'Library URL, folders, file types' }
+  ],
+  connectors: [
+    { id: 'c_fx', name: 'Exchange rates', family: 'ERP', defId: 'cd_rest', endpoint: 'https://api.example-fx.test/v1', connId: 'cn_fx', status: 'Tested', description: 'Daily FX rates for invoice currency checks.' },
+    { id: 'c_track', name: 'Carrier tracking', family: 'SCM', defId: 'cd_mcp', endpoint: 'mcp://carrier-tracking.test', connId: '', status: 'Configured', description: 'Shipment status from carriers. Needs a credential and a test.' },
+    { id: 'c_web', name: 'Supplier web pages', family: 'SCM', defId: 'cd_web', endpoint: 'https://suppliers.example.test', connId: '', status: 'Tested', description: 'Public supplier capability pages for sourcing questions.' }
+  ],
+  docTemplates: [
+    { id: 'dt_exp', name: 'PO expedite email', format: 'Email', res: 'purchaseOrders', q: 'Late=Y', body: 'Subject: Expedite request for late purchase orders\n\nDear {{Supplier}},\n\nThe following purchase orders are past their promised date as of {{today}}:\n{{rows:OrderNumber,ItemNumber,Quantity,PromisedDate}}\n\nPlease confirm revised ship dates within 2 business days.\n\nRegards,\n{{Buyer}}' },
+    { id: 'dt_inv', name: 'Invoice hold summary', format: 'Report', res: 'invoices', q: 'ValidationStatus=Needs revalidation', body: 'Invoice hold summary, {{today}}\n\n{{count}} invoices need revalidation:\n{{rows:InvoiceNumber,Supplier,InvoiceAmount,Variance,HoldName}}\n\nAction: buyers review price holds within 5 business days.' },
+    { id: 'dt_pm', name: 'Maintenance backlog report', format: 'Report', res: 'maintenanceWorkOrders', q: 'Status=Waiting for parts', body: 'Maintenance backlog, {{today}}\n\n{{count}} work orders are waiting for parts:\n{{rows:WorkOrderNumber,AssetDescription,Priority,MaterialItem}}' }
+  ],
+  policyTemplates: [
+    { id: 'pt_mask', name: 'Mask attributes', description: 'Replaces listed attributes with *** in every tool response for a business object.', params: ['resource', 'fields'] },
+    { id: 'pt_block', name: 'Block tool', description: 'Stops agents from calling a tool.', params: ['toolId'] },
+    { id: 'pt_appr', name: 'Approval before update', description: 'Turns every update on a business object into an approval task.', params: ['resource', 'processId'] },
+    { id: 'pt_rows', name: 'Row limit', description: 'Caps rows returned by any business object query.', params: ['max'] },
+    { id: 'pt_phr', name: 'Blocked phrases', description: 'Refuses user input that contains any listed phrase.', params: ['phrases'] }
+  ],
+  policies: [
+    { id: 'p_mask', name: 'Mask worker contact and leave', templateId: 'pt_mask', scope: 'all', active: true, params: { resource: 'workers', fields: 'Email,LeaveBalanceDays' } },
+    { id: 'p_po', name: 'PO updates need approval', templateId: 'pt_appr', scope: 'all', active: true, params: { resource: 'purchaseOrders', processId: 'ap_po' } },
+    { id: 'p_rows', name: 'Max 20 rows per query', templateId: 'pt_rows', scope: 'all', active: true, params: { max: 20 } },
+    { id: 'p_phr', name: 'No pay or bank questions', templateId: 'pt_phr', scope: 'all', active: true, params: { phrases: 'salary, bank account, password' } }
+  ],
+  approvalProcesses: [
+    { id: 'ap_po', name: 'PO change approval', approvers: 'Aisha Rahman', rule: 'Any approver', escalateDays: 2 },
+    { id: 'ap_inv', name: 'Invoice hold release', approvers: 'Grace Okafor, Noah Kim', rule: 'All approvers', escalateDays: 3 }
+  ],
+  creds: {
+    connections: [{ id: 'cn_fx', name: 'FX API key', type: 'API key', user: '', secret: '••••3f9a' }, { id: 'cn_fusion', name: 'Sandbox pod service account', type: 'Basic', user: 'SIM_INTEGRATION', secret: '••••77aa' }],
+    llms: [{ id: 'l_basic', name: 'Basic LLM (GPT-oss class)', tier: 'basic', provider: 'Provider-hosted', connId: 'built-in' }, { id: 'l_prem', name: 'Premium LLM (GPT-5 mini class)', tier: 'premium', provider: 'Provider-hosted', connId: 'built-in' }, { id: 'l_byo', name: 'BYO model (external key)', tier: 'byo', provider: 'External', connId: '' }],
+    chat: { greeting: 'Hi, I can help with supply chain questions.', showSources: true, feedback: true },
+    email: [{ id: 'em1', address: 'ai-agents@example.com', display: 'AI Agents', status: 'Verified' }],
+    channels: [{ id: 'ch_page', name: 'Redwood page embed', status: 'Enabled' }, { id: 'ch_teams', name: 'Microsoft Teams', status: 'Not configured' }, { id: 'ch_slack', name: 'Slack', status: 'Not configured' }],
+    dataSources: [{ id: 'ds1', name: 'Sandbox pod SIM-DEV', url: 'https://sim-pod.example.test', status: 'Connected' }]
+  },
+  deeplinks: [{ id: 'dl_po', name: 'Purchase order', page: 'purchase-order', pattern: '/fscmUI/redwood/purchase-order/view?id={OrderNumber}' }, { id: 'dl_item', name: 'Item', page: 'item', pattern: '/fscmUI/redwood/item/view?id={ItemNumber}' }, { id: 'dl_inv', name: 'Invoice', page: 'invoice', pattern: '/fscmUI/redwood/invoice/view?id={InvoiceNumber}' }, { id: 'dl_wo', name: 'Work order', page: 'work-order', pattern: '/fscmUI/redwood/work-order/view?id={WorkOrderNumber}' }],
+  functions: [{ id: 'fn_calc', name: 'calculate', description: 'Arithmetic on numbers', signature: 'calculate(expression)' }, { id: 'fn_days', name: 'days_between', description: 'Days between two ISO dates', signature: 'days_between(from, to)' }, { id: 'fn_today', name: 'today', description: 'Sandbox business date', signature: 'today()' }],
+  schemas: [{ id: 'sc_inv', name: 'Supplier invoice', fields: [{ name: 'InvoiceNumber', type: 'string' }, { name: 'Supplier', type: 'string' }, { name: 'InvoiceDate', type: 'date' }, { name: 'PONumber', type: 'string' }, { name: 'TotalAmount', type: 'number' }, { name: 'Currency', type: 'string' }] }, { id: 'sc_pack', name: 'Packing slip', fields: [{ name: 'ShipmentNumber', type: 'string' }, { name: 'PONumber', type: 'string' }, { name: 'ItemNumber', type: 'string' }, { name: 'QuantityShipped', type: 'number' }] }],
+  evalSets: [
+    { id: 'ev1', name: 'Shortage advisor regression', wfId: 'wf_short', cases: [{ q: 'Which items are below min at MEL1?', expect: 'AS1, below' }, { q: 'What approval is needed for a AUD 30,000 PO?', expect: 'category manager' }, { q: 'Are there late POs?', expect: 'PO4' }], runs: [] },
+    { id: 'ev2', name: 'Policy Q&A accuracy', wfId: 'wf_pol', cases: [{ q: 'What is the AP invoice tolerance?', expect: '2 percent, 50' }, { q: 'How often do high criticality assets get PM?', expect: '30 days, 500' }, { q: 'Can I pay a supplier in bitcoin?', expect: 'not cover' }], runs: [] }
+  ]
+});
+const DEF_RATES = { basic: 0, premium: 5, byo: 15, tokenCeiling: 10000, docGen: 25, meterTools: false, toolRate: 1, freeGrant: 20000, unitPrice: 0.01 };
+const DEF_EST = { growth: 5, platform: false, platformFee: 500000, platformUnits: 30000000, fx: 1.53, showAud: false, rows: [
+  { name: 'AP invoice validation', agentType: 'custom', llm: 'premium', users: 1, perDay: 500, days: 22, tokens: 6000, docs: 0, env: 'prod' },
+  { name: 'Item shortage advisor', agentType: 'modified', llm: 'premium', users: 40, perDay: 6, days: 22, tokens: 8000, docs: 0, env: 'prod' },
+  { name: 'Policy Q&A', agentType: 'custom', llm: 'basic', users: 300, perDay: 2, days: 22, tokens: 4000, docs: 0, env: 'prod' },
+  { name: 'UAT testing (all agents)', agentType: 'custom', llm: 'premium', users: 8, perDay: 25, days: 10, tokens: 7000, docs: 0, env: 'nonprod' }] };
+
+/* ---------- state ---------- */
+let S;
+const fresh = () => ({ ...seed(), usage: [], daily: [], events: [], outbox: [], tasks: [], chats: {}, rates: { ...DEF_RATES }, est: clone(DEF_EST), hourly: 65, ui: { mode: 'live', play: 'wf_short' } });
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const byId = (arr, id) => (arr === 'llms' ? S.creds.llms : arr === 'connections' ? S.creds.connections : S[arr]).find(x => x.id === id);
+const tierOf = wf => byId('llms', wf.llmId)?.tier || 'basic';
+const event = (kind, text) => { S.events.unshift({ ts: new Date().toISOString(), kind, text }); S.events = S.events.slice(0, 300); };
+try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
+if (!S || !S.workflows) { S = fresh(); S.workflows.filter(w => w.status === 'Published').forEach(w => { w.deployedOn = '2026-10-26'; synth(w, 30); }); }
+if (!(window.claude && window.claude.use) && S.ui.mode === 'live') S.ui.mode = 'api'; if (!S.ui.model) S.ui.model = 'claude-sonnet-5-5';
+S.rates = { ...DEF_RATES, ...S.rates }; S.est = { ...clone(DEF_EST), ...S.est }; S.ui = { mode: 'live', play: 'wf_short', ...S.ui };
+
+/* synthetic production history, generated on successful deployment */
+function synth(wf, days) {
+  const rate = DEF_RATES[tierOf(wf)] ?? 0, base = 6 + Math.floor(Math.random() * 30), err = 0.01 + Math.random() * 0.05;
+  for (let i = days; i >= 1; i--) {
+    const d = new Date(Date.UTC(2026, 10, 25)); d.setUTCDate(d.getUTCDate() - i); const wd = d.getUTCDay() % 6 !== 0;
+    const s = Math.max(0, Math.round(base * (wd ? 1 : 0.2) * (0.7 + Math.random() * 0.6) * (1 + (days - i) / days * 0.4)));
+    const actions = s * (Math.random() < 0.15 ? 2 : 1);
+    S.daily.push({ d: d.toISOString().slice(0, 10), wf: wf.id, s, au: actions * rate, e: Math.round(s * err * (0.5 + Math.random())), src: 'synthetic', tok: s * (3500 + Math.floor(Math.random() * 5000)) });
+  }
+}
+
+/* ---------- policy engine ---------- */
+let CUR = null; // { wf, trace }
+const activePolicies = wf => S.policies.filter(p => p.active && (p.scope === 'all' || p.scope === wf?.id));
+function polTrace(p, msg) { CUR?.trace.push({ k: 'pol', t: `Policy · ${p.name}`, d: { effect: msg } }); }
+function applyReadPolicies(res, out) {
+  activePolicies(CUR?.wf).forEach(p => {
+    if (p.templateId === 'pt_rows' && out.items.length > +p.params.max) { out.items = out.items.slice(0, +p.params.max); out.hasMore = true; polTrace(p, 'rows capped at ' + p.params.max); }
+    if (p.templateId === 'pt_mask' && p.params.resource === res) { const f = String(p.params.fields).split(',').map(s => s.trim()); out.items = out.items.map(r => { const c = { ...r }; f.forEach(k => { if (k in c) c[k] = '***'; }); return c; }); polTrace(p, 'masked ' + f.join(', ')); }
+  });
+  return out;
+}
+function checkBlocked(tool) { const p = activePolicies(CUR?.wf).find(p => p.templateId === 'pt_block' && p.params.toolId === tool.id); if (p) { polTrace(p, 'blocked ' + tool.name); throw new Error(`Blocked by policy "${p.name}"`); } }
+function inputBlocked(text, wf) { const t = text.toLowerCase(); for (const p of activePolicies(wf).filter(p => p.templateId === 'pt_phr')) { const hit = String(p.params.phrases).split(',').map(s => s.trim().toLowerCase()).filter(Boolean).find(ph => t.includes(ph)); if (hit) return { p, hit }; } return null; }
+
+/* ---------- approvals ---------- */
+function createTask(processId, summary, action) {
+  const pr = byId('approvalProcesses', processId) || { name: 'Ad hoc', approvers: 'Manager' };
+  const t = { id: 'APR-' + (1001 + S.tasks.length), ts: new Date().toISOString(), processId, process: pr.name, approvers: pr.approvers, wf: CUR?.wf?.name || '', summary: String(summary).slice(0, 400), action: action || null, status: 'Pending' };
+  S.tasks.unshift(t); event('approval', `${t.id} created for ${pr.approvers}`); return t;
+}
+function decideTask(id, ok) {
+  const t = S.tasks.find(x => x.id === id); if (!t || t.status !== 'Pending') return;
+  t.status = ok ? 'Approved' : 'Rejected'; t.decided = new Date().toISOString();
+  if (ok && t.action) { try { FDB.update(t.action.res, t.action.key, t.action.changes); t.result = 'Update applied'; } catch (e) { t.result = 'Update failed: ' + e.message; } }
+  event('approval', `${t.id} ${t.status.toLowerCase()}${t.result ? ' · ' + t.result : ''}`);
+}
+
+/* ---------- document templates ---------- */
+function renderTemplate(tpl, overrideQ) {
+  const r = FDB.query(tpl.res, { q: overrideQ ?? tpl.q, limit: 50 }), first = r.items[0] || {};
+  return tpl.body.replace(/\{\{rows:([^}]+)\}\}/g, (_, f) => r.items.map(x => '• ' + f.split(',').map(k => x[k.trim()]).join(' · ')).join('\n') || '(no matching records)')
+    .replace(/\{\{count\}\}/g, r.totalResults).replace(/\{\{today\}\}/g, TODAY).replace(/\{\{(\w+)\}\}/g, (_, k) => first[k] ?? '');
+}
+
+/* ---------- tool layer ---------- */
+const FX = { 'AUD-USD': 0.654, 'USD-AUD': 1.53, 'AED-AUD': 0.417, 'AUD-AED': 2.4, 'USD-AED': 3.6725, 'AED-USD': 0.2723 };
+const hash = s => [...String(s)].reduce((a, c) => (a * 31 + c.charCodeAt(0)) >>> 0, 7);
+function connectorGate(tool) { const c = byId('connectors', tool.connectorId); if (!c) throw new Error('Connector missing'); if (c.status !== 'Tested') throw new Error(`Connector "${c.name}" is ${c.status}; add a credential and test it in Connectors`); return c; }
+function toolFns(tool) {
+  const out = [], wrap = run => i => { checkBlocked(tool); return run(i || {}); };
+  if (tool.type === 'business_object') {
+    const meta = FDB.resources[tool.resource], attrs = Object.keys(FDB[tool.resource][0] || {}).join(', ');
+    out.push({ name: 'get_' + tool.resource, description: `${tool.name} (${meta.path}). ${tool.description} Attributes: ${attrs}. Filter q like Status=Open;Late=Y;Quantity>100;Supplier LIKE '*lead*'.`, inputSchema: { type: 'object', properties: { q: { type: 'string' }, limit: { type: 'integer' }, fields: { type: 'string' } } },
+      run: wrap(i => applyReadPolicies(tool.resource, FDB.query(tool.resource, { q: i.q || '', limit: i.limit || 15, fields: i.fields || '' }))) });
+    if ((tool.ops || []).includes('PATCH')) out.push({ name: 'update_' + tool.resource, description: `Update one ${tool.name} record by ${meta.key}. changes = { attribute: newValue }.`, inputSchema: { type: 'object', properties: { key: { type: 'string' }, changes: { type: 'object' } }, required: ['key', 'changes'] },
+      run: wrap(i => { const before = clone(FDB[tool.resource].find(r => String(r[meta.key]) === String(i.key)) || {}); if (!before[meta.key]) throw new Error(`${meta.key} ${i.key} not found`);
+        const p = activePolicies(CUR?.wf).find(p => p.templateId === 'pt_appr' && p.params.resource === tool.resource);
+        if (p) { const t = createTask(p.params.processId, `Update ${i.key}: ${JSON.stringify(i.changes)}`, { res: tool.resource, key: i.key, changes: i.changes || {} }); polTrace(p, 'update routed to approval ' + t.id); return { status: 'PENDING_APPROVAL', task: t.id, approvers: t.approvers, before }; }
+        return { status: 200, before, after: FDB.update(tool.resource, i.key, i.changes || {}) }; }) });
+  }
+  if (tool.type === 'document') out.push({ name: 'search_documents', description: tool.description + ' Returns passages with document title.', inputSchema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] }, run: wrap(i => ({ passages: FDB.searchDocs(i.query).filter(p => (tool.docIds || []).includes(p.id)) })) });
+  if (tool.type === 'calculator') out.push({ name: 'calculate', description: 'Evaluate arithmetic, e.g. (120-45)*1.1', inputSchema: { type: 'object', properties: { expression: { type: 'string' } }, required: ['expression'] }, run: wrap(i => { const e = String(i.expression); if (!/^[\d\s+\-*/().%]+$/.test(e)) throw new Error('Only numbers and + - * / ( ) % allowed'); return { result: Function('"use strict";return (' + e + ')')() }; }) });
+  if (tool.type === 'deep_link') out.push({ name: 'get_deep_link', description: 'Deeplink to a Redwood page. page one of: ' + S.deeplinks.map(d => d.page).join(', '), inputSchema: { type: 'object', properties: { page: { type: 'string' }, recordId: { type: 'string' } }, required: ['page'] },
+    run: wrap(i => { const d = S.deeplinks.find(x => x.page === i.page); if (!d) throw new Error('No deeplink defined for page ' + i.page); return { url: 'https://sim-pod.example.test' + d.pattern.replace(/\{\w+\}/, encodeURIComponent(i.recordId || '')), note: 'Sandbox link' }; }) });
+  if (tool.type === 'email') out.push({ name: 'send_email', description: tool.description, inputSchema: { type: 'object', properties: { to: { type: 'string' }, subject: { type: 'string' }, body: { type: 'string' } }, required: ['to', 'subject', 'body'] },
+    run: wrap(i => { const acct = S.creds.email.find(e => e.status === 'Verified'); if (!acct) throw new Error('No verified email account in Credentials'); S.outbox.unshift({ ts: new Date().toISOString(), from: acct.address, to: i.to, subject: i.subject, body: i.body }); return { status: 'queued in sandbox outbox', from: acct.address }; }) });
+  if (tool.type === 'external_rest') out.push({ name: 'get_exchange_rate', description: tool.description + ' Currencies: AUD, USD, AED.', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } }, required: ['from', 'to'] },
+    run: wrap(i => { const c = connectorGate(tool); const k = String(i.from).toUpperCase() + '-' + String(i.to).toUpperCase(); if (!FX[k]) throw new Error('HTTP 404 rate not found ' + k); return { pair: k, rate: FX[k], asOf: TODAY, connector: c.name }; }) });
+  if (tool.type === 'mcp') out.push({ name: 'track_shipment', description: tool.description, inputSchema: { type: 'object', properties: { orderNumber: { type: 'string' } }, required: ['orderNumber'] },
+    run: wrap(i => { const c = connectorGate(tool); const h = hash(i.orderNumber), st = ['Label created', 'In transit', 'Out for delivery', 'Delivered', 'Delayed - weather'][h % 5]; return { orderNumber: i.orderNumber, carrier: ['StarTrack', 'Aramex', 'TNT'][h % 3], status: st, eta: st === 'Delivered' ? null : '2026-11-' + (26 + h % 4), connector: c.name }; }) });
+  if (tool.type === 'human_approval') out.push({ name: 'request_approval', description: tool.description, inputSchema: { type: 'object', properties: { summary: { type: 'string' } }, required: ['summary'] }, run: wrap(i => createTask(tool.processId, i.summary)) });
+  if (tool.type === 'docgen') out.push({ name: 'generate_document', description: tool.description + ' Optional q overrides the template filter.', inputSchema: { type: 'object', properties: { q: { type: 'string' } } },
+    run: wrap(i => { const t = byId('docTemplates', tool.templateId); if (!t) throw new Error('Template missing'); CUR && (CUR.docs = (CUR.docs || 0) + 1); return { template: t.name, document: renderTemplate(t, i.q || undefined) }; }) });
+  return out.map(f => ({ ...f, toolId: tool.id, toolName: tool.name }));
+}
+function wfTools(wf, agentIds) {
+  const map = new Map();
+  (agentIds || wf.agents).forEach(aid => { const a = byId('agents', aid); if (!a) return; a.tools.forEach(tid => { const t = byId('tools', tid); if (!t) return; toolFns(t).forEach(f => { if (!map.has(f.name)) map.set(f.name, { ...f, agents: [] }); map.get(f.name).agents.push(a.name); }); }); });
+  return [...map.values()];
+}
+function systemPrompt(wf, agentIds, extra) {
+  const agents = (agentIds || wf.agents).map(id => byId('agents', id)).filter(Boolean), topics = [...new Set(agents.flatMap(a => a.topics))];
+  return [`You are an AI agent workflow inside a SIMULATED AI Agent Studio sandbox. All data is synthetic. Today is ${TODAY}.`, `Workflow: ${wf.name} (${wf.type}). ${wf.description}`,
+    wf.type === 'supervisor' && agents.length > 1 ? 'You are the supervisor agent. Route each request to the best agent below and say which agent handled it.' : '',
+    'Agents:', ...agents.map(a => `- ${a.name} (${a.role}). Instructions: ${a.instructions} Tools: ${a.tools.map(t => byId('tools', t)?.name).filter(Boolean).join(', ')}.`),
+    'Topics:', ...topics.map(id => byId('topics', id)).filter(Boolean).map(t => `- ${t.name}: ${t.instructions}`),
+    'Always call tools for data; never invent records, numbers or links. If a tool returns PENDING_APPROVAL, tell the user the change awaits approval. Reply in plain text.', extra || ''].filter(Boolean).join('\n');
+}
+function meter(tier, { chars, toolCalls, docs = 0, llmCalls = 1 }) {
+  const r = S.rates, tokens = Math.ceil(chars / 4), actions = Math.max(1, llmCalls) * Math.max(1, Math.ceil(tokens / Math.max(1, llmCalls) / r.tokenCeiling));
+  return { tokens, actions, au: actions * (r[tier] ?? 0) + (r.meterTools ? toolCalls * r.toolRate : 0) + docs * r.docGen };
+}
+
+/* ---------- runtimes ---------- */
+let sample = null, onTrace = () => {};
+const IN_CLAUDE = !!(window.claude && window.claude.use);
+const MODELS = { 'claude-sonnet-5-5': 'Claude Sonnet 5.5', 'claude-haiku-5-5': 'Claude Haiku 5.5 (cheapest)', 'claude-opus-5-5': 'Claude Opus 5.5' };
+const keyStore = {
+  get() { try { return sessionStorage.getItem('fsim-key') || localStorage.getItem('fsim-key') || ''; } catch (e) { return ''; } },
+  set(k, remember) { try { sessionStorage.setItem('fsim-key', k); if (remember) localStorage.setItem('fsim-key', k); else localStorage.removeItem('fsim-key'); } catch (e) {} },
+  clear() { try { sessionStorage.removeItem('fsim-key'); localStorage.removeItem('fsim-key'); } catch (e) {} },
+  remembered() { try { return !!localStorage.getItem('fsim-key'); } catch (e) { return false; } }
+};
+/* which runtime a call will use right now: live (Claude in claude.ai), api (viewer's key), mock */
+function runtime() {
+  if (S.ui.mode === 'live' && sample) return 'live';
+  if (S.ui.mode === 'api' && keyStore.get()) return 'api';
+  return 'mock';
+}
+async function apiCall({ system, messages, tools, maxTokens = 2000 }) {
+  const key = keyStore.get(); if (!key) throw { code: 'no_key', message: 'No Claude API key entered' };
+  let res;
+  try {
+    res = await fetch('https://api.anthropic.com/v1/messages', { method: 'POST', headers: { 'content-type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+      body: JSON.stringify({ model: S.ui.model || 'claude-sonnet-5-5', max_tokens: maxTokens, ...(system ? { system } : {}), messages, ...(tools && tools.length ? { tools } : {}) }) });
+  } catch (e) { throw { code: 'blocked', message: 'The browser could not reach api.anthropic.com. Inside the Claude artifact viewer direct API calls are blocked; open the standalone copy instead. Otherwise check your network.' }; }
+  const j = await res.json().catch(() => ({}));
+  if (!res.ok) { if (res.status === 401) keyStore.clear(); throw { code: res.status === 401 ? 'bad_key' : res.status === 429 ? 'rate_limited' : 'api_error', message: (j.error && j.error.message) || 'HTTP ' + res.status }; }
+  return j;
+}
+/* Messages API tool-use loop; tools carry execute() like the sample capability */
+async function apiLoop(system, messages, tools, onText) {
+  const defs = tools.map(t => ({ name: t.name, description: t.description, input_schema: t.inputSchema || { type: 'object', properties: {} } }));
+  const msgs = messages.map(m => ({ role: m.role, content: m.content })); let inTok = 0, outTok = 0, text = '';
+  for (let turn = 0; turn < 8; turn++) {
+    const j = await apiCall({ system, messages: msgs, tools: defs });
+    inTok += (j.usage && j.usage.input_tokens) || 0; outTok += (j.usage && j.usage.output_tokens) || 0;
+    const content = j.content || [], uses = content.filter(c => c.type === 'tool_use');
+    text = content.filter(c => c.type === 'text').map(c => c.text).join('\n').trim(); if (text && onText) onText(text);
+    if (j.stop_reason !== 'tool_use' || !uses.length) break;
+    msgs.push({ role: 'assistant', content });
+    const results = [];
+    for (const u of uses) { const t = tools.find(x => x.name === u.name); let out, err = false; try { if (!t) throw new Error('Unknown tool ' + u.name); out = await t.execute(u.input || {}); } catch (e) { out = { error: e.message }; err = true; } results.push({ type: 'tool_result', tool_use_id: u.id, content: JSON.stringify(out), is_error: err }); }
+    msgs.push({ role: 'user', content: results });
+  }
+  return { text, inTok, outTok };
+}
+/* one-shot JSON answer from whichever LLM runtime is active */
+async function askJson(prompt) {
+  const rt = runtime();
+  if (rt === 'live') return sample.json(prompt, { cache: false });
+  if (rt === 'api') { const j = await apiCall({ messages: [{ role: 'user', content: prompt + '\nReturn only the JSON, no prose, no code fences.' }], maxTokens: 3000 }); const t = (j.content || []).filter(c => c.type === 'text').map(c => c.text).join(''); const a = t.indexOf('{'), b = t.lastIndexOf('}'); if (a < 0 || b < a) throw new Error('Model did not return JSON'); return JSON.parse(t.slice(a, b + 1)); }
+  throw { code: 'mock', message: 'No LLM runtime' };
+}
+async function liveCall(wf, agentIds, messages, trace, onText, extra) {
+  const fns = wfTools(wf, agentIds); let chars = 0, calls = 0;
+  const sys = systemPrompt(wf, agentIds, extra);
+  const msgs = messages.map((m, i) => ({ role: m.role, content: i === 0 ? sys + '\n\n--- user ---\n' + m.content : m.content }));
+  chars += msgs.reduce((a, m) => a + m.content.length, 0);
+  trace.push({ k: 'llm', t: `LLM request · ${byId('llms', wf.llmId)?.name} → ${runtime() === 'api' ? 'your Claude API key' : 'Claude'}`, d: { agents: (agentIds || wf.agents).map(id => byId('agents', id)?.name), tools: fns.map(f => f.name), promptChars: chars } });
+  const tools = fns.map(f => ({ name: f.name, description: f.description, inputSchema: f.inputSchema, execute: async input => {
+    calls++; const t0 = performance.now();
+    try { const res = f.run(input || {}); chars += JSON.stringify(res).length + JSON.stringify(input || {}).length; trace.push({ k: 'tool', t: `Tool · ${f.toolName} → ${f.name} (${f.agents.join(', ')})`, d: { input, output: res, ms: Math.round(performance.now() - t0) } }); onTrace(); return res; }
+    catch (e) { trace.push({ k: 'err', t: `Tool error · ${f.name}`, d: { input, error: e.message } }); onTrace(); throw e; } } }));
+  if (runtime() === 'api') {
+    const r = await apiLoop(sys, messages, tools, onText);
+    trace.push({ k: 'llm', t: `Claude API usage · ${MODELS[S.ui.model] || S.ui.model}`, d: { input_tokens: r.inTok, output_tokens: r.outTok } });
+    return { text: r.text, chars: (r.inTok + r.outTok) * 4, calls };
+  }
+  const r = await sample(msgs, { tools, cache: false, onText: ({ text }) => onText && onText(text) });
+  chars += (r.text || '').length; return { text: r.text || '', chars, calls };
+}
+const KW = { items: ['item', 'product', 'sku', 'lead time', 'obsolete'], onhand: ['on hand', 'onhand', 'stock', 'inventory', 'shortage', 'below min', 'available', 'spare'], purchaseOrders: ['po', 'purchase order', 'late', 'buyer', 'promised'], suppliers: ['supplier', 'vendor', 'rating', 'on-time', 'on time'],
+  salesOrders: ['sales order', 'customer', 'on hold', 'ship'], workOrders: ['work order', 'production', 'manufactur'], invoices: ['invoice', 'variance', 'payable', 'validat', 'revalidation'], assets: ['asset', 'machine', 'forklift', 'equipment', 'out of service'], maintenanceWorkOrders: ['maintenance', 'mwo', 'preventive', 'repair', 'waiting for parts'], workers: ['employee', 'worker', 'manager', 'leave', 'who is'] };
+const FN_KW = { search_documents: ['policy', 'approval', 'tolerance', 'guideline', 'standard', 'rule', 'how often', 'need', 'required', 'allowed', 'can i'], calculate: ['calculate', 'compute'], send_email: ['email', 'notify'], get_exchange_rate: ['exchange', 'convert', 'fx rate'], track_shipment: ['track', 'shipment', 'carrier'], request_approval: ['request approval', 'raise approval'], get_deep_link: ['link', 'open page'], generate_document: ['letter', 'draft', 'expedite', 'generate', 'report'] };
+function mockFilters(res, text) {
+  const t = text.toLowerCase(), f = [], row = FDB[res][0] || {}, add = (k, v) => { if (k in row) f.push(`${k}=${v}`); }, m = (re, k) => { const x = text.match(re); if (x) add(k, x[0].toUpperCase()); };
+  m(/\bAS\d{4}\b/i, 'ItemNumber'); m(/\b(MEL1|SYD2|DXB3)\b/i, res === 'purchaseOrders' ? 'ShipToOrganization' : res === 'salesOrders' ? 'FulfillOrganization' : 'OrganizationCode');
+  if (res === 'purchaseOrders') m(/\bPO\d{5}\b/i, 'OrderNumber'); if (res === 'salesOrders') m(/\bSO\d{5}\b/i, 'OrderNumber'); if (res === 'invoices') { m(/\bINV-\d{4}\b/i, 'InvoiceNumber'); m(/\bPO\d{5}\b/i, 'PONumber'); }
+  if (res === 'workOrders' || res === 'maintenanceWorkOrders') m(/\b(MWO-\d{4}|WO\d{5})\b/i, 'WorkOrderNumber'); m(/\bAST-\d{3}\b/i, 'AssetNumber');
+  if (/\blate\b|overdue/.test(t)) add('Late', 'Y'); if (/below min|shortage|short\b/.test(t)) { add('BelowMin', 'Y'); add('ShortageFlag', 'Y'); }
+  if (/\bopen\b/.test(t)) add('Status', 'Open'); if (/on hold/.test(t)) add('Status', 'On Hold'); if (/waiting for parts/.test(t)) add('Status', 'Waiting for parts'); if (/out of service/.test(t)) add('Status', 'Out of service'); if (/obsolete/.test(t)) add('ItemStatus', 'Obsolete');
+  if (/variance/.test(t)) add('MatchStatus', 'Price variance'); if (/revalidat/.test(t)) add('ValidationStatus', 'Needs revalidation'); if (/rating c|poor/.test(t)) add('Rating', 'C');
+  FDB.suppliers.forEach(s => { if (t.includes(s.Supplier.toLowerCase().split(' ')[0]) && 'Supplier' in row) f.push(`Supplier=${s.Supplier}`); });
+  return f.join(';');
+}
+function mockAnswer(wf, agentIds, text, trace) {
+  const fns = wfTools(wf, agentIds), t = text.toLowerCase(); let chars = text.length + systemPrompt(wf, agentIds).length, calls = 0; const parts = [];
+  trace.push({ k: 'llm', t: 'Mock planner · keyword intent match (no LLM)', d: { tools: fns.map(f => f.name) } });
+  const score = f => { const res = f.name.replace(/^(get|update)_/, ''); return (KW[res] || FN_KW[f.name] || []).reduce((a, k) => a + (t.includes(k) ? (k.length > 4 ? 2 : 1) : 0), 0); };
+  const ranked = fns.filter(f => !f.name.startsWith('update_')).map(f => ({ f, s: score(f) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
+  const run = (f, input) => { calls++; try { const o = f.run(input); chars += JSON.stringify(o).length; trace.push({ k: 'tool', t: `Tool · ${f.toolName} → ${f.name} (${f.agents.join(', ')})`, d: { input, output: o } }); return o; } catch (e) { trace.push({ k: 'err', t: 'Tool error · ' + f.name, d: { input, error: e.message } }); parts.push('Tool error: ' + e.message); return null; } };
+  const upd = text.match(/(?:update|set|change)\s+(\S+)\s+.*?status\s+to\s+([A-Za-z ]+?)\.?$/i);
+  if (upd) { const key = upd[1].toUpperCase(), f = fns.find(x => x.name.startsWith('update_') && FDB[x.name.slice(7)].some(r => String(r[FDB.resources[x.name.slice(7)].key]).toUpperCase() === key));
+    if (f) { const o = run(f, { key, changes: { Status: upd[2].trim() } }); if (o) parts.push(o.status === 'PENDING_APPROVAL' ? `Change to ${key} sent for approval (${o.task}, approver ${o.approvers}). Current status: ${o.before.Status}.` : `Updated ${key}: Status ${o.before.Status} → ${o.after.Status}.`); return { text: parts.join('\n'), chars, calls }; } }
+  if (!ranked.length) return { text: `The mock runtime could not map this to a tool on "${wf.name}". The documents and data do not cover it, or try naming a record type (PO, item, invoice). Tools: ${[...new Set(fns.map(f => f.toolName))].join(', ')}.`, chars, calls };
+  ranked.slice(0, ranked[1] && ranked[1].s === ranked[0].s ? 2 : 1).forEach(({ f }) => {
+    if (f.name === 'search_documents') { const o = run(f, { query: text }); if (o) parts.push(o.passages.length ? 'From policy documents:\n' + o.passages.slice(0, 3).map(p => `• ${p.text} (${p.doc})`).join('\n') : 'The documents do not cover this.'); }
+    else if (f.name === 'calculate') { const ex = (text.match(/[\d\s+\-*/().%]{3,}/) || [''])[0].trim(); const o = ex && run(f, { expression: ex }); if (o) parts.push(`${ex} = ${o.result}`); }
+    else if (f.name === 'track_shipment') { const so = (text.match(/\bSO\d{5}\b/i) || ['SO88000'])[0].toUpperCase(); const o = run(f, { orderNumber: so }); if (o) parts.push(`${so}: ${o.status} with ${o.carrier}${o.eta ? ', ETA ' + o.eta : ''}.`); }
+    else if (f.name === 'get_exchange_rate') { const c = text.toUpperCase().match(/\b(AUD|USD|AED)\b.*?\b(AUD|USD|AED)\b/); const o = c && run(f, { from: c[1], to: c[2] }); if (o) parts.push(`${o.pair} rate ${o.rate} as of ${o.asOf}.`); }
+    else if (f.name === 'generate_document') { const o = run(f, {}); if (o) parts.push(`Generated "${o.template}":\n\n${o.document}`); }
+    else if (f.name.startsWith('get_') && FDB[f.name.slice(4)]) {
+      const res = f.name.slice(4), q = mockFilters(res, text), o = run(f, { q, limit: 8 }); if (!o) return; const key = FDB.resources[res].key;
+      const show = r => Object.entries(r).filter(([k]) => k !== key).slice(0, 5).map(([k, v]) => `${k} ${v}`).join(', ');
+      parts.push(`${f.toolName}: ${o.totalResults} record(s)${q ? ' where ' + q.replace(/;/g, ' and ') : ''}.` + (o.items.length ? '\n' + o.items.slice(0, 8).map(r => `• ${r[key]}: ${show(r)}`).join('\n') : '') + (o.totalResults > 8 ? `\n…${o.totalResults - 8} more.` : ''));
+    }
+    else if (f.name === 'send_email') { const o = run(f, { to: 'user@example.com', subject: 'Agent notification', body: text }); if (o) parts.push('Email queued in sandbox outbox.'); }
+    else if (f.name === 'request_approval') { const o = run(f, { summary: text }); if (o) parts.push(`Approval ${o.id} created for ${o.approvers}.`); }
+    else if (f.name === 'get_deep_link') { const o = run(f, { page: S.deeplinks[0].page, recordId: '' }); if (o) parts.push(o.url); }
+  });
+  const answer = parts.join('\n\n'); chars += answer.length; return { text: answer, chars, calls };
+}
+
+async function runWorkflow(wf, userText, onText, opts = {}) {
+  const trace = []; CUR = { wf, trace, docs: 0 }; opts.trace !== false && (S.trace = trace); onTrace();
+  const tier = tierOf(wf), rt = opts.forceMock ? 'mock' : runtime(), live = rt !== 'mock', mode = rt;
+  let text = '', chars = 0, calls = 0, llmCalls = 0, error = false;
+  const blocked = inputBlocked(userText, wf);
+  if (blocked) { polTrace(blocked.p, `input refused, phrase "${blocked.hit}"`); text = `I can't help with that here. A policy (${blocked.p.name}) blocks requests about "${blocked.hit}".`; onText && onText(text); }
+  else try {
+    if (tier === 'byo' && !byId('llms', wf.llmId)?.connId) throw new Error('BYO LLM has no credential. Add a connection in Credentials → LLM');
+    if (wf.type === 'workflow') {
+      let last = userText, stop = false; const out = [];
+      for (const [i, n] of (wf.nodes || []).entries()) {
+        if (stop) { trace.push({ k: 'meter', t: `Node ${i + 1} skipped`, d: {} }); continue; }
+        if (n.type === 'agent') { llmCalls++; const pr = `${n.prompt}\nUser input: ${userText}\nPrevious step output: ${last === userText ? '(none)' : last}`;
+          const r = live ? await liveCall(wf, [n.agentId], [{ role: 'user', content: pr }], trace, null, 'You are one node in a workflow. Return only this step\'s result.') : mockAnswer(wf, [n.agentId], n.prompt + ' ' + userText, trace);
+          chars += r.chars; calls += r.calls; last = r.text; out.push(`Step ${i + 1} · ${byId('agents', n.agentId)?.name}:\n${r.text}`); }
+        else if (n.type === 'condition') { const [op, v] = String(n.expr).split(':'), has = last.toLowerCase().includes(String(v || '').toLowerCase()), ok = op === 'not' ? !has : has; stop = !ok; trace.push({ k: 'meter', t: `Node ${i + 1} · Condition ${n.expr} → ${ok}`, d: {} }); out.push(`Step ${i + 1} · Condition "${n.expr}": ${ok ? 'met, continue' : 'not met, stop'}`); }
+        else if (n.type === 'approval') { const t = createTask(n.processId, last, null); trace.push({ k: 'tool', t: `Node ${i + 1} · Approval ${t.id} → ${t.approvers}`, d: t }); out.push(`Step ${i + 1} · Approval ${t.id} sent to ${t.approvers} (${t.process}). The workflow continues; decide it in Approvals.`); }
+        else if (n.type === 'docgen') { const tp = byId('docTemplates', n.templateId); CUR.docs++; const doc = tp ? renderTemplate(tp) : '(template missing)'; trace.push({ k: 'tool', t: `Node ${i + 1} · Document template "${tp?.name}"`, d: { chars: doc.length } }); last = doc; out.push(`Step ${i + 1} · Generated "${tp?.name}":\n${doc}`); }
+        else if (n.type === 'email') { const acct = S.creds.email.find(e => e.status === 'Verified'); if (!acct) throw new Error('No verified email account'); S.outbox.unshift({ ts: new Date().toISOString(), from: acct.address, to: n.to, subject: `${wf.name} result`, body: last }); trace.push({ k: 'tool', t: `Node ${i + 1} · Email → ${n.to}`, d: { from: acct.address } }); out.push(`Step ${i + 1} · Email sent to ${n.to} (sandbox outbox)`); }
+      }
+      text = out.join('\n\n'); onText && onText(text);
+    } else {
+      llmCalls = 1; const hist = (opts.history || []).concat([{ role: 'user', content: userText }]);
+      const r = live ? await liveCall(wf, null, hist, trace, onText) : mockAnswer(wf, null, userText, trace);
+      text = r.text; chars = r.chars; calls = r.calls; onText && onText(text);
+    }
+    if (trace.some(s => s.k === 'err')) error = true;
+  } catch (e) {
+    error = true; if (['bad_key', 'blocked', 'no_key', 'not_granted'].includes(e.code)) CUR.noCharge = true; trace.push({ k: 'err', t: 'Run failed', d: { code: e.code, message: e.message } });
+    if (e.code === 'not_granted') { sample = null; S.ui.mode = 'mock'; }
+    if (e.code === 'bad_key') S.ui.mode = 'api';
+    text = (e.text ? e.text + '\n\n' : '') + `Run failed: ${e.message || e.code}.`; onText && onText(text);
+  }
+  const m = meter(tier, { chars: chars || userText.length, toolCalls: calls, docs: CUR.docs, llmCalls: Math.max(1, llmCalls) });
+  if (blocked || CUR.noCharge) { m.au = 0; m.actions = 0; }
+  trace.push({ k: 'meter', t: `Metered · ${m.au} AI Units`, d: { estTokens: m.tokens, actions: m.actions, tier, rate: S.rates[tier], toolCalls: calls, docs: CUR.docs, usd: +(m.au * S.rates.unitPrice).toFixed(4) } });
+  const src = opts.src || 'test';
+  S.usage.unshift({ ts: new Date().toISOString(), wf: wf.id, name: wf.name, tier, mode, src, tokens: m.tokens, actions: m.actions, tools: calls, au: m.au, error }); S.usage = S.usage.slice(0, 500);
+  const d = TODAY, row = S.daily.find(x => x.d === d && x.wf === wf.id && x.src === src); if (row) { row.s++; row.au += m.au; row.e += error ? 1 : 0; row.tok += m.tokens; } else S.daily.push({ d, wf: wf.id, s: 1, au: m.au, e: error ? 1 : 0, src, tok: m.tokens });
+  save(); onTrace(); CUR = null;
+  return { text, m, mode, error };
+}
+
+/* ---------- deployment ---------- */
+function validate(wf) {
+  const c = [], add = (ok, t, sev = 'error') => c.push({ ok, t, sev });
+  const llm = byId('llms', wf.llmId);
+  add(!!llm, 'LLM selected' + (llm ? ': ' + llm.name : ''));
+  if (llm?.tier === 'byo') add(!!llm.connId, 'BYO LLM has a credential (Credentials → LLM)');
+  if (wf.type === 'supervisor') add(wf.agents.length > 0, 'At least one agent in the supervisor');
+  else { add((wf.nodes || []).some(n => n.type === 'agent'), 'At least one agent node');
+    (wf.nodes || []).forEach((n, i) => { if (n.type === 'agent') add(!!byId('agents', n.agentId), `Node ${i + 1}: agent exists`); if (n.type === 'docgen') add(!!byId('docTemplates', n.templateId), `Node ${i + 1}: document template exists`); if (n.type === 'approval') add(!!byId('approvalProcesses', n.processId), `Node ${i + 1}: approval process exists`); if (n.type === 'email') add(S.creds.email.some(e => e.status === 'Verified'), `Node ${i + 1}: verified email account`); }); }
+  const agentIds = [...new Set([...wf.agents, ...(wf.nodes || []).map(n => n.agentId).filter(Boolean)])];
+  agentIds.map(id => byId('agents', id)).filter(Boolean).forEach(a => { add(a.tools.length > 0, `${a.name}: has at least one tool`); add(!!a.instructions.trim(), `${a.name}: has instructions`); });
+  const tools = [...new Set(agentIds.flatMap(id => byId('agents', id)?.tools || []))].map(id => byId('tools', id)).filter(Boolean);
+  tools.filter(t => t.connectorId).forEach(t => { const cn = byId('connectors', t.connectorId); add(cn?.status === 'Tested', `${t.name}: connector "${cn?.name}" tested`); });
+  tools.filter(t => t.type === 'email').forEach(() => add(S.creds.email.some(e => e.status === 'Verified'), 'Email tool: verified email account'));
+  add((wf.starters || []).length > 0, 'Starter questions defined (used for the smoke test)', 'warning');
+  return c;
+}
+async function deploy(wf) {
+  const checks = validate(wf), errs = checks.filter(x => !x.ok && x.sev === 'error');
+  if (errs.length) { event('deploy', `${wf.name} deployment failed: ${errs.length} check(s)`); save(); return { ok: false, checks }; }
+  const q = (wf.starters || [])[0] || 'Hello'; const r = await runWorkflow(wf, q, null, { forceMock: true, src: 'test', trace: false });
+  checks.push({ ok: !r.error, t: `Smoke test "${q}" ran without errors`, sev: 'error' });
+  if (r.error) { event('deploy', `${wf.name} smoke test failed`); save(); return { ok: false, checks }; }
+  wf.status = 'Published'; wf.version = (wf.version || 0) + 1; wf.deployedOn = TODAY; wf.editedOn = TODAY;
+  if (!S.daily.some(x => x.wf === wf.id && x.src === 'synthetic')) synth(wf, 30);
+  event('deploy', `${wf.name} v${wf.version} published; 30 days of production sessions generated`); save();
+  return { ok: true, checks };
+}
+
+window.CORE = { $, esc, uid, clone, fmt, usd, TODAY, codeOf, TOOL_TYPES, AGENT_TYPES, FAMILIES, seed, fresh, DEF_RATES, DEF_EST, get S() { return S; }, set S(v) { S = v; }, save, byId, tierOf, event,
+  synth, createTask, decideTask, renderTemplate, toolFns, wfTools, systemPrompt, runWorkflow, validate, deploy, inputBlocked,
+  setSample: x => { sample = x; }, get sample() { return sample; }, runtime, askJson, keyStore, MODELS, IN_CLAUDE, setOnTrace: f => { onTrace = f; } };
+})();
+
+</script>
+<script>
+{
+const C = window.CORE, { $, esc, uid, clone, fmt, usd, TODAY, codeOf, TOOL_TYPES, AGENT_TYPES, FAMILIES, byId } = C;
+const S = () => C.S;
+const toast = t => { const el = $('#toast'); el.textContent = t; el.classList.add('on'); clearTimeout(toast.h); toast.h = setTimeout(() => el.classList.remove('on'), 2600); };
+const tag = (t, c = '') => `<span class="tag ${c}">${esc(t)}</span>`;
+const stTag = s => tag(s, s === 'Published' || s === 'Deployed' || s === 'Tested' || s === 'Approved' || s === 'Verified' || s === 'Enabled' || s === 'Connected' ? 't-pub' : s === 'Rejected' ? 't-bad' : s === 'Pending' || s === 'Configured' ? 't-warn' : 't-draft');
+const opts = (map, v) => (Array.isArray(map) ? map.map(x => [x.id ?? x, x.name ?? x]) : Object.entries(map)).map(([k, l]) => `<option value="${esc(k)}" ${String(k) === String(v) ? 'selected' : ''}>${esc(l)}</option>`).join('');
+const ask = (ph, key) => `<div class="ask"><span class="ring"></span><input data-filter="${key}" placeholder="${esc(ph)}" value="${esc(F[key] || '')}" aria-label="${esc(ph)}"></div>`;
+const F = {}; const match = (key, ...vals) => !F[key] || vals.join(' ').toLowerCase().includes(F[key].toLowerCase());
+const ui = () => S().ui;
+const tabs = (key, list) => { const cur = ui()[key] || list[0][0]; return `<div class="tabs" role="tablist">${list.map(([k, l]) => `<button role="tab" class="${k === cur ? 'on' : ''}" data-a="tab" data-k="${key}" data-id="${k}">${esc(l)}</button>`).join('')}</div>`; };
+const curTab = (key, first) => ui()[key] || first;
+
+const ICON = {
+  home: '<rect x="3" y="7" width="18" height="10" rx="5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  applications: '<path d="M4 4h16v16H4zM4 9h16M9 14h6M12 11v6" fill="none" stroke="currentColor" stroke-width="2"/>',
+  workflows: '<path d="M5 8a4 4 0 0 1 7-2M19 16a4 4 0 0 1-7 2M9 15l2 2 4-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  resources: '<path d="M4 4h16v16H4zM8 9h8M8 13h8M8 17h5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  connectors: '<circle cx="6" cy="6" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="12" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="7" cy="18" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 7l8 4M8.5 16.5l7-3.5" stroke="currentColor" stroke-width="2"/>',
+  templates: '<path d="M6 3h8l4 4v14H6zM9 12h6M9 16h6" fill="none" stroke="currentColor" stroke-width="2"/>',
+  policies: '<path d="M5 5h4v4H5zM15 5l2 2-2 2-2-2zM5 15h4v4H5zM17 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0" fill="none" stroke="currentColor" stroke-width="2"/>',
+  approvals: '<path d="M6 3h8l4 4v6M6 3v18h7M14 19l2 2 4-5" fill="none" stroke="currentColor" stroke-width="2"/>',
+  credentials: '<rect x="5" y="10" width="14" height="10" rx="1" fill="none" stroke="currentColor" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/>',
+  monitoring: '<path d="M4 16a8 8 0 0 1 16 0M12 16l4-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  estimator: '<path d="M5 3h14v18H5zM8 7h8M8 12h2M12 12h2M8 16h2M12 16h4" fill="none" stroke="currentColor" stroke-width="2"/>',
+  data: '<ellipse cx="12" cy="6" rx="7" ry="3" fill="none" stroke="currentColor" stroke-width="2"/><path d="M5 6v12c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12c0 1.7 3.1 3 7 3s7-1.3 7-3" fill="none" stroke="currentColor" stroke-width="2"/>'
+};
+const NAV = [['home', 'AI Agent Studio'], ['applications', 'Applications'], ['workflows', 'Workflows'], ['resources', 'Resources'], ['connectors', 'Connectors'], ['templates', 'Document Templates'], ['policies', 'Policy Models'], ['approvals', 'Approvals'], ['credentials', 'Credentials'], ['monitoring', 'Monitoring and Evaluation'], ['estimator', 'Cost Estimator'], ['data', 'Sandbox Data']];
+$('#nav').innerHTML = NAV.map(([k, l]) => `<a href="#${k}" data-nav="${k}" title="${esc(l)}"><svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">${ICON[k]}</svg><span>${esc(l)}</span></a>`).join('');
+
+const V = {};
+const pending = () => S().tasks.filter(t => t.status === 'Pending').length;
+const modeOpts = () => ({ ...(C.sample ? { live: 'Live LLM (Claude)' } : {}), ...(C.IN_CLAUDE ? {} : { api: 'Your Claude API key' }), mock: 'Mock runtime' });
+const modeVal = () => { const o = modeOpts(); return o[ui().mode] ? ui().mode : 'mock'; };
+const rtLabel = () => { const r = C.runtime(); return r === 'live' ? 'Live LLM (Claude)' : r === 'api' ? 'Your API key · ' + (C.MODELS[ui().model] || ui().model) : ui().mode === 'api' ? 'API key needed' : 'Mock runtime'; };
+/* key prompt: resolves true when a key is saved */
+function keyDialog(reason) {
+  return new Promise(res => {
+    const d = $('#dlg'); let done = false; const fin = v => { if (done) return; done = true; d.close(); res(v); };
+    $('#dlgbody').innerHTML = `<h2>Enter your Claude API key</h2><p>${esc(reason || 'Live agent runs call Claude with your own API key.')}</p>
+     <label for="k1">API key</label><input id="k1" type="password" autocomplete="off" placeholder="sk-ant-…" value="">
+     <label for="k2">Model</label><select id="k2">${opts(C.MODELS, ui().model)}</select>
+     <label class="row" style="color:var(--ink)"><input type="checkbox" id="k3" ${C.keyStore.remembered() ? 'checked' : ''}> Remember on this device</label>
+     <p class="note">The key stays in this browser and is sent only to api.anthropic.com. Usage is billed to your Anthropic account. Use a key with a spend limit, and don't save it on a shared computer. Get a key at console.anthropic.com.</p>
+     <p class="bad" id="k4"></p>
+     <div class="row" style="justify-content:flex-end;margin-top:8px"><button id="k5">Use mock runtime</button><button class="pri" id="k6">Save key</button></div>`;
+    d.showModal(); d.onclose = () => fin(false); $('#k1').focus();
+    $('#k5').onclick = () => { ui().mode = 'mock'; C.save(); syncMode(); fin(false); render(); };
+    $('#k6').onclick = () => { const k = $('#k1').value.trim(); if (!/^sk-ant-/.test(k)) { $('#k4').textContent = 'That does not look like a Claude API key (it starts with sk-ant-).'; return; }
+      C.keyStore.set(k, $('#k3').checked); ui().model = $('#k2').value; ui().mode = 'api'; C.save(); syncMode(); toast('API key saved for this browser'); fin(true); render(); };
+  });
+}
+/* call before any LLM work: asks for the key when the API runtime is selected without one */
+async function needLLM(reason) { if (ui().mode === 'api' && !C.keyStore.get()) await keyDialog(reason); return C.runtime(); }
+
+/* ---------- AI Agent Studio home ---------- */
+V.home = () => {
+  const s = S(), sessions = s.daily.reduce((a, x) => a + x.s, 0), au = s.daily.reduce((a, x) => a + x.au, 0);
+  const rows = [['Applications', 'Packaged agentic applications: workflows plus a user-facing workspace (insight cards and an ask box). Deploy to make them available.', 'applications'], ['Workflows', 'Agent teams. Supervisor workflows route requests to agents; sequential workflows run nodes (agent, condition, approval, document, email). Publish after validation.', 'workflows'], ['Resources', 'Reusable building blocks: agents, supervisor agents, tools, topics, business objects, deeplinks, functions and document schemas.', 'resources'], ['Connectors', 'Links to external systems and content (REST, MCP, web pages, integration flows). Tools use them; they must be tested before deployment.', 'connectors'], ['Document Templates', 'Templates that turn agent results and records into emails, letters and reports.', 'templates'], ['Policy Models', 'Governance. Policy templates become policies that mask data, block tools, force approvals, cap rows or refuse inputs at runtime.', 'policies'], ['Approvals', 'Approval processes for human-in-the-loop steps, plus the task inbox to approve or reject.', 'approvals'], ['Credentials', 'Connections (secrets), LLM configuration, chat experience, email accounts, channels, data source applications and the CLI.', 'credentials'], ['Monitoring and Evaluation', 'Sessions, AI Units and errors per workflow; evaluation sets; activity log; value realised.', 'monitoring']];
+  const keyCard = !C.IN_CLAUDE ? `<div class="card" style="margin-bottom:16px;border-color:var(--gold)"><div class="row"><div style="flex:1;min-width:240px"><h2 style="margin:0 0 4px">${C.keyStore.get() ? 'Live runs use your Claude API key' : 'Add your Claude API key to run agents live'}</h2><p class="note" style="margin:0">${C.keyStore.get() ? 'Model: ' + esc(C.MODELS[ui().model] || ui().model) + '. You can change or remove the key in Credentials → LLM.' : 'Without a key everything still works on the deterministic mock runtime. With a key, agents reason and call tools with Claude, and token usage is metered from real API usage.'}</p></div><button class="pri" data-a="keySet">${C.keyStore.get() ? 'Change key' : 'Enter API key'}</button>${C.keyStore.get() ? '<button data-a="keyClear">Remove key</button>' : ''}</div></div>` : '';
+  return keyCard + `<div class="hero"><svg class="art" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g1" cx=".75" cy=".3" r=".7"><stop offset="0" stop-color="#1d5a6c"/><stop offset="1" stop-color="#062631"/></radialGradient></defs><rect width="1200" height="420" fill="url(#g1)"/><path d="M820 -20C980 -40 1120 60 1110 220 1100 360 980 430 860 420 760 410 700 330 720 230 740 130 700 0 820 -20z" fill="#a9cfd6" opacity=".55"/><path d="M1000 210c80-30 190 10 210 120s-60 170-150 160-140-80-130-160 20-100 70-120z" fill="#e0a361" opacity=".85"/><path d="M1080 300c50-10 120 30 120 90s-80 60-120 40-50-120 0-130z" fill="#d97a6a" opacity=".7"/>${Array.from({ length: 26 }, (_, i) => `<ellipse cx="${700 + i * 17 + (i % 5) * 9}" cy="${40 + (i % 7) * 16 + Math.floor(i / 7) * 10}" rx="9" ry="2.6" transform="rotate(${18 + i % 4 * 6} ${700 + i * 17} ${40 + (i % 7) * 16})" fill="${i % 3 ? '#f3c49a' : '#e57b5e'}" opacity=".85"/>`).join('')}</svg>
+   <p class="hi">Hi, sandbox builder!</p><h1>What would you like to build?</h1>
+   <form id="buildf"><div class="ask"><span class="ring"></span><textarea id="buildin" style="background:transparent;border:0;min-height:70px;font-size:17px" placeholder="Describe an agent, e.g. a workflow that finds late POs for critical items and drafts expedite emails"></textarea><button class="pri" id="buildb">Build</button></div></form>
+   <div class="chips">${['Inventory balance analyst', 'Spend anomaly radar', 'Supplier risk monitor', 'Maintenance backlog planner', 'Customer order status helper'].map(c => `<button class="chip" data-a="chip" data-id="${esc(c)}">${esc(c)}</button>`).join('')}</div></div>
+  <div class="grid" style="margin-bottom:16px">${[['Workflows', s.workflows.length, 'Published: ' + s.workflows.filter(w => w.status === 'Published').length], ['Applications', s.applications.length, 'Deployed: ' + s.applications.filter(a => a.status === 'Deployed').length], ['Sessions recorded', fmt(sessions), 'Synthetic + test'], ['AI Units recorded', fmt(au), usd(au * s.rates.unitPrice)], ['Approvals pending', pending(), 'In Approvals']].map(([l, v, n]) => `<div class="card"><div class="kpi">${esc(v)}</div><div class="kl">${esc(l)} · ${esc(n)}</div></div>`).join('')}</div>
+  <div class="card"><h2>What each area does</h2><p class="note">Sandbox interpretation of the AI Agent Studio navigation. Behaviour in your release can differ; check the Oracle documentation for your version.</p>
+   <div class="scroll"><table class="stack"><thead><tr><th>Area</th><th>Purpose</th><th>Practice here</th></tr></thead><tbody>${rows.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td><a href="#${r[2]}" style="color:var(--seed)">Open</a></td></tr>`).join('')}</tbody></table></div>
+   <h3 style="margin-top:14px">Suggested practice path</h3><ol style="margin:4px 0 0;padding-left:20px;color:var(--mute)"><li>Run a seeded workflow (Workflows → ▷) and read the trace.</li><li>Deploy "Order Status Assistant". It fails on the BYO LLM credential and the untested carrier connector; fix both in Credentials and Connectors.</li><li>Ask a workflow to set a PO status. The policy turns it into an approval; approve it and check the PO in Sandbox Data.</li><li>Run an evaluation set, then compare AI Units in Monitoring and the Cost Estimator.</li></ol></div>`;
+};
+
+/* ---------- Applications ---------- */
+V.applications = () => {
+  const s = S(), apps = s.applications.filter(a => match('apps', a.name, a.description));
+  return `<h1>Applications</h1>${ask('Search applications', 'apps')}<div class="row" style="margin-bottom:14px"><button data-a="appEdit" data-id="">Add</button><button data-a="importCfg">Import</button><button data-a="exportCfg">Export configuration</button></div>
+  <div class="list">${apps.map(a => `<div class="li"><div><h3>${esc(a.name)}</h3>${stTag(a.status)}<div class="note" style="margin-top:4px">${esc(a.description)}</div></div><div><div class="k">Code</div><div class="v mono">${esc(codeOf(a.name))}</div></div><div><div class="k">Workflows</div><div class="v">${a.workflows.map(w => esc(byId('workflows', w)?.name)).join(', ')}</div></div><div><div class="k">Family</div><div class="v">${esc(a.family)} · ${esc(a.product)}</div></div><div><div class="k">Version</div><div class="v">${a.version || 0}</div></div><div class="row"><button class="icon" data-a="appOpen" data-id="${a.id}" title="Open">▷</button><button class="link" data-a="appEdit" data-id="${a.id}">Edit</button><button class="link" data-a="appDeploy" data-id="${a.id}">Deploy</button></div></div>`).join('') || '<p>No applications match.</p>'}</div>`;
+};
+V.app = () => {
+  const a = byId('applications', ui().app); if (!a) return V.applications();
+  const ins = a.insights.map(i => { const r = FDB.query(i.res, { q: i.q, limit: 500 }); const v = i.agg === 'count' ? r.totalResults : r.items.reduce((s, x) => s + (+x[i.agg.split(':')[1]] || 0), 0); return `<div class="card"><div class="kpi">${esc(i.agg === 'count' ? fmt(v) : v.toLocaleString('en-US', { maximumFractionDigits: 2 }))}</div><div class="kl">${esc(i.label)}</div></div>`; }).join('');
+  return `<div class="note"><a href="#applications" style="color:var(--seed)">Applications</a></div><div class="row"><h1 style="margin:0">${esc(a.name)}</h1>${stTag(a.status)}</div><p class="sub" style="margin-top:6px">${esc(a.description)}</p>
+  <div class="grid" style="margin-bottom:14px">${ins}</div>
+  <div class="card"><h2>Ask the application</h2><form id="appf" class="row" style="flex-wrap:nowrap"><input id="appin" value="${esc(a.prompt)}"><button class="pri">Run</button></form><pre id="appout" style="margin-top:12px">Results from ${esc(a.workflows.map(w => byId('workflows', w)?.name).join(', '))} appear here.</pre>
+  <p class="note">${a.status === 'Deployed' ? 'Deployed: runs count as application sessions in Monitoring.' : 'Draft: runs count as test sessions. Deploy needs every workflow published.'}</p></div>`;
+};
+
+/* ---------- Workflows ---------- */
+V.workflows = () => {
+  const s = S(), sort = ui().wfSort || 'name'; let list = s.workflows.filter(w => match('wf', w.name, w.description, w.product));
+  list = list.slice().sort((x, y) => sort === 'status' ? x.status.localeCompare(y.status) : sort === 'edited' ? String(y.editedOn || '').localeCompare(String(x.editedOn || '')) : x.name.localeCompare(y.name));
+  return `<h1>Workflows</h1>${ask('Search workflows', 'wf')}<div class="row" style="margin-bottom:10px"><button data-a="wfNew">Add</button><button data-a="importCfg">Import</button><span class="sp"></span><label for="wfsort" style="margin:0">Sorted by</label><select id="wfsort" data-ui="wfSort" style="width:auto">${opts({ name: 'Name', status: 'Status', edited: 'Edited on' }, sort)}</select></div>
+  <div class="list">${list.map(w => `<div class="li"><div><h3>${esc(w.name)}</h3>${w.seeded ? tag('Seeded', 't-seed') : tag('Custom')} ${tag(w.type === 'workflow' ? 'Sequential' : 'Supervisor')}<div class="note" style="margin-top:4px">${esc(w.description)}</div></div>
+   <div><div class="k">Code</div><div class="v mono">${esc(codeOf(w.name, w.seeded))}</div></div><div><div class="k">LLM</div><div class="v">${esc(byId('llms', w.llmId)?.name || '—')}</div></div><div><div class="k">Edited on</div><div class="v">${esc(w.editedOn || '2026-11-20')}</div></div><div><div class="k">Status</div>${stTag(w.status)}<div class="note">v${w.version || 0}</div></div>
+   <div class="row"><button class="icon" data-a="wfRun" data-id="${w.id}" title="Run">▷</button><button class="icon" data-a="wfEdit" data-id="${w.id}" title="View and edit">◉</button><button class="icon" data-a="wfCopy" data-id="${w.id}" title="Duplicate">⧉</button><button class="link" data-a="wfDeploy" data-id="${w.id}">${w.status === 'Published' ? 'Redeploy' : 'Deploy'}</button></div></div>`).join('') || '<p>No workflows match.</p>'}</div>`;
+};
+V.edit = () => {
+  const w = byId('workflows', ui().edit); if (!w) return V.workflows(); const s = S();
+  const node = (n, i) => `<div class="node"><div class="num">${i + 1}</div><div><div class="row"><select data-node="${i}" data-f="type" style="width:auto">${opts({ agent: 'Agent', condition: 'Condition', approval: 'Approval', docgen: 'Document template', email: 'Email' }, n.type)}</select><span class="sp"></span><button class="link" data-a="nodeUp" data-id="${i}">Move up</button><button class="link" data-a="nodeDel" data-id="${i}">Remove</button></div>
+   ${n.type === 'agent' ? `<label>Agent</label><select data-node="${i}" data-f="agentId">${opts(s.agents, n.agentId)}</select><label>Step instruction</label><textarea data-node="${i}" data-f="prompt">${esc(n.prompt)}</textarea>` : ''}
+   ${n.type === 'condition' ? `<label>Expression on previous output (contains:word or not:word)</label><input data-node="${i}" data-f="expr" value="${esc(n.expr)}">` : ''}
+   ${n.type === 'approval' ? `<label>Approval process</label><select data-node="${i}" data-f="processId">${opts(s.approvalProcesses, n.processId)}</select>` : ''}
+   ${n.type === 'docgen' ? `<label>Document template</label><select data-node="${i}" data-f="templateId">${opts(s.docTemplates, n.templateId)}</select>` : ''}
+   ${n.type === 'email' ? `<label>To</label><input data-node="${i}" data-f="to" value="${esc(n.to)}">` : ''}</div></div>`;
+  return `<div class="note"><a href="#workflows" style="color:var(--seed)">Workflows</a></div><div class="row" style="margin-bottom:12px"><h1 style="margin:0">${esc(w.name)}</h1>${stTag(w.status)}<span class="sp"></span><button data-a="wfRun" data-id="${w.id}">Run</button><button class="pri" data-a="wfDeploy" data-id="${w.id}">Deploy</button></div>
+  ${w.seeded ? '<p class="note">Seeded workflow. Edits are allowed in the sandbox; in a real pod you would duplicate it first.</p>' : ''}
+  <div class="two"><div class="card"><h2>Details</h2><label for="e_n">Name</label><input id="e_n" data-wf="name" value="${esc(w.name)}"><label for="e_d">Description</label><textarea id="e_d" data-wf="description">${esc(w.description)}</textarea>
+   <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,190px),1fr))"><div><label>Type</label><select data-wf="type">${opts({ supervisor: 'Supervisor', workflow: 'Sequential workflow' }, w.type)}</select></div><div><label>LLM</label><select data-wf="llmId">${opts(s.creds.llms, w.llmId)}</select></div><div><label>Family</label><select data-wf="family">${opts(Object.keys(FAMILIES), w.family)}</select></div><div><label>Product</label><select data-wf="product">${opts(FAMILIES[w.family] || [], w.product)}</select></div><div><label>Agent origin</label><select data-wf="agentType">${opts(AGENT_TYPES, w.agentType)}</select></div><div><label>Minutes saved per session</label><input type="number" min="0" data-wf="minutesSaved" value="${esc(w.minutesSaved || 0)}"></div></div>
+   <label>Starter questions (one per line)</label><textarea data-wf="starters">${esc((w.starters || []).join('\n'))}</textarea>
+   <label>Agents</label><div class="chk">${s.agents.map(a => `<label><input type="checkbox" data-wfa="${a.id}" ${w.agents.includes(a.id) ? 'checked' : ''}>${esc(a.name)}</label>`).join('')}</div>
+   <h3 style="margin-top:14px">Pre-deployment checks</h3>${C.validate(w).map(c => `<div class="${c.ok ? 'ok' : c.sev === 'warning' ? '' : 'bad'}">${c.ok ? '✓' : c.sev === 'warning' ? '!' : '✕'} ${esc(c.t)}</div>`).join('')}</div>
+  <div class="card">${w.type === 'workflow' ? `<h2>Nodes</h2><p class="note">Run top to bottom. Each agent node is one LLM action; document templates meter at the document rate.</p>${(w.nodes || []).map(node).join('') || '<p class="note">No nodes.</p>'}<button data-a="nodeAdd">Add node</button>`
+   : `<h2>Supervisor canvas</h2><p class="note">The supervisor routes each request to one agent. Topics apply to every agent that carries them.</p>${w.agents.map(id => byId('agents', id)).filter(Boolean).map(a => `<div class="box"><div class="row"><h3>${esc(a.name)}</h3><span class="sp"></span><button class="link" data-a="agentEdit" data-id="${a.id}">Edit agent</button></div><p class="note" style="margin:2px 0 8px">${esc(a.instructions)}</p><div class="row">${a.tools.map(x => tag(byId('tools', x)?.name || x, 't-seed')).join('')}${a.topics.map(x => tag(byId('topics', x)?.name || x)).join('')}</div></div>`).join('') || '<p class="note">Add at least one agent.</p>'}`}
+   <details style="margin-top:12px"><summary>Assembled prompt</summary><pre>${esc(C.systemPrompt(w))}</pre></details></div></div>`;
+};
+V.run = () => {
+  const s = S(); if (!byId('workflows', ui().play)) ui().play = s.workflows[0]?.id; const w = byId('workflows', ui().play); if (!w) return '<p>No workflows.</p>';
+  const msgs = s.chats[w.id] || [];
+  return `<div class="note"><a href="#workflows" style="color:var(--seed)">Workflows</a></div><h1>Run and debug</h1>
+  <div class="row" style="margin-bottom:12px"><select id="pwf" style="width:auto;max-width:100%">${opts(s.workflows, w.id)}</select>${stTag(w.status)}${tag(byId('llms', w.llmId)?.name || '')}<select data-ui="mode" style="width:auto" aria-label="Runtime">${opts(modeOpts(), modeVal())}</select>${tag(rtLabel(), C.runtime() === 'mock' ? '' : 't-seed')}${ui().mode === 'api' ? '<button data-a="keySet">API key</button>' : ''}<button data-a="clearChat">Clear</button><button data-a="wfEdit" data-id="${w.id}">Edit</button></div>
+  <div class="two"><div class="card chat"><div class="msgs" id="msgs">${msgs.length ? msgs.map(m => `<div class="m ${m.role === 'user' ? 'u' : 'a'}">${esc(m.text)}${m.meta ? `<span class="meta">${esc(m.meta)}</span>` : ''}</div>`).join('') : `<div class="note">${esc(s.creds.chat.greeting)}</div>${(w.starters || []).map(q => `<button style="text-align:left" data-a="starter" data-id="${esc(q)}">${esc(q)}</button>`).join('')}`}</div>
+   <form id="chatf" class="row" style="margin-top:10px;flex-wrap:nowrap"><input id="chatin" placeholder="Message ${esc(w.name)}" autocomplete="off"><button class="pri" id="sendb">Send</button></form></div>
+  <div class="card"><h2>Trace</h2><div class="trace" id="trace"></div></div></div>`;
+};
+function renderTrace() { const el = $('#trace'); if (!el) return; const tr = S().trace || []; el.innerHTML = tr.length ? tr.map(x => `<div class="step ${x.k}"><b>${esc(x.t)}</b>${x.d && Object.keys(x.d).length ? `<pre>${esc(JSON.stringify(x.d, null, 2))}</pre>` : ''}</div>`).join('') : '<p class="note">Send a message to see LLM requests, tool calls, policy effects and metering.</p>'; el.scrollTop = el.scrollHeight; }
+C.setOnTrace(renderTrace);
+
+/* ---------- Resources ---------- */
+V.resources = () => {
+  const s = S(), t = curTab('resTab', 'agents'); let body = '';
+  const addBtn = (a, l = 'Add') => `<div class="row" style="margin-bottom:12px"><button data-a="${a}" data-id="">${l}</button></div>`;
+  if (t === 'agents') body = addBtn('agentEdit') + `<div class="list">${s.agents.filter(a => match('res', a.name, a.role)).map(a => `<div class="li"><div><h3>${esc(a.name)}</h3><div class="note">${esc(a.role)}</div></div><div><div class="k">Tools</div><div class="v">${a.tools.map(x => esc(byId('tools', x)?.name)).join(', ')}</div></div><div><div class="k">Topics</div><div class="v">${a.topics.map(x => esc(byId('topics', x)?.name)).join(', ')}</div></div><div><div class="k">Used in</div><div class="v">${s.workflows.filter(w => w.agents.includes(a.id) || (w.nodes || []).some(n => n.agentId === a.id)).map(w => esc(w.name)).join(', ') || '—'}</div></div><div></div><div><button class="link" data-a="agentEdit" data-id="${a.id}">Edit</button></div></div>`).join('')}</div>`;
+  if (t === 'supervisors') body = `<div class="list">${s.workflows.filter(w => w.type === 'supervisor' && match('res', w.name)).map(w => `<div class="li"><div><h3>${esc(w.name)}</h3>${stTag(w.status)}</div><div><div class="k">Routes to</div><div class="v">${w.agents.map(id => esc(byId('agents', id)?.name)).join(', ')}</div></div><div><div class="k">LLM</div><div class="v">${esc(byId('llms', w.llmId)?.name)}</div></div><div></div><div></div><div><button class="link" data-a="wfEdit" data-id="${w.id}">Open</button></div></div>`).join('')}</div>`;
+  if (t === 'tools') body = addBtn('toolEdit') + `<div class="scroll"><table class="stack"><thead><tr><th>Tool</th><th>Type</th><th>Target</th><th>Description</th><th></th></tr></thead><tbody>${s.tools.filter(x => match('res', x.name, x.type)).map(x => `<tr><td><b>${esc(x.name)}</b></td><td>${esc(TOOL_TYPES[x.type])}</td><td class="mono">${esc(x.type === 'business_object' ? FDB.resources[x.resource]?.path + ' · ' + (x.ops || []).join('/') : x.connectorId ? 'Connector: ' + byId('connectors', x.connectorId)?.name : x.templateId ? 'Template: ' + byId('docTemplates', x.templateId)?.name : x.processId ? 'Process: ' + byId('approvalProcesses', x.processId)?.name : (x.docIds || []).join(', ') || '—')}</td><td>${esc(x.description)}</td><td><button class="link" data-a="toolEdit" data-id="${x.id}">Edit</button></td></tr>`).join('')}</tbody></table></div>`;
+  if (t === 'topics') body = addBtn('topicEdit') + `<div class="grid">${s.topics.filter(x => match('res', x.name, x.instructions)).map(x => `<div class="card"><h3>${esc(x.name)}</h3><p class="note">${esc(x.instructions)}</p><button class="link" data-a="topicEdit" data-id="${x.id}">Edit</button></div>`).join('')}</div>`;
+  if (t === 'bo') body = `<p class="note">Business objects are the REST resources tools can call. Browse and query them in Sandbox Data.</p><div class="scroll"><table class="stack"><thead><tr><th>Object</th><th>Area</th><th>Path</th><th>Key</th><th class="n">Rows</th><th>Attributes</th></tr></thead><tbody>${Object.entries(FDB.resources).filter(([k]) => match('res', k)).map(([k, m]) => `<tr><td><b>${esc(k)}</b></td><td>${esc(m.area)}</td><td class="mono">${esc(m.path)}</td><td>${esc(m.key)}</td><td class="n">${FDB[k].length}</td><td class="note">${esc(Object.keys(FDB[k][0]).join(', '))}</td></tr>`).join('')}</tbody></table></div>`;
+  if (t === 'deeplinks') body = addBtn('dlAdd') + `<div class="scroll"><table class="stack"><thead><tr><th>Name</th><th>Page</th><th>Pattern</th></tr></thead><tbody>${s.deeplinks.map(d => `<tr><td><b>${esc(d.name)}</b></td><td>${esc(d.page)}</td><td class="mono">${esc(d.pattern)}</td></tr>`).join('')}</tbody></table></div>`;
+  if (t === 'functions') body = `<p class="note">Functions are deterministic helpers agents call instead of letting the LLM do arithmetic or date maths.</p><div class="scroll"><table class="stack"><thead><tr><th>Function</th><th>Signature</th><th>Description</th></tr></thead><tbody>${s.functions.map(f => `<tr><td><b>${esc(f.name)}</b></td><td class="mono">${esc(f.signature)}</td><td>${esc(f.description)}</td></tr>`).join('')}</tbody></table></div>
+   <div class="card" style="margin-top:12px"><h3>Try calculate()</h3><div class="row" style="flex-wrap:nowrap"><input id="fnin" value="(450-120)*0.6"><button data-a="fnTry">Run</button></div><pre id="fnout" style="margin-top:8px">Result</pre></div>`;
+  if (t === 'schemas') body = addBtn('schemaAdd') + `<div class="grid">${s.schemas.map(sc => `<div class="card"><h3>${esc(sc.name)}</h3><div class="row">${sc.fields.map(f => tag(f.name + ' · ' + f.type)).join('')}</div></div>`).join('')}</div>
+   <div class="card" style="margin-top:12px"><h3>Test extraction</h3><p class="note">Paste document text. Live mode asks the LLM to fill the schema; mock mode uses pattern matching.</p><select id="scsel">${opts(s.schemas, '')}</select><textarea id="sctext" style="margin-top:8px">TAX INVOICE  INV-7188  Pacific Lead Metals  Date: 2026-11-18  Your PO: PO45004  Total due AUD 12,480.50</textarea><div class="row" style="margin-top:8px"><button data-a="extract">Extract</button></div><pre id="scout" style="margin-top:8px">Extracted JSON appears here.</pre></div>`;
+  return `<h1>Resources</h1>${tabs('resTab', [['agents', 'Agents'], ['supervisors', 'Supervisor Agents'], ['tools', 'Tools'], ['topics', 'Topics'], ['bo', 'Business Objects'], ['deeplinks', 'Deeplinks'], ['functions', 'Functions'], ['schemas', 'Document Schema']])}${ask('Search resources', 'res')}${body}`;
+};
+
+/* ---------- Connectors ---------- */
+V.connectors = () => {
+  const s = S();
+  return `<h1>Connectors</h1>${ask('Search connectors', 'con')}<div class="grid" style="margin-bottom:22px"><button class="addc" data-a="conEdit" data-id=""><span><h2>Add Connector</h2><span class="note">Configure a connector from an existing definition.</span></span><span class="plus">+</span></button><button class="addc" data-a="defAdd"><span><h2>Create Connector Definition</h2><span class="note">A bespoke definition for your own system or data source.</span></span><span class="plus">+</span></button></div>
+  <h2>Configured connectors</h2><div class="grid">${s.connectors.filter(c => match('con', c.name, c.description)).map(c => { const d = byId('connectorDefs', c.defId); return `<div class="card"><div class="note">${esc(c.family)} · ${esc(d?.name)}</div><h3 style="margin:4px 0">${esc(c.name)}</h3><p class="note">${esc(c.description)}</p><p class="mono note">${esc(c.endpoint)}</p><div class="row">${stTag(c.status)}${tag(c.connId ? 'Credential: ' + (byId('connections', c.connId)?.name || c.connId) : 'No credential', c.connId ? '' : 't-warn')}</div><div class="row" style="margin-top:10px"><button data-a="conTest" data-id="${c.id}">Test</button><button class="link" data-a="conEdit" data-id="${c.id}">Edit</button></div></div>`; }).join('')}</div>
+  <h2 style="margin-top:22px">Definitions</h2><div class="scroll"><table class="stack"><thead><tr><th>Definition</th><th>Kind</th><th>Configuration</th></tr></thead><tbody>${s.connectorDefs.map(d => `<tr><td><b>${esc(d.name)}</b></td><td>${esc(d.kind)}</td><td>${esc(d.fields)}</td></tr>`).join('')}</tbody></table></div>`;
+};
+
+/* ---------- Document Templates ---------- */
+V.templates = () => {
+  const s = S(), sel = byId('docTemplates', ui().tpl) || s.docTemplates[0];
+  return `<h1>Document Templates</h1>${ask('Search templates', 'tpl')}<div class="row" style="margin-bottom:14px"><button data-a="tplEdit" data-id="">Add</button></div>
+  <div class="two"><div class="list">${s.docTemplates.filter(t => match('tpl', t.name)).map(t => `<div class="li" style="grid-template-columns:minmax(0,1fr) auto"><div><h3>${esc(t.name)}</h3>${tag(t.format)} <span class="note mono">${esc(t.res)} · ${esc(t.q || 'all rows')}</span></div><div class="row"><button class="link" data-a="tplPick" data-id="${t.id}">Preview</button><button class="link" data-a="tplEdit" data-id="${t.id}">Edit</button></div></div>`).join('')}</div>
+  <div class="card"><h2>Preview with live data${sel ? ': ' + esc(sel.name) : ''}</h2><pre>${sel ? esc(C.renderTemplate(sel)) : 'Add a template.'}</pre><p class="note">Placeholders: {{Field}} from the first record, {{rows:FieldA,FieldB}} one line per record, {{count}}, {{today}}.</p></div></div>`;
+};
+
+/* ---------- Policy Models ---------- */
+V.policies = () => {
+  const s = S(), t = curTab('polTab', 'templates');
+  const body = t === 'templates' ? `<div class="grid">${s.policyTemplates.filter(p => match('pol', p.name)).map(p => `<div class="card"><h3>${esc(p.name)}</h3><p class="note">${esc(p.description)}</p><p class="note mono">Parameters: ${esc(p.params.join(', '))}</p><button data-a="polEdit" data-id="" data-k="${p.id}">Create policy</button></div>`).join('')}</div>`
+    : `<div class="row" style="margin-bottom:12px"><button data-a="polEdit" data-id="">Add</button></div><div class="list">${s.policies.filter(p => match('pol', p.name)).map(p => `<div class="li"><div><h3>${esc(p.name)}</h3>${tag(p.active ? 'Active' : 'Inactive', p.active ? 't-pub' : 't-draft')}</div><div><div class="k">Template</div><div class="v">${esc(byId('policyTemplates', p.templateId)?.name)}</div></div><div><div class="k">Parameters</div><div class="v mono">${esc(Object.entries(p.params).map(([k, v]) => k + '=' + v).join('; '))}</div></div><div><div class="k">Scope</div><div class="v">${esc(p.scope === 'all' ? 'All workflows' : byId('workflows', p.scope)?.name)}</div></div><div></div><div class="row"><button class="link" data-a="polToggle" data-id="${p.id}">${p.active ? 'Deactivate' : 'Activate'}</button><button class="link" data-a="polEdit" data-id="${p.id}">Edit</button></div></div>`).join('')}</div>`;
+  return `<h1>Policy Models</h1>${tabs('polTab', [['templates', 'Policy Templates'], ['policies', 'Policies']])}${ask('Search policies', 'pol')}${body}<p class="note" style="margin-top:12px">Policies run inside the tool layer, so they apply whichever LLM is used. The trace shows each policy effect in purple.</p>`;
+};
+
+/* ---------- Approvals ---------- */
+V.approvals = () => {
+  const s = S(), t = curTab('apTab', 'inbox');
+  const body = t === 'inbox' ? `<div class="list">${s.tasks.filter(x => match('ap', x.summary, x.process)).slice(0, 60).map(x => `<div class="li"><div><h3>${esc(x.id)} · ${esc(x.process)}</h3>${stTag(x.status)}<div class="note" style="margin-top:4px;white-space:pre-wrap">${esc(x.summary)}</div></div><div><div class="k">Approvers</div><div class="v">${esc(x.approvers)}</div></div><div><div class="k">From workflow</div><div class="v">${esc(x.wf || '—')}</div></div><div><div class="k">Action on approval</div><div class="v mono">${esc(x.action ? `${x.action.res} ${x.action.key} ${JSON.stringify(x.action.changes)}` : 'none')}</div>${x.result ? `<div class="note">${esc(x.result)}</div>` : ''}</div><div><div class="k">Created</div><div class="v">${esc(x.ts.slice(0, 16).replace('T', ' '))}</div></div><div class="row">${x.status === 'Pending' ? `<button class="pri" data-a="taskOk" data-id="${x.id}">Approve</button><button data-a="taskNo" data-id="${x.id}">Reject</button>` : ''}</div></div>`).join('') || '<p>No approval tasks yet. Ask a workflow to change a PO status, or run Invoice Validation Workflow.</p>'}</div>`
+    : `<div class="row" style="margin-bottom:12px"><button data-a="apEdit" data-id="">Add</button></div><div class="list">${s.approvalProcesses.filter(p => match('ap', p.name)).map(p => `<div class="li"><div><h3>${esc(p.name)}</h3></div><div><div class="k">Approvers</div><div class="v">${esc(p.approvers)}</div></div><div><div class="k">Rule</div><div class="v">${esc(p.rule)}</div></div><div><div class="k">Escalate after</div><div class="v">${esc(p.escalateDays)} days</div></div><div></div><div><button class="link" data-a="apEdit" data-id="${p.id}">Edit</button></div></div>`).join('')}</div>`;
+  return `<h1>Approval Processes</h1>${tabs('apTab', [['inbox', `Task inbox (${pending()} pending)`], ['processes', 'Processes']])}${ask('Search approvals', 'ap')}${body}`;
+};
+
+/* ---------- Credentials ---------- */
+V.credentials = () => {
+  const s = S(), c = s.creds, t = curTab('crTab', 'connections'); let body = '';
+  if (t === 'connections') body = `<div class="grid"><button class="addc" data-a="connEdit" data-id=""><span><h2>Add Connection</h2><span class="note">Configure integration credentials for your connections.</span></span><span class="plus">+</span></button>${c.connections.map(x => `<div class="card"><h3>${esc(x.name)}</h3><p class="note">${esc(x.type)}${x.user ? ' · ' + esc(x.user) : ''}</p><p class="mono">${esc(x.secret)}</p><button class="link" data-a="connEdit" data-id="${x.id}">Edit</button></div>`).join('')}</div><p class="note">Secrets are masked and stored only in this browser. Never paste real credentials into the sandbox.</p>`;
+  if (t === 'llm') { const r = s.rates; body = (C.IN_CLAUDE ? '' : `<div class="card" style="margin-bottom:14px"><h2>Claude API key</h2><div class="row"><span>${C.keyStore.get() ? 'Key saved' + (C.keyStore.remembered() ? ' on this device' : ' for this session') + ' · ' + esc(C.MODELS[ui().model] || ui().model) : 'No key entered. Live runs fall back to the mock runtime.'}</span><span class="sp"></span><button class="pri" data-a="keySet">${C.keyStore.get() ? 'Change' : 'Enter key'}</button>${C.keyStore.get() ? '<button data-a="keyClear">Remove</button>' : ''}</div><p class="note">Each person who opens this page uses their own key. Nothing is shared with the page author.</p></div>`) + `<div class="two"><div class="card"><h2>Models</h2><table class="stack"><thead><tr><th>Name</th><th>Tier</th><th>Provider</th><th>Credential</th><th></th></tr></thead><tbody>${c.llms.map(l => `<tr><td><b>${esc(l.name)}</b></td><td>${esc(l.tier)}</td><td>${esc(l.provider)}</td><td>${l.connId ? esc(l.connId === 'built-in' ? 'Built-in' : byId('connections', l.connId)?.name || l.connId) : tag('Missing', 't-warn')}</td><td><button class="link" data-a="llmEdit" data-id="${l.id}">Edit</button></td></tr>`).join('')}</tbody></table>
+   <h2 style="margin-top:16px">AI Unit rate card</h2><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),1fr))">${[['basic', 'Basic, AU per action'], ['premium', 'Premium, AU per action'], ['byo', 'BYO, AU per action'], ['tokenCeiling', 'Tokens per action'], ['docGen', 'Document generation AU'], ['toolRate', 'AU per tool call'], ['freeGrant', 'Free AU per month'], ['unitPrice', 'USD per AU']].map(([k, l]) => `<div><label for="r_${k}">${l}</label><input id="r_${k}" type="number" step="any" min="0" data-rate="${k}" value="${esc(r[k])}"></div>`).join('')}</div>
+   <label class="row" style="color:var(--ink)"><input type="checkbox" data-rate="meterTools" ${r.meterTools ? 'checked' : ''}> Meter tool and REST calls</label><button data-a="resetRates">Reset rates</button></div>
+   <div class="card"><h2>Source of each default</h2><table><tbody>${[['1 AU = USD 0.01', 'Oracle', 't-pub'], ['Basic LLM action = 0 AU', 'Partner reports', 't-seed'], ['Premium LLM action = 5 AU', 'Partner reports', 't-seed'], ['10,000 tokens per action', 'Partner report', 't-seed'], ['20,000 free AU per month', 'Partner reports', 't-seed'], ['BYO = 15 AU', 'Assumption', 't-warn'], ['Document generation = 25 AU', 'Assumption', 't-warn'], ['Tool calls not metered', 'Sources conflict', 't-warn']].map(x => `<tr><td>${x[0]}</td><td>${tag(x[1], x[2])}</td></tr>`).join('')}</tbody></table><p class="note">Oracle says AI Units are deducted for completed actions, not intermediate steps; one partner says REST calls count. Use the toggle to model both, and confirm with Oracle before quoting.</p></div></div>`; }
+  if (t === 'chat') body = `<div class="card" style="max-width:640px"><label>Greeting</label><input data-chat="greeting" value="${esc(c.chat.greeting)}"><label class="row" style="color:var(--ink)"><input type="checkbox" data-chat="showSources" ${c.chat.showSources ? 'checked' : ''}> Show sources under answers</label><label class="row" style="color:var(--ink)"><input type="checkbox" data-chat="feedback" ${c.chat.feedback ? 'checked' : ''}> Collect thumbs up/down feedback</label><p class="note">The greeting appears in Run and debug.</p></div>`;
+  if (t === 'email') body = `<div class="row" style="margin-bottom:12px"><button data-a="emailAdd">Add</button></div><table class="stack"><thead><tr><th>Address</th><th>Display name</th><th>Status</th><th></th></tr></thead><tbody>${c.email.map(e => `<tr><td>${esc(e.address)}</td><td>${esc(e.display)}</td><td>${stTag(e.status)}</td><td><button class="link" data-a="emailToggle" data-id="${e.id}">${e.status === 'Verified' ? 'Disable' : 'Verify'}</button></td></tr>`).join('')}</tbody></table><h2 style="margin-top:18px">Sandbox outbox</h2>${s.outbox.slice(0, 8).map(o => `<div class="box"><b>${esc(o.subject)}</b> <span class="note">${esc(o.from || '')} → ${esc(o.to)}</span><pre style="margin-top:6px;max-height:160px">${esc(o.body)}</pre></div>`).join('') || '<p class="note">Nothing sent yet.</p>'}`;
+  if (t === 'channels') body = `<table class="stack"><thead><tr><th>Channel</th><th>Status</th><th></th></tr></thead><tbody>${c.channels.map(x => `<tr><td><b>${esc(x.name)}</b></td><td>${stTag(x.status)}</td><td><button class="link" data-a="chToggle" data-id="${x.id}">${x.status === 'Enabled' ? 'Disable' : 'Enable'}</button></td></tr>`).join('')}</tbody></table><p class="note">Channels decide where published workflows can be reached. Enabling one here is a configuration exercise only.</p>`;
+  if (t === 'ds') body = `<table class="stack"><thead><tr><th>Application</th><th>URL</th><th>Status</th></tr></thead><tbody>${c.dataSources.map(x => `<tr><td><b>${esc(x.name)}</b></td><td class="mono">${esc(x.url)}</td><td>${stTag(x.status)}</td></tr>`).join('')}</tbody></table>`;
+  if (t === 'cli') body = `<div class="card"><p class="note">Illustrative commands for practising export and promotion. They mirror sandbox actions; they are not the real CLI syntax.</p><pre>studio-sim login --pod SIM-DEV --user sandbox
+studio-sim workflow list
+studio-sim workflow export ${esc(codeOf(s.workflows[0]?.name || 'X', true))} --out workflow.json
+studio-sim workflow import workflow.json --pod SIM-TEST
+studio-sim workflow deploy CUST_POLICY_Q_A
+studio-sim monitor sessions --last 7d</pre><div class="row" style="margin-top:10px"><button data-a="exportCfg">Export configuration (same as "workflow export")</button><button data-a="importCfg">Import configuration</button></div></div>`;
+  return `<h1>Credentials</h1>${tabs('crTab', [['connections', 'Connections'], ['llm', 'LLM'], ['chat', 'Chat Experience'], ['email', 'Email Accounts'], ['channels', 'Channels'], ['ds', 'Data Source Applications'], ['cli', 'AI Studio CLI']])}${body}`;
+};
+
+/* ---------- Monitoring and Evaluation ---------- */
+const PERIODS = { d1: 1, d7: 7, m1: 30, m3: 90 };
+function inPeriod(d) { const n = PERIODS[ui().period || 'm1'], dt = new Date(Date.UTC(2026, 10, 25)); dt.setUTCDate(dt.getUTCDate() - n + 1); return d >= dt.toISOString().slice(0, 10); }
+V.monitoring = () => {
+  const s = S(), t = curTab('monTab', 'monitoring'), src = ui().src || 'all';
+  const rows = s.daily.filter(x => inPeriod(x.d) && (src === 'all' || x.src === src));
+  let body = '';
+  if (t === 'monitoring') {
+    const per = s.workflows.map(w => { const x = rows.filter(r => r.wf === w.id), ss = x.reduce((a, r) => a + r.s, 0), e = x.reduce((a, r) => a + r.e, 0); return { w, ss, au: x.reduce((a, r) => a + r.au, 0), e, rate: ss ? e / ss * 100 : 0 }; }).filter(p => p.ss && match('mon', p.w.name, p.w.product));
+    const tot = per.reduce((a, p) => a + p.au, 0), ses = per.reduce((a, p) => a + p.ss, 0);
+    body = `<div class="row" style="margin-bottom:12px"><div class="seg">${Object.entries({ d1: 'Last 1 day', d7: 'Last 7 days', m1: 'Last 1 month', m3: 'Last 3 months' }).map(([k, l]) => `<button class="${(ui().period || 'm1') === k ? 'on' : ''}" data-a="period" data-id="${k}">${l}</button>`).join('')}</div><select data-ui="src" style="width:auto">${opts({ all: 'All sessions', synthetic: 'Production (synthetic)', test: 'Test runs', app: 'Application runs' }, src)}</select></div>
+    <div class="grid" style="margin-bottom:14px">${[['Sessions', fmt(ses)], ['AI Units', fmt(tot)], ['USD equivalent', usd(tot * s.rates.unitPrice)], ['Share of one month\'s free grant', (tot / s.rates.freeGrant * 100).toFixed(1) + '%']].map(([l, v]) => `<div class="card"><div class="kpi">${esc(v)}</div><div class="kl">${esc(l)}</div></div>`).join('')}</div>
+    <div class="card" style="margin-bottom:14px"><h2>Sessions per day</h2><div class="fig" style="position:relative;min-height:200px"><svg id="sesfig" style="position:absolute;inset:0;width:100%;height:100%" role="img" aria-label="Sessions per day"></svg></div></div>
+    <div class="scroll"><table class="stack"><thead><tr><th>Name</th><th class="n">Sessions</th><th>Family</th><th>Product</th><th class="n">AI Units</th><th class="n">Error Rate</th><th class="n">Error Count</th></tr></thead><tbody>${per.map(p => `<tr><td><b>${esc(p.w.name)}</b></td><td class="n">${fmt(p.ss)}</td><td>${esc(p.w.family)}</td><td>${esc(p.w.product)}</td><td class="n">${fmt(p.au)}</td><td class="n">${p.rate.toFixed(1)}%</td><td class="n">${fmt(p.e)}</td></tr>`).join('') || '<tr><td colspan="7">There is nothing here so far. Deploy a workflow or run one.</td></tr>'}</tbody></table></div>`;
+  }
+  if (t === 'evaluation') body = `<div class="row" style="margin-bottom:12px"><button data-a="evEdit" data-id="">Add evaluation set</button></div>${s.evalSets.filter(e => match('mon', e.name)).map(e => { const last = e.runs[0]; return `<div class="card" style="margin-bottom:12px"><div class="row"><h3>${esc(e.name)}</h3>${tag(byId('workflows', e.wfId)?.name || '—')}${last ? tag(`Last score ${last.score}%`, last.score >= 80 ? 't-pub' : last.score >= 50 ? 't-warn' : 't-bad') : ''}<span class="sp"></span><button class="pri" data-a="evRun" data-id="${e.id}">Run evaluation</button><button class="link" data-a="evEdit" data-id="${e.id}">Edit</button></div>
+     <div class="scroll"><table class="stack"><thead><tr><th>Question</th><th>Expected (all must appear)</th><th>Last result</th></tr></thead><tbody>${e.cases.map((c, i) => { const r = last?.results[i]; return `<tr><td>${esc(c.q)}</td><td class="mono">${esc(c.expect)}</td><td>${r ? `${r.pass ? '<span class="ok">Pass</span>' : '<span class="bad">Fail</span>'} <span class="note">${esc(r.answer.slice(0, 160))}</span>` : '—'}</td></tr>`; }).join('')}</tbody></table></div>
+     ${e.runs.length ? `<p class="note">History: ${e.runs.slice(0, 6).map(r => `${r.ts.slice(5, 16).replace('T', ' ')} ${r.score}% (${r.mode}, ${r.au} AU)`).join(' · ')}</p>` : ''}</div>`; }).join('')}<p class="note">Scoring is keyword-based: a case passes when every expected phrase appears in the answer. Evaluation runs consume AI Units like any other run.</p>`;
+  if (t === 'activities') body = `<div class="row" style="margin-bottom:10px"><button data-a="clearLog">Clear activity</button></div><div class="scroll"><table class="stack"><thead><tr><th>Time</th><th>Workflow</th><th>Source</th><th>Runtime</th><th class="n">Tokens</th><th class="n">Tool calls</th><th class="n">AU</th><th>Result</th></tr></thead><tbody>${s.usage.filter(u => match('mon', u.name)).slice(0, 60).map(u => `<tr><td>${esc(u.ts.slice(5, 16).replace('T', ' '))}</td><td>${esc(u.name)}</td><td>${esc(u.src)}</td><td>${esc(u.mode)}</td><td class="n">${fmt(u.tokens)}</td><td class="n">${u.tools}</td><td class="n">${u.au}</td><td>${u.error ? '<span class="bad">Error</span>' : '<span class="ok">OK</span>'}</td></tr>`).join('')}</tbody></table></div>
+   <h2 style="margin-top:18px">Events</h2>${s.events.slice(0, 30).map(e => `<div class="note">${esc(e.ts.slice(5, 16).replace('T', ' '))} · ${esc(e.kind)} · ${esc(e.text)}</div>`).join('') || '<p class="note">No events.</p>'}`;
+  if (t === 'value') { const per = s.workflows.map(w => { const x = rows.filter(r => r.wf === w.id), ss = x.reduce((a, r) => a + r.s - r.e, 0), au = x.reduce((a, r) => a + r.au, 0), hrs = ss * (w.minutesSaved || 0) / 60; return { w, ss, au, hrs, val: hrs * s.hourly, cost: au * s.rates.unitPrice }; }).filter(p => p.ss);
+    const tv = per.reduce((a, p) => a + p.val, 0), tc = per.reduce((a, p) => a + p.cost, 0);
+    body = `<div class="row" style="margin-bottom:12px"><label for="hr" style="margin:0">Loaded hourly rate (USD)</label><input id="hr" type="number" data-root="hourly" value="${esc(s.hourly)}" style="width:110px"><span class="note">Minutes saved per session is set on each workflow.</span></div>
+    <div class="grid" style="margin-bottom:14px">${[['Hours saved', fmt(per.reduce((a, p) => a + p.hrs, 0))], ['Value of time saved', usd(tv)], ['AI Unit cost (before free grant)', usd(tc)], ['Value ÷ cost', tc ? (tv / tc).toFixed(0) + '×' : 'n/a (free tier)']].map(([l, v]) => `<div class="card"><div class="kpi">${esc(v)}</div><div class="kl">${esc(l)}</div></div>`).join('')}</div>
+    <div class="scroll"><table class="stack"><thead><tr><th>Workflow</th><th class="n">Successful sessions</th><th class="n">Minutes saved each</th><th class="n">Hours saved</th><th class="n">Value</th><th class="n">AI Unit cost</th></tr></thead><tbody>${per.map(p => `<tr><td>${esc(p.w.name)}</td><td class="n">${fmt(p.ss)}</td><td class="n">${p.w.minutesSaved || 0}</td><td class="n">${fmt(p.hrs)}</td><td class="n">${usd(p.val)}</td><td class="n">${usd(p.cost)}</td></tr>`).join('')}</tbody></table></div><p class="note">Value is a modelling input you control; it is not measured.</p>`; }
+  return `<h1>Monitoring and Evaluation</h1>${tabs('monTab', [['monitoring', 'Monitoring'], ['evaluation', 'Evaluation'], ['activities', 'Activities'], ['value', 'Value']])}${ask('Search by workflow name or product', 'mon')}${body}`;
+};
+function drawSessions() {
+  const svg = $('#sesfig'); if (!svg) return; const s = S(), src = ui().src || 'all', n = PERIODS[ui().period || 'm1'];
+  const days = Array.from({ length: n }, (_, i) => { const d = new Date(Date.UTC(2026, 10, 25)); d.setUTCDate(d.getUTCDate() - (n - 1 - i)); return d.toISOString().slice(0, 10); });
+  const vals = days.map(d => s.daily.filter(x => x.d === d && (src === 'all' || x.src === src)).reduce((a, x) => a + x.s, 0));
+  const W = svg.clientWidth, H = svg.clientHeight, L = W < 520 ? 6 : 40, B = 22, mx = Math.max(1, ...vals), bw = (W - L - 6) / days.length;
+  svg.innerHTML = (W < 520 ? '' : [0, .5, 1].map(f => `<line x1="${L}" x2="${W}" y1="${6 + (H - 28) * (1 - f)}" y2="${6 + (H - 28) * (1 - f)}" stroke="#a8c2cb" stroke-opacity=".2"/><text x="${L - 6}" y="${10 + (H - 28) * (1 - f)}" text-anchor="end" font-size="11" fill="#a8c2cb">${fmt(mx * f)}</text>`).join(''))
+    + vals.map((v, i) => { const h = (H - 28) * v / mx; return `<rect x="${L + i * bw + 1}" y="${H - B - h}" width="${Math.max(1, bw - 2)}" height="${h}" rx="2" fill="#78bfd6"><title>${days[i]}: ${v} sessions</title></rect>`; }).join('')
+    + `<text x="${L}" y="${H - 4}" font-size="11" fill="#a8c2cb">${days[0].slice(5)}</text><text x="${W - 4}" y="${H - 4}" font-size="11" fill="#a8c2cb" text-anchor="end">${days[days.length - 1].slice(5)}</text>`;
+}
+
+/* ---------- Cost estimator ---------- */
+function estCalc() {
+  const s = S(), E = s.est, r = s.rates;
+  const rows = E.rows.map(x => { const inter = x.users * x.perDay * x.days, apr = Math.max(1, Math.ceil(x.tokens / r.tokenCeiling)); return { ...x, inter, apr, au: inter * apr * (r[x.llm] ?? 0) + x.docs * r.docGen }; });
+  const au = rows.reduce((a, x) => a + x.au, 0), acts = rows.reduce((a, x) => a + x.inter * x.apr, 0), docs = rows.reduce((a, x) => a + x.docs * r.docGen, 0);
+  const incl = r.freeGrant + (E.platform ? E.platformUnits / 12 : 0), bill = Math.max(0, au - incl);
+  const year = Array.from({ length: 12 }, (_, i) => { const a = au * (1 + E.growth / 100) ** i; return { a, cost: Math.max(0, a - incl) * r.unitPrice }; });
+  const units = year.reduce((t, m) => t + m.cost, 0);
+  return { rows, au, bill, month: bill * r.unitPrice, year, units, annual: units + (E.platform ? E.platformFee : 0), incl, packs: Math.ceil(year.reduce((t, m) => t + Math.max(0, m.a - incl), 0) / 100000), tiers: ['basic', 'premium', 'byo'].map(k => ({ k, cost: Math.max(0, acts * r[k] + docs - incl) * r.unitPrice })) };
+}
+V.estimator = () => {
+  const s = S(), E = s.est, c = estCalc(), cur = v => (E.showAud ? 'A$' : '$') + Number(v * (E.showAud ? E.fx : 1)).toLocaleString('en-US', { maximumFractionDigits: 0 }), mx = Math.max(1, ...c.rows.map(x => x.au));
+  return `<h1>${c.bill > 0 ? `${cur(c.month)} a month in AI Units above the free grant` : 'This workload fits inside the free monthly grant'}</h1><p class="sub">Models AI Unit consumption per use case with the rate card in Credentials → LLM. Estimates only; confirm with Oracle before quoting.</p>
+  <div class="grid" style="margin-bottom:14px">${[['AI Units per month', fmt(c.au)], ['Included per month', fmt(c.incl)], ['Billable AU per month', fmt(c.bill)], ['First-year total', cur(c.annual)]].map(([l, v]) => `<div class="card"><div class="kpi">${esc(v)}</div><div class="kl">${esc(l)}</div></div>`).join('')}</div>
+  <div class="card" style="margin-bottom:14px"><div class="row"><h2 style="margin:0">Use cases</h2><span class="sp"></span><button data-a="estAdd">Add use case</button><button data-a="estMeasured">Add measured workflows</button><button data-a="estPreset">Worked example</button><button data-a="estReset">Reset</button></div>
+   <div class="scroll" style="margin-top:10px"><table class="stack"><thead><tr><th>Use case</th><th>LLM</th><th class="n">Users</th><th class="n">Interactions per user per day</th><th class="n">Days per month</th><th class="n">Avg tokens</th><th class="n">Docs per month</th><th>Env</th><th class="n">AU per month</th><th></th></tr></thead><tbody>
+   ${c.rows.map((x, i) => `<tr><td><input data-er="${i}" data-f="name" value="${esc(x.name)}" style="min-width:160px"></td><td><select data-er="${i}" data-f="llm">${opts({ basic: 'Basic', premium: 'Premium', byo: 'BYO' }, x.llm)}</select></td>${['users', 'perDay', 'days', 'tokens', 'docs'].map(f => `<td class="n"><input type="number" min="0" data-er="${i}" data-f="${f}" value="${esc(x[f])}" style="width:96px;text-align:right"></td>`).join('')}<td><select data-er="${i}" data-f="env">${opts({ prod: 'Prod', nonprod: 'Non-prod' }, x.env)}</select></td><td class="n"><b>${fmt(x.au)}</b></td><td><button class="link" data-a="estDel" data-id="${i}">Remove</button></td></tr>`).join('')}</tbody></table></div>
+   <p class="note">AU = interactions × ⌈tokens ÷ ${fmt(s.rates.tokenCeiling)}⌉ × rate (Basic ${s.rates.basic}, Premium ${s.rates.premium}, BYO ${s.rates.byo}) + documents × ${s.rates.docGen}. Agent origin does not change the rate. Non-prod is metered like prod.</p></div>
+  <div class="two"><div class="card"><h2>12-month projection</h2><div class="row"><label for="eg" style="margin:0">Monthly growth %</label><input id="eg" type="number" step="any" data-eo="growth" value="${esc(E.growth)}" style="width:90px"></div><div style="position:relative;min-height:230px;margin-top:10px"><svg id="proj" style="position:absolute;inset:0;width:100%;height:100%" role="img" aria-label="Monthly cost projection"></svg></div>
+   <h3 style="margin-top:12px">AU per month by use case</h3>${c.rows.map(x => `<div class="brow"><span>${esc(x.name)}</span><div class="bar"><i style="width:${x.au / mx * 100}%"></i></div><span class="mono">${fmt(x.au)}</span></div>`).join('')}</div>
+  <div class="card"><h2>Commercial options</h2><label class="row" style="color:var(--ink)"><input type="checkbox" data-eo="platform" ${E.platform ? 'checked' : ''}> Agentic Applications platform subscription (production only)</label>
+   <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr))"><div><label>Platform fee USD/yr</label><input type="number" data-eo="platformFee" value="${esc(E.platformFee)}"></div><div><label>AU included per year</label><input type="number" data-eo="platformUnits" value="${esc(E.platformUnits)}"></div><div><label>USD→AUD</label><input type="number" step="any" data-eo="fx" value="${esc(E.fx)}"></div></div>
+   <label class="row" style="color:var(--ink)"><input type="checkbox" data-eo="showAud" ${E.showAud ? 'checked' : ''}> Show AUD</label><p class="note">Platform fee and included units are third-party reported list figures. AU packs: USD 1,000 per 100,000 (reported).</p>
+   <h3>Same workload per LLM tier, per month</h3><table><tbody>${c.tiers.map(t => `<tr><td>${esc(t.k)}</td><td class="n"><b>${cur(t.cost)}</b></td></tr>`).join('')}</tbody></table>
+   <h3 style="margin-top:12px">Year one</h3><table><tbody><tr><td>AI Units above grant</td><td class="n">${cur(c.units)}</td></tr><tr><td>Platform fee</td><td class="n">${cur(E.platform ? E.platformFee : 0)}</td></tr><tr><td><b>Total</b></td><td class="n"><b>${cur(c.annual)}</b></td></tr><tr><td>100k AU packs needed</td><td class="n">${fmt(c.packs)}</td></tr></tbody></table></div></div>`;
+};
+function drawProj() {
+  const svg = $('#proj'); if (!svg) return; const c = estCalc(), E = S().est, k = E.showAud ? E.fx : 1, pre = E.showAud ? 'A$' : '$', W = svg.clientWidth, H = svg.clientHeight, L = W < 520 ? 6 : 60, B = 22, mx = Math.max(1, ...c.year.map(m => m.cost)), bw = (W - L - 6) / 12;
+  svg.innerHTML = (W < 520 ? '' : [0, .5, 1].map(f => `<line x1="${L}" x2="${W}" y1="${6 + (H - 28) * (1 - f)}" y2="${6 + (H - 28) * (1 - f)}" stroke="#a8c2cb" stroke-opacity=".2"/><text x="${L - 6}" y="${10 + (H - 28) * (1 - f)}" text-anchor="end" font-size="11" fill="#a8c2cb">${pre}${fmt(mx * f * k)}</text>`).join(''))
+    + c.year.map((m, i) => { const h = (H - 28) * m.cost / mx; return `<rect x="${L + i * bw + 2}" y="${H - B - h}" width="${Math.max(2, bw - 4)}" height="${h}" rx="3" fill="#f0b93a"><title>Month ${i + 1}: ${pre}${fmt(m.cost * k)}</title></rect><text x="${L + i * bw + bw / 2}" y="${H - 6}" text-anchor="middle" font-size="11" fill="#a8c2cb">${i + 1}</text>`; }).join('');
+}
+
+/* ---------- Sandbox data ---------- */
+V.data = () => {
+  const r = ui().dataRes || 'purchaseOrders', m = FDB.resources[r];
+  return `<h1>Sandbox Data</h1><p class="sub">Synthetic business objects behind mock REST resources. Tools and approvals read and write these. Edits last until the page reloads.</p>
+  <div class="row" style="margin-bottom:12px"><select id="dres" style="width:auto">${opts(Object.keys(FDB.resources).map(k => ({ id: k, name: `${k} (${FDB[k].length})` })), r)}</select></div>
+  <div class="card" style="margin-bottom:14px"><h2>REST explorer</h2><div class="row" style="flex-wrap:nowrap"><select id="rm" style="width:auto"><option>GET</option><option>PATCH</option></select><input id="ru" class="mono" value="${esc(m.path)}?q=&amp;limit=5"></div>
+   <label for="rb">PATCH body; path ends with /{${esc(m.key)}}</label><textarea id="rb" class="mono" style="min-height:60px">{ "Status": "Approved" }</textarea><div class="row" style="margin-top:8px"><button class="pri" data-a="rest">Send</button><span class="note">q: Field=Val;Field&gt;10;Field LIKE '*text*'</span></div><pre id="rout" style="margin-top:10px">Response appears here.</pre></div>
+  <div class="card"><h2>${esc(r)} <span class="note">${esc(m.area)} · ${esc(m.path)}</span></h2><div class="scroll"><table><thead><tr>${Object.keys(FDB[r][0]).map(k => `<th class="${typeof FDB[r][0][k] === 'number' ? 'n' : ''}">${esc(k)}</th>`).join('')}</tr></thead><tbody>${FDB[r].slice(0, 60).map(row => `<tr>${Object.values(row).map(v => `<td class="${typeof v === 'number' ? 'n' : ''}">${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+};
+function rest() {
+  const meth = $('#rm').value, u = $('#ru').value.trim(), out = $('#rout');
+  try { const [path, qs = ''] = u.split('?'), params = Object.fromEntries(new URLSearchParams(qs)), ent = Object.entries(FDB.resources).find(([, x]) => path === x.path || path.startsWith(x.path + '/'));
+    if (!ent) throw { s: 404, m: 'No resource at ' + path }; const [res, m] = ent, key = decodeURIComponent(path.slice(m.path.length + 1));
+    if (meth === 'GET') { const r = key ? FDB.query(res, { q: `${m.key}=${key}`, limit: 1 }) : FDB.query(res, params); if (key && !r.items.length) throw { s: 404, m: 'Not found' }; out.textContent = 'HTTP 200\n' + JSON.stringify(key ? r.items[0] : r, null, 2); }
+    else { if (!key) throw { s: 400, m: 'PATCH needs /{' + m.key + '}' }; out.textContent = 'HTTP 200\n' + JSON.stringify(FDB.update(res, key, JSON.parse($('#rb').value)), null, 2); }
+  } catch (e) { out.textContent = `HTTP ${e.s || 400}\n` + JSON.stringify({ title: e.m || e.message }, null, 2); }
+}
+
+/* ---------- dialogs ---------- */
+function dialog(html, onSave, saveLabel = 'Save') {
+  $('#dlgbody').innerHTML = html + `<div class="row" style="margin-top:16px;justify-content:flex-end"><button id="dlgx">${onSave ? 'Cancel' : 'Close'}</button>${onSave ? `<button class="pri" id="dlgok">${esc(saveLabel)}</button>` : ''}</div>`;
+  const d = $('#dlg'); d.showModal(); $('#dlgx').onclick = () => d.close();
+  if (onSave) $('#dlgok').onclick = async () => { try { if ((await onSave()) !== false) { d.close(); C.save(); render(); } } catch (e) { toast(e.message); } };
+}
+const chks = (list, sel, name) => `<div class="chk">${list.map(x => `<label><input type="checkbox" name="${name}" value="${esc(x.id)}" ${sel.includes(x.id) ? 'checked' : ''}>${esc(x.name)}</label>`).join('')}</div>`;
+const got = name => [...document.querySelectorAll(`#dlg input[name=${name}]:checked`)].map(i => i.value);
+const val = id => $('#' + id).value;
+const need = (v, l) => { if (!String(v).trim()) throw new Error(l + ' is required'); return String(v).trim(); };
+const delBtn = id => id ? '<div style="margin-top:12px"><button class="danger" id="ddel">Delete</button></div>' : '';
+const onDel = fn => { const b = $('#ddel'); if (b) b.onclick = () => { const err = fn(); if (err) return toast(err); $('#dlg').close(); C.save(); render(); }; };
+
+const D = {
+  agent(id) { const s = S(), a = byId('agents', id) || { id: uid('a'), name: '', role: '', instructions: '', tools: [], topics: [] };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} agent</h2><label>Name</label><input id="d1" value="${esc(a.name)}"><label>Role</label><input id="d2" value="${esc(a.role)}"><label>Instructions</label><textarea id="d3">${esc(a.instructions)}</textarea><label>Tools</label>${chks(s.tools, a.tools, 'dt')}<label>Topics</label>${chks(s.topics, a.topics, 'dp')}${delBtn(id)}`, () => { Object.assign(a, { name: need(val('d1'), 'Name'), role: val('d2'), instructions: val('d3'), tools: got('dt'), topics: got('dp') }); if (!id) s.agents.push(a); });
+    onDel(() => s.workflows.some(w => w.agents.includes(id) || (w.nodes || []).some(n => n.agentId === id)) ? 'Remove the agent from its workflows first' : void (s.agents = s.agents.filter(x => x.id !== id))); },
+  tool(id) { const s = S(), t = byId('tools', id) || { id: uid('t'), name: '', type: 'business_object', resource: 'items', ops: ['GET'], description: '', docIds: [] };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} tool</h2><label>Name</label><input id="d1" value="${esc(t.name)}"><label>Type</label><select id="d2">${opts(TOOL_TYPES, t.type)}</select>
+     <label>Business object</label><select id="d3">${opts(Object.keys(FDB.resources), t.resource)}</select><label class="row" style="color:var(--ink)"><input type="checkbox" id="d4" ${(t.ops || []).includes('PATCH') ? 'checked' : ''}> Allow updates (PATCH)</label>
+     <label>Documents (document tools)</label>${chks(FDB.documents.map(d => ({ id: d.id, name: d.title })), t.docIds || [], 'dd')}
+     <label>Connector (external REST / MCP)</label><select id="d5"><option value="">—</option>${opts(s.connectors, t.connectorId)}</select><label>Document template (document template tools)</label><select id="d7"><option value="">—</option>${opts(s.docTemplates, t.templateId)}</select><label>Approval process (approval tools)</label><select id="d8"><option value="">—</option>${opts(s.approvalProcesses, t.processId)}</select>
+     <label>Description the LLM sees</label><textarea id="d6">${esc(t.description)}</textarea><p class="note">External REST and MCP tools return mocked responses. The sandbox cannot reach outside hosts.</p>${delBtn(id)}`, () => {
+      const ty = val('d2'); if ((ty === 'external_rest' || ty === 'mcp') && !val('d5')) throw new Error('Pick a connector'); if (ty === 'docgen' && !val('d7')) throw new Error('Pick a template');
+      Object.assign(t, { name: need(val('d1'), 'Name'), type: ty, resource: val('d3'), ops: $('#d4').checked ? ['GET', 'PATCH'] : ['GET'], docIds: got('dd'), connectorId: val('d5'), templateId: val('d7'), processId: val('d8') || 'ap_po', description: val('d6') }); if (!id) s.tools.push(t); });
+    onDel(() => { s.tools = s.tools.filter(x => x.id !== id); s.agents.forEach(a => a.tools = a.tools.filter(x => x !== id)); }); },
+  topic(id) { const s = S(), t = byId('topics', id) || { id: uid('tp'), name: '', instructions: '' };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} topic</h2><label>Name</label><input id="d1" value="${esc(t.name)}"><label>Instructions</label><textarea id="d2">${esc(t.instructions)}</textarea>${delBtn(id)}`, () => { Object.assign(t, { name: need(val('d1'), 'Name'), instructions: val('d2') }); if (!id) s.topics.push(t); });
+    onDel(() => { s.topics = s.topics.filter(x => x.id !== id); s.agents.forEach(a => a.topics = a.topics.filter(x => x !== id)); }); },
+  app(id) { const s = S(), a = byId('applications', id) || { id: uid('app'), name: '', description: '', family: 'SCM', product: 'Inventory', workflows: [], prompt: '', status: 'Draft', version: 0, insights: [{ label: 'Open POs', res: 'purchaseOrders', q: 'Status=Open', agg: 'count' }] };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} application</h2><label>Name</label><input id="d1" value="${esc(a.name)}"><label>Description</label><textarea id="d2">${esc(a.description)}</textarea><div class="grid" style="grid-template-columns:1fr 1fr"><div><label>Family</label><select id="d3">${opts(Object.keys(FAMILIES), a.family)}</select></div><div><label>Product</label><input id="d4" value="${esc(a.product)}"></div></div>
+     <label>Workflows</label>${chks(s.workflows, a.workflows, 'dw')}<label>Default question</label><input id="d5" value="${esc(a.prompt)}"><label>Insight cards (one per line: label | object | q | count or sum:Field)</label><textarea id="d6" class="mono">${esc(a.insights.map(i => [i.label, i.res, i.q, i.agg].join(' | ')).join('\n'))}</textarea>${delBtn(id)}`, () => {
+      const ins = val('d6').split('\n').map(l => l.split('|').map(x => x.trim())).filter(p => p[0]).map(([label, res, q, agg]) => { if (!FDB.resources[res]) throw new Error('Unknown object ' + res); return { label, res, q: q || '', agg: agg || 'count' }; });
+      if (!got('dw').length) throw new Error('Pick at least one workflow');
+      Object.assign(a, { name: need(val('d1'), 'Name'), description: val('d2'), family: val('d3'), product: val('d4'), workflows: got('dw'), prompt: val('d5'), insights: ins }); if (!id) s.applications.push(a); });
+    onDel(() => { s.applications = s.applications.filter(x => x.id !== id); }); },
+  con(id) { const s = S(), c = byId('connectors', id) || { id: uid('c'), name: '', family: 'SCM', defId: 'cd_rest', endpoint: 'https://', connId: '', status: 'Configured', description: '' };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} connector</h2><label>Definition</label><select id="d1">${opts(s.connectorDefs, c.defId)}</select><label>Name</label><input id="d2" value="${esc(c.name)}"><label>Family</label><select id="d3">${opts(Object.keys(FAMILIES), c.family)}</select><label>Endpoint</label><input id="d4" class="mono" value="${esc(c.endpoint)}"><label>Credential</label><select id="d5"><option value="">None</option>${opts(s.creds.connections, c.connId)}</select><label>Description</label><textarea id="d6">${esc(c.description)}</textarea>${delBtn(id)}`, () => {
+      const ch = c.endpoint !== val('d4') || c.connId !== val('d5'); Object.assign(c, { defId: val('d1'), name: need(val('d2'), 'Name'), family: val('d3'), endpoint: need(val('d4'), 'Endpoint'), connId: val('d5'), description: val('d6') }); if (ch) c.status = 'Configured'; if (!id) s.connectors.push(c); });
+    onDel(() => s.tools.some(t => t.connectorId === id) ? 'A tool uses this connector' : void (s.connectors = s.connectors.filter(x => x.id !== id))); },
+  def() { const s = S(); dialog('<h2>Create connector definition</h2><label>Name</label><input id="d1"><label>Kind</label><select id="d2">' + opts(['REST', 'MCP', 'Web', 'OIC', 'Files', 'Database']) + '</select><label>Configuration fields</label><input id="d3" value="Base URL, auth connection">', () => { s.connectorDefs.push({ id: uid('cd'), name: need(val('d1'), 'Name'), kind: val('d2'), fields: val('d3') }); }); },
+  tpl(id) { const s = S(), t = byId('docTemplates', id) || { id: uid('dt'), name: '', format: 'Report', res: 'purchaseOrders', q: '', body: '{{count}} records as of {{today}}:\n{{rows:OrderNumber,Supplier,Status}}' };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} document template</h2><label>Name</label><input id="d1" value="${esc(t.name)}"><div class="grid" style="grid-template-columns:1fr 1fr"><div><label>Format</label><select id="d2">${opts(['Email', 'Letter', 'Report'], t.format)}</select></div><div><label>Business object</label><select id="d3">${opts(Object.keys(FDB.resources), t.res)}</select></div></div><label>Filter q</label><input id="d4" class="mono" value="${esc(t.q)}"><label>Body</label><textarea id="d5" class="mono" style="min-height:180px">${esc(t.body)}</textarea>${delBtn(id)}`, () => {
+      const nt = { name: need(val('d1'), 'Name'), format: val('d2'), res: val('d3'), q: val('d4'), body: need(val('d5'), 'Body') }; C.renderTemplate({ ...t, ...nt }); Object.assign(t, nt); if (!id) s.docTemplates.push(t); ui().tpl = t.id; });
+    onDel(() => s.tools.some(x => x.templateId === id) || s.workflows.some(w => (w.nodes || []).some(n => n.templateId === id)) ? 'In use by a tool or workflow' : void (s.docTemplates = s.docTemplates.filter(x => x.id !== id))); },
+  pol(id, tplId) { const s = S(), p = byId('policies', id) || { id: uid('p'), name: '', templateId: tplId || 'pt_mask', scope: 'all', active: true, params: {} }, pt = byId('policyTemplates', p.templateId);
+    const field = k => k === 'resource' ? `<select id="pp_${k}">${opts(Object.keys(FDB.resources), p.params[k])}</select>` : k === 'toolId' ? `<select id="pp_${k}">${opts(s.tools, p.params[k])}</select>` : k === 'processId' ? `<select id="pp_${k}">${opts(s.approvalProcesses, p.params[k])}</select>` : `<input id="pp_${k}" value="${esc(p.params[k] ?? '')}">`;
+    dialog(`<h2>${id ? 'Edit' : 'Add'} policy · ${esc(pt.name)}</h2><p class="note">${esc(pt.description)}</p><label>Name</label><input id="d1" value="${esc(p.name)}"><label>Scope</label><select id="d2">${opts([{ id: 'all', name: 'All workflows' }, ...s.workflows], p.scope)}</select>${pt.params.map(k => `<label>${esc(k)}</label>${field(k)}`).join('')}${delBtn(id)}`, () => {
+      Object.assign(p, { name: need(val('d1'), 'Name'), scope: val('d2'), params: Object.fromEntries(pt.params.map(k => [k, need(val('pp_' + k), k)])) }); if (!id) s.policies.push(p); ui().polTab = 'policies'; });
+    onDel(() => { s.policies = s.policies.filter(x => x.id !== id); }); },
+  ap(id) { const s = S(), p = byId('approvalProcesses', id) || { id: uid('ap'), name: '', approvers: '', rule: 'Any approver', escalateDays: 2 };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} approval process</h2><label>Name</label><input id="d1" value="${esc(p.name)}"><label>Approvers (comma separated)</label><input id="d2" value="${esc(p.approvers)}"><label>Rule</label><select id="d3">${opts(['Any approver', 'All approvers', 'Sequential'], p.rule)}</select><label>Escalate after days</label><input id="d4" type="number" min="1" value="${esc(p.escalateDays)}">`, () => { Object.assign(p, { name: need(val('d1'), 'Name'), approvers: need(val('d2'), 'Approvers'), rule: val('d3'), escalateDays: +val('d4') || 1 }); if (!id) s.approvalProcesses.push(p); ui().apTab = 'processes'; }); },
+  conn(id) { const s = S(), c = byId('connections', id) || { id: uid('cn'), name: '', type: 'API key', user: '', secret: '' };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} connection</h2><label>Name</label><input id="d1" value="${esc(c.name)}"><label>Type</label><select id="d2">${opts(['API key', 'Basic', 'OAuth2 client credentials', 'JWT'], c.type)}</select><label>User or client ID</label><input id="d3" value="${esc(c.user)}"><label>Secret (fake values only; stored masked)</label><input id="d4" type="password" placeholder="${id ? 'Leave blank to keep' : ''}">`, () => {
+      const sec = val('d4'); if (!id && !sec) throw new Error('Secret is required'); Object.assign(c, { name: need(val('d1'), 'Name'), type: val('d2'), user: val('d3') }); if (sec) c.secret = '••••' + sec.slice(-4); if (!id) s.creds.connections.push(c); }); },
+  llm(id) { const s = S(), l = byId('llms', id);
+    dialog(`<h2>${esc(l.name)}</h2><label>Name</label><input id="d1" value="${esc(l.name)}"><label>Provider</label><input id="d2" value="${esc(l.provider)}"><label>Credential</label><select id="d3">${l.tier === 'byo' ? '' : '<option value="built-in">Built-in</option>'}<option value="">None</option>${opts(s.creds.connections, l.connId)}</select>`, () => { Object.assign(l, { name: need(val('d1'), 'Name'), provider: val('d2'), connId: val('d3') }); }); },
+  ev(id) { const s = S(), e = byId('evalSets', id) || { id: uid('ev'), name: '', wfId: s.workflows[0]?.id, cases: [], runs: [] };
+    dialog(`<h2>${id ? 'Edit' : 'Add'} evaluation set</h2><label>Name</label><input id="d1" value="${esc(e.name)}"><label>Workflow</label><select id="d2">${opts(s.workflows, e.wfId)}</select><label>Cases (one per line: question | expected phrases, comma separated)</label><textarea id="d3" class="mono" style="min-height:160px">${esc(e.cases.map(c => c.q + ' | ' + c.expect).join('\n'))}</textarea>${delBtn(id)}`, () => {
+      const cases = val('d3').split('\n').map(l => l.split('|')).filter(p => p[0].trim()).map(([q, x]) => ({ q: q.trim(), expect: (x || '').trim() })); if (!cases.length) throw new Error('Add at least one case');
+      Object.assign(e, { name: need(val('d1'), 'Name'), wfId: val('d2'), cases }); if (!id) s.evalSets.push(e); });
+    onDel(() => { s.evalSets = s.evalSets.filter(x => x.id !== id); }); }
+};
+
+/* ---------- actions ---------- */
+let busy = false;
+async function deployWf(w) {
+  toast('Validating and running smoke test…'); const r = await C.deploy(w);
+  dialog(`<h2>${r.ok ? 'Deployed' : 'Deployment failed'}: ${esc(w.name)}</h2>${r.checks.map(c => `<div class="${c.ok ? 'ok' : c.sev === 'warning' ? '' : 'bad'}">${c.ok ? '✓' : c.sev === 'warning' ? '!' : '✕'} ${esc(c.t)}</div>`).join('')}${r.ok ? `<p>Version ${w.version} is published. Thirty days of production sessions were generated; see Monitoring and Evaluation.</p>` : '<p class="note">Fix the failed checks and deploy again.</p>'}`);
+  render();
+}
+async function buildFromPrompt(text) {
+  const s = S(); if (!text.trim()) return toast('Describe what to build');
+  const b = $('#buildb'); if (b) { b.disabled = true; b.textContent = 'Building…'; }
+  let spec = null;
+  await needLLM('Building a workflow from a description uses Claude.');
+  try {
+    if (C.runtime() !== 'mock') {
+      const toolList = s.tools.map(t => `${t.id}: ${t.name} (${TOOL_TYPES[t.type]})`).join('\n'), topicList = s.topics.map(t => `${t.id}: ${t.name}`).join('\n');
+      spec = await C.askJson(`Design an agent workflow for a SIMULATED Fusion AI Agent Studio sandbox from this request: "${text}".\nAvailable tool ids:\n${toolList}\nAvailable topic ids:\n${topicList}\nFamilies and products: ${JSON.stringify(FAMILIES)}.\nReturn JSON only: {"name":string,"description":string,"family":string,"product":string,"type":"supervisor","llm":"basic"|"premium","agents":[{"name":string,"role":string,"instructions":string,"tools":[tool ids],"topics":[topic ids]}],"starters":[3 short questions answerable from the tools]}. Use 1-3 agents and only listed ids.`);
+    }
+  } catch (e) { toast('LLM build failed (' + (e.message || e.code) + '), using template match'); }
+  if (!spec || !Array.isArray(spec.agents)) {
+    const t = text.toLowerCase(), pick = /invoice|spend|ap\b|payable/.test(t) ? 'wf_inv' : /mainten|asset|backlog/.test(t) ? 'wf_mnt' : /order|customer|ship/.test(t) ? 'wf_ord' : /policy|rule/.test(t) ? 'wf_pol' : 'wf_short', src = byId('workflows', pick) || s.workflows[0];
+    spec = { name: text.slice(0, 48).replace(/^./, c => c.toUpperCase()), description: 'Built from: ' + text, family: src.family, product: src.product, type: src.type, llm: src.type === 'workflow' ? 'premium' : 'basic', agents: src.agents.map(id => { const a = byId('agents', id); return { name: a.name, role: a.role, instructions: a.instructions, tools: a.tools, topics: a.topics }; }), starters: src.starters, nodes: src.nodes };
+  }
+  const ids = spec.agents.map(a => { const n = { id: uid('a'), name: String(a.name || 'Agent'), role: String(a.role || ''), instructions: String(a.instructions || ''), tools: (a.tools || []).filter(x => byId('tools', x)), topics: (a.topics || []).filter(x => byId('topics', x)) }; s.agents.push(n); return n.id; });
+  const fam = FAMILIES[spec.family] ? spec.family : 'SCM';
+  const w = { id: uid('wf'), name: String(spec.name || 'New workflow'), seeded: false, description: String(spec.description || ''), type: spec.type === 'workflow' ? 'workflow' : 'supervisor', llmId: spec.llm === 'premium' ? 'l_prem' : 'l_basic', agentType: 'custom', family: fam, product: FAMILIES[fam].includes(spec.product) ? spec.product : FAMILIES[fam][0], status: 'Draft', version: 0, agents: ids, nodes: [], minutesSaved: 10, starters: (spec.starters || []).map(String).slice(0, 4), editedOn: TODAY };
+  if (spec.nodes && spec.nodes.length) w.nodes = clone(spec.nodes).map(n => { if (n.agentId) { const i = spec.agents.findIndex(a => a.name === byId('agents', n.agentId)?.name); n.agentId = ids[Math.max(0, i)]; } return n; });
+  s.workflows.push(w); C.event('build', `${w.name} drafted from a prompt`); C.save(); ui().edit = w.id; location.hash = 'edit'; toast('Draft workflow created. Review, then deploy.');
+}
+async function send() {
+  const inp = $('#chatin'), q = inp.value.trim(); if (!q || busy) return; await needLLM('This workflow runs live with your Claude API key.'); const s = S(), w = byId('workflows', ui().play);
+  busy = true; $('#sendb').disabled = true; inp.value = ''; s.chats[w.id] = s.chats[w.id] || [];
+  const hist = s.chats[w.id].slice(-8).map(m => ({ role: m.role, content: m.text })); s.chats[w.id].push({ role: 'user', text: q });
+  const box = $('#msgs'); if (s.chats[w.id].length === 1) box.innerHTML = '';
+  box.insertAdjacentHTML('beforeend', `<div class="m u">${esc(q)}</div><div class="m a" id="pend">Thinking…</div>`); box.scrollTop = box.scrollHeight; const p = $('#pend');
+  const r = await C.runWorkflow(w, q, t => { p.textContent = t; box.scrollTop = box.scrollHeight; }, { history: hist, src: 'test' });
+  const meta = `${r.mode === 'live' ? 'Live LLM' : r.mode === 'api' ? 'Claude API' : 'Mock'} · ${r.m.au} AU · ~${fmt(r.m.tokens)} tokens · ${r.m.actions} action(s)`;
+  s.chats[w.id].push({ role: 'assistant', text: r.text || '(no answer)', meta }); s.chats[w.id] = s.chats[w.id].slice(-30);
+  p.removeAttribute('id'); p.textContent = r.text || '(no answer)'; p.insertAdjacentHTML('beforeend', `<span class="meta">${esc(meta)}</span>`);
+  busy = false; $('#sendb').disabled = false; C.save(); inp.focus();
+}
+const A = {
+  tab: (id, el) => { ui()[el.dataset.k] = id; },
+  chip: id => { $('#buildin').value = id + ': '; $('#buildin').focus(); return 'keep'; },
+  wfNew: () => { const w = { id: uid('wf'), name: 'New workflow', seeded: false, description: '', type: 'supervisor', llmId: 'l_basic', agentType: 'custom', family: 'SCM', product: 'Inventory', status: 'Draft', version: 0, agents: [], nodes: [], minutesSaved: 10, starters: [], editedOn: TODAY }; S().workflows.push(w); ui().edit = w.id; location.hash = 'edit'; },
+  wfEdit: id => { ui().edit = id; location.hash = 'edit'; },
+  wfRun: id => { ui().play = id; S().trace = []; location.hash = 'run'; },
+  wfCopy: id => { const s = S(), w = clone(byId('workflows', id)); w.id = uid('wf'); w.name += ' (copy)'; w.seeded = false; w.status = 'Draft'; w.version = 0; w.agentType = 'modified'; w.editedOn = TODAY; s.workflows.push(w); toast('Duplicated as draft. Agents are shared with the original.'); },
+  wfDeploy: id => { deployWf(byId('workflows', id)); return 'keep'; },
+  nodeAdd: () => { byId('workflows', ui().edit).nodes.push({ id: uid('n'), type: 'agent', agentId: S().agents[0]?.id, prompt: '' }); },
+  nodeDel: i => { byId('workflows', ui().edit).nodes.splice(+i, 1); },
+  nodeUp: i => { const n = byId('workflows', ui().edit).nodes; i = +i; if (i > 0) [n[i - 1], n[i]] = [n[i], n[i - 1]]; },
+  agentEdit: id => { D.agent(id); return 'keep'; }, toolEdit: id => { D.tool(id); return 'keep'; }, topicEdit: id => { D.topic(id); return 'keep'; },
+  appEdit: id => { D.app(id); return 'keep'; }, appOpen: id => { ui().app = id; location.hash = 'app'; },
+  appDeploy: id => { const s = S(), a = byId('applications', id), bad = a.workflows.map(w => byId('workflows', w)).filter(w => !w || w.status !== 'Published');
+    if (bad.length) { dialog(`<h2>Cannot deploy ${esc(a.name)}</h2><p>These workflows are not published:</p><ul>${bad.map(w => `<li>${esc(w?.name || 'missing')}</li>`).join('')}</ul><p class="note">Deploy them from Workflows first.</p>`); return 'keep'; }
+    a.status = 'Deployed'; a.version = (a.version || 0) + 1; C.event('deploy', `Application ${a.name} v${a.version} deployed`); toast(a.name + ' deployed'); },
+  conEdit: id => { D.con(id); return 'keep'; }, defAdd: () => { D.def(); return 'keep'; },
+  conTest: id => { const c = byId('connectors', id), d = byId('connectorDefs', c.defId); const needsCred = d.kind !== 'Web';
+    if (needsCred && !c.connId) { c.status = 'Configured'; toast('Test failed: add a credential'); C.event('connector', `${c.name} test failed: no credential`); }
+    else if (!/^(https:\/\/|mcp:\/\/)/.test(c.endpoint)) { c.status = 'Configured'; toast('Test failed: endpoint must start with https:// or mcp://'); }
+    else { c.status = 'Tested'; toast(c.name + ': connection test passed (simulated)'); C.event('connector', `${c.name} tested`); } },
+  tplEdit: id => { D.tpl(id); return 'keep'; }, tplPick: id => { ui().tpl = id; },
+  polEdit: (id, el) => { D.pol(id, el.dataset.k); return 'keep'; }, polToggle: id => { const p = byId('policies', id); p.active = !p.active; },
+  apEdit: id => { D.ap(id); return 'keep'; }, taskOk: id => { C.decideTask(id, true); }, taskNo: id => { C.decideTask(id, false); },
+  connEdit: id => { D.conn(id); return 'keep'; }, llmEdit: id => { D.llm(id); return 'keep'; },
+  emailAdd: () => { dialog('<h2>Add email account</h2><label>Address</label><input id="d1" type="email"><label>Display name</label><input id="d2">', () => { S().creds.email.push({ id: uid('em'), address: need(val('d1'), 'Address'), display: val('d2'), status: 'Pending' }); }); return 'keep'; },
+  emailToggle: id => { const e = S().creds.email.find(x => x.id === id); e.status = e.status === 'Verified' ? 'Disabled' : 'Verified'; },
+  chToggle: id => { const c = S().creds.channels.find(x => x.id === id); c.status = c.status === 'Enabled' ? 'Not configured' : 'Enabled'; },
+  resetRates: () => { S().rates = { ...C.DEF_RATES }; },
+  dlAdd: () => { dialog('<h2>Add deeplink</h2><label>Name</label><input id="d1"><label>Page key</label><input id="d2"><label>Pattern</label><input id="d3" class="mono" value="/fscmUI/redwood/page/view?id={Key}">', () => { S().deeplinks.push({ id: uid('dl'), name: need(val('d1'), 'Name'), page: need(val('d2'), 'Page'), pattern: need(val('d3'), 'Pattern') }); }); return 'keep'; },
+  schemaAdd: () => { dialog('<h2>Add document schema</h2><label>Name</label><input id="d1"><label>Fields (name:type per line; types string, number, date)</label><textarea id="d2" class="mono">DocumentNumber:string\nAmount:number</textarea>', () => { S().schemas.push({ id: uid('sc'), name: need(val('d1'), 'Name'), fields: val('d2').split('\n').map(l => l.split(':')).filter(p => p[0].trim()).map(([n, t]) => ({ name: n.trim(), type: (t || 'string').trim() })) }); }); return 'keep'; },
+  fnTry: () => { const f = C.toolFns({ id: 'x', name: 'Calculator', type: 'calculator' })[0]; try { $('#fnout').textContent = JSON.stringify(f.run({ expression: $('#fnin').value })); } catch (e) { $('#fnout').textContent = e.message; } return 'keep'; },
+  extract: async () => { const sc = byId('schemas', $('#scsel').value), txt = $('#sctext').value, out = $('#scout'); out.textContent = 'Extracting…';
+    await needLLM('Extraction with a document schema uses Claude.'); if (C.runtime() !== 'mock') { try { const r = await C.askJson(`Extract these fields from the document as JSON (null if absent): ${JSON.stringify(sc.fields)}.\nDocument:\n${txt}`); out.textContent = JSON.stringify(r, null, 2); return 'keep'; } catch (e) { out.textContent = 'LLM failed: ' + (e.message || e.code) + '. Mock result:\n'; } } else out.textContent = '';
+    const o = {}; sc.fields.forEach(f => { const n = f.name.toLowerCase(); o[f.name] = f.type === 'date' ? (txt.match(/\d{4}-\d{2}-\d{2}/) || [null])[0] : f.type === 'number' ? (() => { const m = txt.match(/(?:total|amount|qty|quantity)[^\d]*([\d,]+\.?\d*)/i) || txt.match(/([\d,]+\.\d{2})/); return m ? +m[1].replace(/,/g, '') : null; })() : n.includes('invoice') ? (txt.match(/INV-\d+/i) || [null])[0] : n.includes('po') ? (txt.match(/PO\d+/i) || [null])[0] : n.includes('currency') ? (txt.match(/\b(AUD|USD|AED)\b/) || [null])[0] : n.includes('supplier') ? (FDB.suppliers.find(s => txt.includes(s.Supplier)) || {}).Supplier || null : n.includes('item') ? (txt.match(/AS\d{4}/) || [null])[0] : null; });
+    out.textContent += JSON.stringify(o, null, 2); return 'keep'; },
+  period: id => { ui().period = id; },
+  keySet: async () => { await keyDialog(); return 'keep'; },
+  keyClear: () => { C.keyStore.clear(); toast('Key removed from this browser'); },
+  evEdit: id => { D.ev(id); return 'keep'; },
+  evRun: async id => { const s = S(), e = byId('evalSets', id), w = byId('workflows', e.wfId); if (!w || busy) return 'keep'; await needLLM('Evaluation runs each case through the workflow.'); busy = true; toast(`Running ${e.cases.length} cases…`); const results = []; let au = 0, mode = 'mock';
+    for (const c of e.cases) { const r = await C.runWorkflow(w, c.q, null, { src: 'test', trace: false }); au += r.m.au; mode = r.mode; const ex = c.expect.split(',').map(x => x.trim().toLowerCase()).filter(Boolean); results.push({ answer: r.text, pass: !r.error && ex.every(x => r.text.toLowerCase().includes(x)) }); }
+    e.runs.unshift({ ts: new Date().toISOString(), score: Math.round(results.filter(r => r.pass).length / results.length * 100), results, au, mode }); e.runs = e.runs.slice(0, 20);
+    C.event('evaluation', `${e.name}: ${e.runs[0].score}%`); busy = false; C.save(); render(); return 'keep'; },
+  clearLog: () => { const s = S(); s.usage = []; s.events = []; s.daily = s.daily.filter(x => x.src === 'synthetic'); },
+  clearChat: () => { S().chats[ui().play] = []; S().trace = []; },
+  starter: q => { $('#chatin').value = q; send(); return 'keep'; },
+  rest: () => { rest(); return 'keep'; },
+  estAdd: () => { S().est.rows.push({ name: 'New use case', agentType: 'custom', llm: 'premium', users: 10, perDay: 5, days: 22, tokens: 5000, docs: 0, env: 'prod' }); },
+  estDel: i => { S().est.rows.splice(+i, 1); }, estReset: () => { S().est = clone(C.DEF_EST); },
+  estPreset: () => { const s = S(); s.est.rows = [{ name: 'AP invoice validation (500 per day)', agentType: 'custom', llm: 'premium', users: 1, perDay: 500, days: 22, tokens: 6000, docs: 0, env: 'prod' }]; s.est.platform = false; s.est.growth = 0; toast('500 × 5 AU × 22 days = 55,000 AU; 35,000 billable'); },
+  estMeasured: () => { const s = S(); let n = 0; s.workflows.forEach(w => { const x = s.daily.filter(r => r.wf === w.id && r.s); if (!x.length) return; const ss = x.reduce((a, r) => a + r.s, 0), tok = Math.round(x.reduce((a, r) => a + (r.tok || 0), 0) / ss) || 5000, days = new Set(x.map(r => r.d)).size; const nm = w.name + ' (measured)'; const row = { name: nm, agentType: w.agentType, llm: C.tierOf(w), users: 1, perDay: Math.round(ss / Math.max(1, days)), days: 22, tokens: tok, docs: 0, env: 'prod' }; const ex = s.est.rows.findIndex(r => r.name === nm); if (ex >= 0) s.est.rows[ex] = row; else s.est.rows.push(row); n++; }); toast(n ? `${n} workflow(s) added from monitoring data` : 'No monitoring data yet'); },
+  exportCfg: async () => { const s = S(), j = JSON.stringify({ workflows: s.workflows, agents: s.agents, tools: s.tools, topics: s.topics, applications: s.applications, docTemplates: s.docTemplates, policies: s.policies, approvalProcesses: s.approvalProcesses, connectors: s.connectors }, null, 2); try { await navigator.clipboard.writeText(j); toast('Configuration copied to clipboard'); } catch (e) { dialog(`<h2>Configuration</h2><pre>${esc(j)}</pre>`); } return 'keep'; },
+  importCfg: () => { dialog('<h2>Import configuration</h2><label>Paste JSON exported from this sandbox</label><textarea id="d1" class="mono" style="min-height:220px"></textarea>', () => { const j = JSON.parse(val('d1')); if (!Array.isArray(j.workflows) || !Array.isArray(j.agents)) throw new Error('Missing workflows or agents'); Object.keys(j).forEach(k => { if (Array.isArray(j[k]) && Array.isArray(S()[k])) S()[k] = j[k]; }); }, 'Import'); return 'keep'; },
+  resetAll: () => { dialog('<h2>Reset the sandbox?</h2><p>Everything returns to the seeded state, including monitoring data.</p>', () => { localStorage.removeItem('fsim-v2'); location.reload(); }, 'Reset'); return 'keep'; }
+};
+
+/* ---------- render + events ---------- */
+let ro = null;
+function render() {
+  const s = S(), v = (location.hash || '#home').slice(1), fn = V[v] || V.home;
+  const navKey = { edit: 'workflows', run: 'workflows', app: 'applications' }[v] || v;
+  document.querySelectorAll('#nav a').forEach(a => a.classList.toggle('on', a.dataset.nav === navKey));
+  $('#view').innerHTML = fn() + (v === 'home' ? '<div style="margin-top:16px"><button class="danger" data-a="resetAll">Reset sandbox</button></div>' : '');
+  if (ro) { ro.disconnect(); ro = null; }
+  if (v === 'run') { renderTrace(); $('#chatf').onsubmit = e => { e.preventDefault(); send(); }; $('#pwf').onchange = e => { ui().play = e.target.value; s.trace = []; C.save(); render(); }; const m = $('#msgs'); m.scrollTop = m.scrollHeight; }
+  if (v === 'home') $('#buildf').onsubmit = e => { e.preventDefault(); buildFromPrompt($('#buildin').value); };
+  if (v === 'app') $('#appf').onsubmit = async e => { e.preventDefault(); await needLLM('Applications run their workflows live.'); const a = byId('applications', ui().app), out = $('#appout'), q = $('#appin').value; out.textContent = 'Running…'; let txt = '';
+    for (const id of a.workflows) { const w = byId('workflows', id); if (!w) continue; const r = await C.runWorkflow(w, q, null, { src: a.status === 'Deployed' ? 'app' : 'test', trace: false }); txt += `${w.name} (${r.m.au} AU)\n${r.text}\n\n`; out.textContent = txt; } };
+  if (v === 'data') $('#dres').onchange = e => { ui().dataRes = e.target.value; C.save(); render(); };
+  if (v === 'monitoring' && (ui().monTab || 'monitoring') === 'monitoring' && $('#sesfig')) { ro = new ResizeObserver(drawSessions); ro.observe($('#sesfig')); }
+  if (v === 'estimator') { ro = new ResizeObserver(drawProj); ro.observe($('#proj')); }
+}
+document.addEventListener('click', async e => {
+  const b = e.target.closest('[data-a]'); if (!b || !A[b.dataset.a]) return; e.preventDefault();
+  const r = await A[b.dataset.a](b.dataset.id, b); if (r !== 'keep') { C.save(); render(); }
+});
+document.addEventListener('input', e => { const k = e.target.dataset.filter; if (!k) return; F[k] = e.target.value; const pos = e.target.selectionStart; render(); const el = document.querySelector(`[data-filter="${k}"]`); if (el) { el.focus(); el.setSelectionRange(pos, pos); } });
+document.addEventListener('change', e => {
+  const el = e.target, d = el.dataset, s = S(), y = scrollY, done = (re = true) => { C.save(); if (re) { render(); scrollTo(0, y); } };
+  if (d.rate) { s.rates[d.rate] = el.type === 'checkbox' ? el.checked : Number(el.value) || 0; return done(false); }
+  if (d.ui) { ui()[d.ui] = el.value; if (d.ui === 'mode') { syncMode(); if (el.value === 'api' && !C.keyStore.get()) { C.save(); keyDialog(); return; } } return done(); }
+  if (d.root) { s[d.root] = Number(el.value) || 0; return done(); }
+  if (d.chat) { s.creds.chat[d.chat] = el.type === 'checkbox' ? el.checked : el.value; return done(false); }
+  if (d.wf) { const w = byId('workflows', ui().edit); w[d.wf] = d.wf === 'starters' ? el.value.split('\n').map(x => x.trim()).filter(Boolean) : d.wf === 'minutesSaved' ? Number(el.value) || 0 : el.value; w.editedOn = TODAY;
+    if (d.wf === 'family') w.product = FAMILIES[w.family][0]; if (d.wf === 'type' && el.value === 'workflow' && !w.nodes.length) w.nodes = w.agents.map(a => ({ id: uid('n'), type: 'agent', agentId: a, prompt: '' }));
+    if (w.status === 'Published') { w.status = 'Draft'; toast('Edited: status back to Draft until you redeploy'); } return done(['type', 'llmId', 'family', 'name'].includes(d.wf) || true); }
+  if (d.wfa) { const w = byId('workflows', ui().edit); w.agents = el.checked ? [...new Set([...w.agents, d.wfa])] : w.agents.filter(x => x !== d.wfa); w.editedOn = TODAY; if (w.status === 'Published') w.status = 'Draft'; return done(); }
+  if (d.node) { const w = byId('workflows', ui().edit), n = w.nodes[+d.node]; n[d.f] = el.value; if (d.f === 'type') { if (el.value === 'agent' && !n.agentId) n.agentId = s.agents[0]?.id; if (el.value === 'condition' && !n.expr) n.expr = 'contains:'; if (el.value === 'approval' && !n.processId) n.processId = s.approvalProcesses[0]?.id; if (el.value === 'docgen' && !n.templateId) n.templateId = s.docTemplates[0]?.id; if (el.value === 'email' && !n.to) n.to = 'team@example.com'; } if (w.status === 'Published') w.status = 'Draft'; return done(d.f === 'type' || true); }
+  if (d.er) { const r = s.est.rows[+d.er]; r[d.f] = el.type === 'number' ? Math.max(0, Number(el.value) || 0) : el.value; return done(); }
+  if (d.eo) { s.est[d.eo] = el.type === 'checkbox' ? el.checked : Number(el.value) || 0; return done(); }
+});
+$('#colb').onclick = () => $('#shell').classList.toggle('col');
+function syncMode() { const sel = $('#rtmode'); sel.innerHTML = opts(modeOpts(), modeVal()); }
+$('#rtmode').onchange = e => { ui().mode = e.target.value; C.save(); render(); if (e.target.value === 'api' && !C.keyStore.get()) keyDialog(); };
+addEventListener('hashchange', render);
+render(); syncMode();
+if (window.claude && window.claude.use) window.claude.use('sample').then(x => { C.setSample(x); syncMode(); if ((location.hash || '#home') === '#run') render(); }).catch(() => syncMode());
+}
+
+</script>
+</body>
+</html>
