@@ -15,94 +15,102 @@
 :root{color-scheme:dark;--rail:#000;--bg:#0a3442;--bg2:#072a35;--card:#0e4658;--card2:#0b3c4c;--line:#1f5c70;--ink:#f3f1ec;--mute:#a8c2cb;
 --gold:#f0b93a;--ok:#7cbd5a;--okbg:#2f5a1f;--seed:#78bfd6;--warn:#f0b04a;--bad:#ff8a7a;--acc:#78bfd6;--btn:#134e61;--pri:#f3efe7;--prink:#0a3442}
 *{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;overflow-x:clip}
-.shell{display:grid;grid-template-columns:270px minmax(0,1fr);min-height:100vh}
-.shell.col{grid-template-columns:64px minmax(0,1fr)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 Inter,system-ui,sans-serif;overflow-x:clip}
+.shell{display:grid;grid-template-columns:232px minmax(0,1fr);min-height:100vh}
+.shell.col{grid-template-columns:58px minmax(0,1fr)}
 aside{background:var(--rail);position:sticky;top:0;height:100vh;overflow-y:auto;padding:14px 0}
 .rtop{display:flex;justify-content:space-between;align-items:center;padding:0 14px 14px}
 .logo{display:flex;gap:10px;align-items:center;font-weight:700}
 .col .logo span,.col aside a span,.col .sim{display:none}
-aside a{display:flex;gap:14px;align-items:center;color:var(--ink);text-decoration:none;padding:13px 18px;font-weight:600;border-left:3px solid transparent;font-size:15.5px}
+aside a{display:flex;gap:12px;align-items:center;color:var(--ink);text-decoration:none;padding:9px 16px;font-weight:500;border-left:3px solid transparent;font-size:14px}
 aside a:hover{background:#0b2730}aside a.on{background:#0a3442;border-left-color:var(--seed)}
 aside svg{flex:none}
-.sim{margin:14px 18px;font-size:12px;color:var(--mute);border:1px solid #333;border-radius:8px;padding:8px}
-main{padding:26px clamp(14px,3vw,40px) 60px;max-width:1400px;width:100%}
-.topbar{height:6px;background:linear-gradient(90deg,#c9a66b,#d5796a,#78bfd6,#e3c86b,#c97b5a);margin:-26px calc(-1*clamp(14px,3vw,40px)) 20px}
-h1{font-size:clamp(24px,2.6vw,32px);line-height:1.1;margin:0 0 14px}
-h2{font-size:19px;margin:0 0 10px}h3{font-size:15.5px;margin:0 0 4px}
-.sub{color:var(--mute);margin:-6px 0 16px;max-width:80ch}
-.ask{display:flex;gap:12px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin-bottom:18px;max-width:1220px}
-.ask input{background:transparent;border:0;color:var(--ink);font-size:17px;padding:8px 0}
+.sim{margin:14px 16px;font-size:11.5px;color:var(--mute);border:1px solid #333;border-radius:8px;padding:8px}
+main{padding:22px clamp(14px,2.5vw,32px) 48px;max-width:1440px;width:100%}
+.topbar{height:5px;background:linear-gradient(90deg,#c9a66b,#d5796a,#78bfd6,#e3c86b,#c97b5a);margin:-22px calc(-1*clamp(14px,2.5vw,32px)) 18px}
+h1{font-size:clamp(20px,2vw,24px);line-height:1.2;margin:0 0 12px;font-weight:700}
+h2{font-size:16px;margin:0 0 8px}h3{font-size:14px;margin:0 0 4px}
+.sub{color:var(--mute);margin:-4px 0 14px;max-width:90ch;font-size:13px}
+.ask{display:flex;gap:10px;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:4px 12px;margin-bottom:16px;max-width:1220px}
+.ask input{background:transparent;border:0;color:var(--ink);font-size:15px;padding:6px 0}
 .ask input:focus-visible{outline:none}.ask:focus-within{outline:2px solid var(--seed)}
-.ring{width:22px;height:13px;border:2.5px solid var(--seed);border-radius:99px;flex:none}
-.hero{position:relative;border-radius:14px;overflow:hidden;padding:clamp(24px,5vw,60px);background:#062631;margin-bottom:18px;min-height:340px}
+.ring{width:19px;height:11px;border:2.5px solid var(--seed);border-radius:99px;flex:none}
+.hero{position:relative;border-radius:12px;overflow:hidden;padding:clamp(20px,4vw,48px);background:#062631;margin-bottom:16px;min-height:280px}
 .hero svg.art{position:absolute;inset:0;width:100%;height:100%}
 .hero>*:not(svg){position:relative}
-.hero .hi{font-size:clamp(20px,2.4vw,30px);font-weight:300;margin:60px 0 4px}
-.hero h1{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(34px,5vw,64px);line-height:1.05;margin:0 0 20px;max-width:16ch}
-.hero .ask{background:#04202acc;min-height:110px;align-items:flex-start}
+.hero .hi{font-size:clamp(16px,1.8vw,22px);font-weight:300;margin:40px 0 4px}
+.hero h1{font-family:"Libre Caslon Text",Georgia,serif;font-weight:400;font-size:clamp(28px,3.6vw,44px);line-height:1.1;margin:0 0 16px;max-width:18ch}
+.hero .ask{background:#04202acc;min-height:88px;align-items:flex-start;padding:10px 12px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
-.chip{border-radius:99px;border:1px solid var(--line);background:#0d3e4ecc;color:var(--ink);padding:8px 16px;font-weight:500;min-height:40px;cursor:pointer;font:inherit}
+.chip{border-radius:99px;border:1px solid var(--line);background:#0d3e4ecc;color:var(--ink);padding:5px 14px;min-height:32px;cursor:pointer;font:inherit;font-size:13px}
 .chip.w{background:#fff;color:#0a3442;border-color:#fff}
-button,.btn{font:inherit;font-weight:600;min-height:42px;padding:9px 18px;border-radius:8px;border:1px solid transparent;background:var(--btn);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+button,.btn{font:inherit;font-size:14px;font-weight:600;min-height:34px;padding:6px 14px;border-radius:6px;border:1px solid transparent;background:var(--btn);color:var(--ink);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
 button.pri{background:var(--pri);color:var(--prink)}
-button.link{background:none;color:var(--seed);padding:4px 8px;min-height:34px}
+button.link{background:none;color:var(--seed);padding:4px 6px;min-height:30px;font-weight:500}
 button.danger{background:transparent;border-color:var(--bad);color:var(--bad)}
-button.icon{background:none;padding:6px;min-width:42px;justify-content:center}
+button.icon{background:none;padding:4px;min-width:34px;justify-content:center}
 button:disabled{opacity:.45;cursor:default}
 :focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-input,select,textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;min-height:42px}
-textarea{min-height:90px;resize:vertical}
-label{display:block;font-size:13px;font-weight:600;color:var(--mute);margin:10px 0 4px}
+input,select,textarea{font:inherit;font-size:14px;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:6px 10px;width:100%;min-height:34px}
+textarea{min-height:80px;resize:vertical}
+label{display:block;font-size:12px;font-weight:600;color:var(--mute);margin:10px 0 4px}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{flex:1}
-.tabs{display:flex;gap:2px;overflow-x:auto;margin:-4px 0 18px;border-bottom:1px solid var(--line)}
-.tabs button{background:none;border-radius:0;color:var(--ink);opacity:.85;border-bottom:3px solid transparent;flex:none;font-size:16px}
+.tabs{display:flex;gap:2px;overflow-x:auto;margin:-2px 0 16px;border-bottom:1px solid var(--line)}
+.tabs button{background:none;border-radius:0;color:var(--ink);opacity:.85;border-bottom:3px solid transparent;flex:none;font-size:14px;padding:8px 12px}
 .tabs button.on{color:var(--gold);opacity:1;border-color:var(--gold)}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
 .grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr))}
 .two{display:grid;gap:14px;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr)}
 @media(max-width:1000px){.two{grid-template-columns:minmax(0,1fr)}}
-.list>.li{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,.8fr) auto;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);align-items:start}
-.li .k{font-size:13px;color:var(--mute)}.li .v{overflow-wrap:anywhere}
+.list>.li{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1.6fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,.8fr) auto;gap:14px;padding:12px 0;border-bottom:1px solid var(--line);align-items:start}
+.li .k{font-size:12px;color:var(--mute)}.li .v{font-size:13px}.li .note{font-size:12.5px}.li .v{overflow-wrap:anywhere}
 @media(max-width:900px){.list>.li{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.li>:first-child{grid-column:1/-1}}
-.tag{display:inline-block;font-size:12.5px;font-weight:600;padding:2px 10px;border-radius:99px;white-space:nowrap;background:#1d5568;color:var(--ink)}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:99px;white-space:nowrap;background:#1d5568;color:var(--ink)}
 .t-pub{background:var(--ok);color:#10240a}.t-seed{background:var(--seed);color:#062631}.t-draft{background:#5a5a52;color:#fff}.t-warn{background:var(--warn);color:#2b1a00}.t-bad{background:var(--bad);color:#2b0700}
-table{border-collapse:collapse;width:100%;font-size:14px}
-th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
-th{color:var(--mute);font-weight:600;white-space:nowrap}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:7px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600;white-space:nowrap;font-size:12px}
 td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
 .scroll{overflow-x:auto}
-pre,code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12.5px}
+pre,code,.mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-size:12px}
 pre{background:var(--bg2);border:1px solid var(--line);border-radius:8px;padding:10px;overflow:auto;max-height:420px;margin:0;white-space:pre-wrap}
-.kpi{font-size:clamp(24px,2.6vw,32px);font-weight:700;line-height:1.1;font-variant-numeric:tabular-nums}.kl{font-size:13px;color:var(--mute)}
+.kpi{font-size:clamp(18px,1.8vw,22px);font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}.kl{font-size:12px;color:var(--mute)}
 .chat{display:flex;flex-direction:column;height:min(72vh,660px)}
 .msgs{flex:1;overflow:auto;display:flex;flex-direction:column;gap:10px;padding:4px}
-.m{max-width:90%;padding:10px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
+.m{font-size:13.5px;max-width:90%;padding:9px 12px;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}
 .m.u{align-self:flex-end;background:var(--pri);color:var(--prink)}.m.a{align-self:flex-start;background:var(--card2);border:1px solid var(--line)}
-.m .meta{display:block;font-size:12px;color:var(--mute);margin-top:6px}
+.m .meta{display:block;font-size:11.5px;color:var(--mute);margin-top:6px}
 .trace{max-height:min(72vh,660px);overflow:auto;display:flex;flex-direction:column;gap:8px}
 .step{border-left:3px solid var(--line);padding:4px 0 4px 10px}.step.llm{border-color:var(--seed)}.step.tool{border-color:var(--gold)}.step.err{border-color:var(--bad)}.step.meter{border-color:var(--ok)}.step.pol{border-color:#c58af0}
-.step b{font-size:13px}.step pre{max-height:180px;margin-top:4px}
+.step b{font-size:12.5px}.step pre{max-height:180px;margin-top:4px}
 .bar{height:12px;background:var(--bg2);border-radius:6px;overflow:hidden}.bar i{display:block;height:100%;background:var(--seed)}
-.brow{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) auto;gap:10px;align-items:center;margin:6px 0;font-size:14px}
+.brow{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr) auto;gap:10px;align-items:center;margin:6px 0;font-size:13px}
 .node{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;padding:12px;border:1px solid var(--line);border-radius:10px;background:var(--card2);margin-bottom:8px}
-.num{width:30px;height:30px;border-radius:50%;background:var(--seed);color:#062631;display:grid;place-items:center;font-weight:700}
+.num{width:26px;height:26px;font-size:12px;border-radius:50%;background:var(--seed);color:#062631;display:grid;place-items:center;font-weight:700}
 .box{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:10px;background:var(--card2)}
 .chk{display:flex;flex-wrap:wrap;gap:6px}
-.chk label{display:flex;gap:6px;align-items:center;margin:0;font-weight:500;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:5px 11px}
+.chk label{display:flex;gap:6px;align-items:center;margin:0;font-weight:500;font-size:13px;color:var(--ink);border:1px solid var(--line);border-radius:99px;padding:3px 10px}
 .chk input,input[type=checkbox]{width:auto;min-height:0;accent-color:var(--gold)}
-.note{font-size:13px;color:var(--mute)}
+.note{font-size:12.5px;color:var(--mute)}
 .ok{color:var(--ok)}.bad{color:var(--bad)}
-.addc{display:flex;justify-content:space-between;gap:12px;cursor:pointer;min-height:150px;text-align:left;align-items:flex-start;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;color:var(--ink);font:inherit}
-.addc span.plus{font-size:32px;line-height:1;align-self:center}
-.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}.seg button{border-radius:0;background:none;min-height:38px}.seg button.on{background:var(--btn);color:var(--gold)}
-.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--pri);color:var(--prink);padding:10px 16px;border-radius:8px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;font-weight:600}
+.addc{display:flex;justify-content:space-between;gap:12px;cursor:pointer;min-height:120px;text-align:left;align-items:flex-start;width:100%;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;color:var(--ink);font:inherit}
+.addc span.plus{font-size:26px;line-height:1;align-self:center}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:6px;overflow:hidden}.seg button{border-radius:0;background:none;min-height:32px;font-size:13px;font-weight:500}.seg button.on{background:var(--btn);color:var(--gold)}
+.toast{font-size:13px;position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--pri);color:var(--prink);padding:10px 16px;border-radius:8px;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;font-weight:600}
 .toast.on{opacity:1}
-dialog{border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);max-width:min(640px,95vw);width:100%;padding:20px;max-height:90vh}
+dialog{border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);max-width:min(620px,95vw);width:100%;padding:18px;max-height:90vh;font-size:14px}
 dialog::backdrop{background:#000a}
 @media(max-width:820px){.shell,.shell.col{grid-template-columns:minmax(0,1fr)}aside{position:sticky;height:auto;overflow-x:auto;padding:0;z-index:30}#nav{display:flex}aside a{white-space:nowrap}.rtop,.sim{display:none}aside a{flex:none;padding:12px 14px;border-left:0;border-bottom:3px solid transparent}aside a.on{border-bottom-color:var(--seed)}.col aside a span{display:inline}
 .topbar{margin-top:-26px}}
-@media(max-width:600px){table{font-size:13px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;color:var(--mute);font-size:12px}.stack td:empty{display:none}.brow{grid-template-columns:minmax(0,1fr) auto}.brow .bar{grid-column:1/-1;grid-row:2}.hero .hi{margin-top:10px}}
+@media(max-width:600px){input,select,textarea{font-size:16px}.ask input{font-size:16px}button,.btn{min-height:38px}table{font-size:12.5px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:8em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7.5em;margin-inline-start:-8em;color:var(--mute);font-size:12px}.stack td:empty{display:none}.brow{grid-template-columns:minmax(0,1fr) auto}.brow .bar{grid-column:1/-1;grid-row:2}.hero .hi{margin-top:10px}}
+.flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0 4px}.fstep{background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;min-width:88px}.arr{color:var(--mute);font-size:18px}
+.gwrap{overflow-x:auto;margin-top:10px}.gtree,.gtree ul{list-style:none;margin:0;padding:0}.gtree ul{padding-left:26px;margin-left:12px;border-left:2px solid var(--line)}
+.gtree li{position:relative;margin:10px 0}.gtree ul>li::before{content:'';position:absolute;left:-26px;top:22px;width:22px;border-top:2px solid var(--line)}
+.gnode{display:inline-block;max-width:100%;font-size:13px;background:var(--card2);border:1px solid var(--line);border-left:4px solid var(--seed);border-radius:8px;padding:6px 10px}
+.g-sup{border-left-color:#d5796a}.g-comp{border-left-color:#c58af0}.g-semi{border-left-color:var(--gold)}.g-fg{border-left-color:var(--ok)}.g-ship{border-left-color:var(--seed)}.g-wo{border-left-color:#a8c2cb;border-style:dashed solid dashed solid}
+.steps{display:flex;flex-wrap:wrap;gap:6px;list-style:none;padding:0;margin:0 0 16px;counter-reset:s}.steps li{counter-increment:s;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mute);font-size:12.5px}.steps li::before{content:counter(s) '. '}.steps li.done{color:var(--ok);border-color:var(--ok)}.steps li.now{color:#062631;background:var(--gold);border-color:var(--gold);font-weight:600}
+summary{cursor:pointer;color:var(--seed);margin:4px 0}
+@media(max-width:600px){.gtree ul{padding-left:14px;margin-left:6px}.gtree ul>li::before{left:-14px;width:10px}.fstep{min-width:0;flex:1 1 40%}.arr{display:none}}
 @media(prefers-reduced-motion:reduce){.toast{transition:none}}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
@@ -238,6 +246,100 @@ dialog::backdrop{background:#000a}
     Object.keys(patch).forEach(k => { if (!(k in row)) throw new Error('Unknown attribute ' + k); row[k] = patch[k]; });
     return row;
   };
+
+  /* ---------- Supplier lot recall dataset: lots, receipts, genealogy, shipments ---------- */
+  items.push({ ItemId: 100030, ItemNumber: 'AS1031', ItemDescription: 'Wet cell module 12V (semi-finished)', ItemCategory: 'Semi-Finished', PrimaryUOMCode: 'Ea', ItemStatus: 'Active', MakeOrBuy: 'Make', ListPrice: 142.5, LeadTimeDays: 4, MinQty: 40, MaxQty: 400, LotControlled: 'Y', SerialControlled: 'N' });
+  ['AS1001', 'AS1002', 'AS1006', 'AS1007', 'AS1029'].forEach(n => { const it = items.find(i => i.ItemNumber === n); if (it) { it.LotControlled = 'Y'; it.ItemStatus = 'Active'; } });
+  const sup = n => suppliers.find(x => x.Supplier === n);
+  const po = (id, n, supName, item, qty, price, ordered, promised) => ({ POHeaderId: id, OrderNumber: n, Supplier: supName, SupplierNumber: sup(supName).SupplierNumber, Buyer: 'Priya Nair', ShipToOrganization: 'MEL1', ItemNumber: item, Quantity: qty, QuantityReceived: qty, UnitPrice: price, Amount: qty * price, Currency: 'AUD', OrderedDate: ordered, PromisedDate: promised, Status: 'Closed', Late: 'N' });
+  purchaseOrders.push(po(9100, 'PO45100', 'BlueLine Chemicals', 'AS1006', 800, 6.4, '2026-07-20', '2026-09-24'), po(9101, 'PO45101', 'Pacific Lead Metals', 'AS1029', 500, 3.1, '2026-09-01', '2026-10-15'), po(9102, 'PO45102', 'Southern Plastics Pty', 'AS1007', 300, 8.9, '2026-10-12', '2026-11-10'));
+  const rc = (r, p, supName, item, sl, lot, shipped, received, qty, uom, asn) => ({ ReceiptNumber: r, PONumber: p, Supplier: supName, SupplierNumber: sup(supName).SupplierNumber, ItemNumber: item, SupplierLotNumber: sl, LotNumber: lot, ShippedDate: shipped, ReceivedDate: received, Quantity: qty, UOM: uom, OrganizationCode: 'MEL1', Subinventory: 'RM', ASNNumber: asn });
+  const receipts = [
+    rc('RCV-60950', 'PO45100', 'BlueLine Chemicals', 'AS1006', 'BLC-240801', 'L-1006-0806A', '2026-08-02', '2026-08-06', 300, 'L', 'ASN-88102'),
+    rc('RCV-61001', 'PO45100', 'BlueLine Chemicals', 'AS1006', 'BLC-240917', 'L-1006-0924A', '2026-09-20', '2026-09-24', 250, 'L', 'ASN-88231'),
+    rc('RCV-61001', 'PO45100', 'BlueLine Chemicals', 'AS1006', 'BLC-240917', 'L-1006-0924B', '2026-09-20', '2026-09-24', 150, 'L', 'ASN-88231'),
+    rc('RCV-61007', 'PO45100', 'BlueLine Chemicals', 'AS1006', 'BLC-240917', 'L-1006-1003A', '2026-09-30', '2026-10-03', 100, 'L', 'ASN-88290'),
+    rc('RCV-61010', 'PO45101', 'Pacific Lead Metals', 'AS1029', 'PLM-LI-5521', 'L-1029-1015A', '2026-10-10', '2026-10-15', 500, 'Kg', 'ASN-31877'),
+    rc('RCV-61015', 'PO45102', 'Southern Plastics Pty', 'AS1007', 'SPP-7781', 'L-1007-1110A', '2026-11-06', '2026-11-10', 300, 'Ea', 'ASN-50419')
+  ];
+  const lt = (lot, item, org, sub, origin, slot, src, onhand, reserved, uom, created) => ({ LotNumber: lot, ItemNumber: item, OrganizationCode: org, Subinventory: sub, Origin: origin, SupplierLotNumber: slot, SourceDocument: src, OnhandQuantity: onhand, ReservedQuantity: reserved, UOM: uom, MaterialStatus: 'Active', CreatedDate: created });
+  const lots = [
+    lt('L-1006-0806A', 'AS1006', 'MEL1', 'RM', 'Supplier receipt', 'BLC-240801', 'RCV-60950', 0, 0, 'L', '2026-08-06'),
+    lt('L-1006-0924A', 'AS1006', 'MEL1', 'RM', 'Supplier receipt', 'BLC-240917', 'RCV-61001', 50, 0, 'L', '2026-09-24'),
+    lt('L-1006-0924B', 'AS1006', 'MEL1', 'RM', 'Supplier receipt', 'BLC-240917', 'RCV-61001', 30, 0, 'L', '2026-09-24'),
+    lt('L-1006-1003A', 'AS1006', 'MEL1', 'RM', 'Supplier receipt', 'BLC-240917', 'RCV-61007', 60, 0, 'L', '2026-10-03'),
+    lt('SF-1031-0926', 'AS1031', 'MEL1', 'WIP', 'Work order', '', 'WO33101', 20, 0, 'Ea', '2026-09-26'),
+    lt('SF-1031-1001', 'AS1031', 'MEL1', 'WIP', 'Work order', '', 'WO33105', 0, 0, 'Ea', '2026-10-01'),
+    lt('FG-1001-0815', 'AS1001', 'SYD2', 'STORES', 'Work order', '', 'WO33090', 12, 0, 'Ea', '2026-08-15'),
+    lt('FG-1001-1003', 'AS1001', 'SYD2', 'STORES', 'Work order', '', 'WO33102', 50, 0, 'Ea', '2026-10-03'),
+    lt('FG-1002-1008', 'AS1002', 'MEL1', 'FG', 'Work order', '', 'WO33103', 30, 20, 'Ea', '2026-10-08'),
+    lt('L-1029-1015A', 'AS1029', 'MEL1', 'RM', 'Supplier receipt', 'PLM-LI-5521', 'RCV-61010', 200, 0, 'Kg', '2026-10-15'),
+    lt('FG-1002-1020', 'AS1002', 'MEL1', 'FG', 'Work order', '', 'WO33108', 0, 0, 'Ea', '2026-10-20'),
+    lt('L-1007-1110A', 'AS1007', 'MEL1', 'RM', 'Supplier receipt', 'SPP-7781', 'RCV-61015', 300, 0, 'Ea', '2026-11-10')
+  ];
+  const gn = (wo, st, ci, cl, iq, pi, pl, pq, done) => ({ WorkOrderNumber: wo, WorkOrderStatus: st, OrganizationCode: 'MEL1', ComponentItem: ci, ComponentLot: cl, IssuedQuantity: iq, ProductItem: pi, ProductLot: pl, ProducedQuantity: pq, CompletionDate: done });
+  const lotGenealogy = [
+    gn('WO33090', 'Completed', 'AS1006', 'L-1006-0806A', 300, 'AS1001', 'FG-1001-0815', 52, '2026-08-15'),
+    gn('WO33101', 'Completed', 'AS1006', 'L-1006-0924A', 200, 'AS1031', 'SF-1031-0926', 200, '2026-09-26'),
+    gn('WO33105', 'Completed', 'AS1006', 'L-1006-0924B', 120, 'AS1031', 'SF-1031-1001', 120, '2026-10-01'),
+    gn('WO33102', 'Completed', 'AS1031', 'SF-1031-0926', 150, 'AS1001', 'FG-1001-1003', 150, '2026-10-03'),
+    gn('WO33103', 'Completed', 'AS1031', 'SF-1031-1001', 100, 'AS1002', 'FG-1002-1008', 100, '2026-10-08'),
+    gn('WO33106', 'Released', 'AS1006', 'L-1006-1003A', 40, 'AS1031', '', 0, ''),
+    gn('WO33107', 'Released', 'AS1031', 'SF-1031-0926', 30, 'AS1001', '', 0, ''),
+    gn('WO33108', 'Completed', 'AS1029', 'L-1029-1015A', 300, 'AS1002', 'FG-1002-1020', 90, '2026-10-20')
+  ];
+  lotGenealogy.forEach((g, i) => { if (!workOrders.some(w => w.WorkOrderNumber === g.WorkOrderNumber)) workOrders.push({ WorkOrderId: 6100 + i, WorkOrderNumber: g.WorkOrderNumber, OrganizationCode: 'MEL1', ItemNumber: g.ProductItem, PlannedQuantity: g.ProducedQuantity || (g.ProductItem === 'AS1031' ? 60 : 40), CompletedQuantity: g.ProducedQuantity, PlannedStartDate: g.CompletionDate || '2026-11-24', PlannedCompletionDate: g.CompletionDate || '2026-11-28', Status: g.WorkOrderStatus, WorkCenter: g.ProductItem === 'AS1031' ? 'Formation' : 'Assembly', ShortageFlag: 'N' }); });
+  const sh = (del, so, line, cust, item, lot, qty, date, org, status) => ({ DeliveryNumber: del, OrderNumber: so, LineNumber: line, Customer: cust, ItemNumber: item, LotNumber: lot, Quantity: qty, UOM: 'Ea', ShipDate: date, ShipFromOrganization: org, Status: status });
+  const shipments = [
+    sh('DEL-76990', 'SO88099', 1, 'Metro Auto Parts', 'AS1001', 'FG-1001-0815', 40, '2026-08-30', 'SYD2', 'Shipped'),
+    sh('DEL-77001', 'SO88101', 1, 'Metro Auto Parts', 'AS1001', 'FG-1001-1003', 60, '2026-10-28', 'SYD2', 'Shipped'),
+    sh('DEL-77004', 'SO88102', 1, 'Outback Fleet Services', 'AS1001', 'FG-1001-1003', 40, '2026-11-04', 'SYD2', 'Shipped'),
+    sh('DEL-77006', 'SO88103', 1, 'GreenGrid Energy', 'AS1002', 'FG-1002-1008', 70, '2026-10-15', 'MEL1', 'Shipped'),
+    sh('DEL-77009', 'SO88104', 1, 'Sunrise Mining', 'AS1002', 'FG-1002-1008', 20, '', 'MEL1', 'Awaiting shipping'),
+    sh('DEL-77011', 'SO88106', 2, 'Coastal Marine', 'AS1031', 'SF-1031-1001', 20, '2026-10-12', 'MEL1', 'Shipped'),
+    sh('DEL-77013', 'SO88105', 1, 'Al Noor Trading', 'AS1002', 'FG-1002-1020', 90, '2026-10-24', 'MEL1', 'Shipped')
+  ];
+  shipments.forEach((x, i) => { if (!salesOrders.some(o => o.OrderNumber === x.OrderNumber)) { const it = items.find(z => z.ItemNumber === x.ItemNumber); salesOrders.push({ HeaderId: 7100 + i, OrderNumber: x.OrderNumber, Customer: x.Customer, ItemNumber: x.ItemNumber, OrderedQuantity: x.Quantity, Amount: Math.round(x.Quantity * it.ListPrice * 100) / 100, Currency: 'AUD', RequestedShipDate: x.ShipDate || '2026-11-29', FulfillOrganization: x.ShipFromOrganization, Status: x.Status === 'Shipped' ? 'Shipped' : 'Awaiting Shipping', HoldReason: '' }); } });
+  const customerAccounts = [['Metro Auto Parts', 'CUST-1001', 'Sam Reid', 'AU'], ['Outback Fleet Services', 'CUST-1002', 'Jo Barker', 'AU'], ['Coastal Marine', 'CUST-1003', 'Nina Park', 'AU'], ['GreenGrid Energy', 'CUST-1004', 'Ravi Menon', 'AU'], ['Sunrise Mining', 'CUST-1005', 'Lucy Grant', 'AU'], ['Al Noor Trading', 'CUST-1006', 'Hassan Ali', 'AE']]
+    .map(([n, a, c, k]) => ({ CustomerName: n, AccountNumber: a, Contact: c, Email: 'quality@' + n.toLowerCase().split(' ')[0] + '.example.com', Country: k }));
+  documents.push({ id: 'DOC-6', title: 'Product recall procedure', text: 'When a supplier recalls a component lot, quality must trace the lot genealogy forward to every semi-finished and finished lot within 24 hours. All affected on-hand stock is placed on recall hold and open work orders using the lot are put on hold. Customers who received affected finished or semi-finished goods are notified within 48 hours and a return material authorisation is raised per shipped sales order line. Unused supplier material is returned to the supplier with a claim referencing the supplier lot. One recall plan approval by the quality manager covers all containment actions. Recall records are retained for 7 years.' });
+  Object.assign(FDB, { receipts, lots, lotGenealogy, shipments, customers: customerAccounts, rmas: [], supplierReturns: [] });
+  Object.assign(FDB.resources, {
+    lots: { path: '/fscmRestApi/resources/11.13.18.05/inventoryLots', key: 'LotNumber', area: 'Inventory' },
+    receipts: { path: '/fscmRestApi/resources/11.13.18.05/receivingReceipts', key: 'LotNumber', area: 'Receiving' },
+    lotGenealogy: { path: '/fscmRestApi/resources/11.13.18.05/lotGenealogy', key: 'WorkOrderNumber', area: 'Manufacturing' },
+    shipments: { path: '/fscmRestApi/resources/11.13.18.05/shipmentLines', key: 'DeliveryNumber', area: 'Shipping' },
+    customers: { path: '/crmRestApi/resources/11.13.18.05/accounts', key: 'AccountNumber', area: 'Customers' },
+    rmas: { path: '/fscmRestApi/resources/11.13.18.05/returnOrders', key: 'RMANumber', area: 'Order Management' },
+    supplierReturns: { path: '/fscmRestApi/resources/11.13.18.05/supplierReturns', key: 'ReturnNumber', area: 'Receiving' }
+  });
+  FDB.columns = { rmas: ['RMANumber', 'OriginalOrder', 'OriginalLine', 'Customer', 'ItemNumber', 'LotNumber', 'Quantity', 'UOM', 'Reason', 'Disposition', 'Status', 'CreatedDate', 'RecallCase'], supplierReturns: ['ReturnNumber', 'Supplier', 'SupplierNumber', 'PONumber', 'ReceiptNumber', 'ItemNumber', 'LotNumber', 'SupplierLotNumber', 'Quantity', 'UOM', 'Reason', 'Status', 'CreatedDate', 'RecallCase'] };
+  FDB.cols = r => FDB[r] && FDB[r][0] ? Object.keys(FDB[r][0]) : (FDB.columns[r] || []);
+
+  /* forward genealogy: supplier lot or internal lot -> receipts, every downstream lot, work orders, shipments */
+  FDB.traceLot = q => {
+    const key = String(q || '').trim().toUpperCase(); if (!key) throw new Error('Enter a supplier lot or lot number');
+    const roots = FDB.lots.filter(l => l.SupplierLotNumber.toUpperCase() === key || l.LotNumber.toUpperCase() === key);
+    if (!roots.length) throw new Error(`No supplier lot or lot "${q}" found in inventory`);
+    const item = n => FDB.items.find(i => i.ItemNumber === n) || {}, woStatus = (n, d) => (FDB.workOrders.find(w => w.WorkOrderNumber === n) || {}).Status || d;
+    const nodes = [], wos = [], seen = new Set();
+    const walk = (lot, level, parent, via) => {
+      if (seen.has(lot.LotNumber)) return; seen.add(lot.LotNumber);
+      const it = item(lot.ItemNumber);
+      nodes.push({ ...lot, Level: level, ParentLot: parent, ViaWorkOrder: via, ItemDescription: it.ItemDescription, Stage: level === 0 ? 'Component' : it.ItemCategory === 'Semi-Finished' ? 'Semi-finished' : 'Finished good' });
+      FDB.lotGenealogy.filter(g => g.ComponentLot === lot.LotNumber).forEach(g => {
+        wos.push({ ...g, WorkOrderStatus: woStatus(g.WorkOrderNumber, g.WorkOrderStatus), ProductDescription: item(g.ProductItem).ItemDescription });
+        const child = g.ProductLot && FDB.lots.find(x => x.LotNumber === g.ProductLot); if (child) walk(child, level + 1, lot.LotNumber, g.WorkOrderNumber);
+      });
+    };
+    roots.forEach(r => walk(r, 0, '', ''));
+    const set = new Set(nodes.map(n => n.LotNumber)), receiptsHit = FDB.receipts.filter(r => set.has(r.LotNumber)), ships = FDB.shipments.filter(s => set.has(s.LotNumber)), shipped = ships.filter(s => s.Status === 'Shipped');
+    const r0 = receiptsHit[0] || {};
+    return { query: q, supplier: r0.Supplier || '', supplierNumber: r0.SupplierNumber || '', supplierLot: roots[0].SupplierLotNumber, item: roots[0].ItemNumber, itemDescription: item(roots[0].ItemNumber).ItemDescription,
+      receipts: receiptsHit, lots: nodes, workOrders: wos, shipments: ships,
+      summary: { lots: nodes.length, onhandLots: nodes.filter(n => n.OnhandQuantity > 0).length, openWorkOrders: wos.filter(w => !['Completed', 'Closed'].includes(w.WorkOrderStatus)).length, shippedLines: shipped.length, shippedQuantity: shipped.reduce((a, s) => a + s.Quantity, 0), customers: [...new Set(shipped.map(s => s.Customer))], unshippedLines: ships.length - shipped.length } };
+  };
+
   FDB.searchDocs = (query, k = 2) => {
     const terms = String(query).toLowerCase().split(/\W+/).filter(w => w.length > 2);
     const chunks = [];
@@ -261,7 +363,7 @@ const TODAY = '2026-11-25';
 const codeOf = (name, seeded) => (seeded ? 'SIM_' : 'CUST_') + String(name).toUpperCase().replace(/[^A-Z0-9]+/g, '_').replace(/^_|_$/g, '');
 const KEY = 'fsim-v2';
 
-const TOOL_TYPES = { business_object: 'Business object', document: 'Document (RAG)', deep_link: 'Deeplink', calculator: 'Function: calculator', external_rest: 'External REST (connector)', mcp: 'MCP (connector)', email: 'Email', human_approval: 'Human approval', docgen: 'Document template' };
+const TOOL_TYPES = { business_object: 'Business object', document: 'Document (RAG)', deep_link: 'Deeplink', calculator: 'Function: calculator', external_rest: 'External REST (connector)', mcp: 'MCP (connector)', email: 'Email', human_approval: 'Human approval', docgen: 'Document template', genealogy: 'Function: lot genealogy' };
 const AGENT_TYPES = { seeded: 'Oracle seeded', modified: 'Modified seeded', custom: 'Fully custom', marketplace: 'Marketplace partner' };
 const FAMILIES = { SCM: ['Inventory', 'Procurement', 'Manufacturing', 'Maintenance', 'Order Management'], ERP: ['Payables', 'General Ledger', 'Expenses'], HCM: ['Core HR', 'Talent'], CX: ['Service', 'Sales'] };
 
@@ -277,14 +379,22 @@ const seed = () => ({
     { id: 't_ast', name: 'Maintenance assets', type: 'business_object', resource: 'assets', ops: ['GET'], description: 'Assets with criticality, status, meter reading, last PM date.' },
     { id: 't_mwo', name: 'Maintenance work orders', type: 'business_object', resource: 'maintenanceWorkOrders', ops: ['GET', 'PATCH'], description: 'Maintenance work orders by asset, type, priority, status.' },
     { id: 't_wrk', name: 'Workers', type: 'business_object', resource: 'workers', ops: ['GET'], description: 'Worker directory with job, department, manager, leave balance.' },
-    { id: 't_docs', name: 'Policy documents', type: 'document', docIds: ['DOC-1', 'DOC-2', 'DOC-3', 'DOC-4', 'DOC-5'], description: 'Semantic search over uploaded policy documents.' },
+    { id: 't_docs', name: 'Policy documents', type: 'document', docIds: ['DOC-1', 'DOC-2', 'DOC-3', 'DOC-4', 'DOC-5', 'DOC-6'], description: 'Semantic search over uploaded policy documents.' },
     { id: 't_calc', name: 'Calculator', type: 'calculator', description: 'Evaluates arithmetic expressions.' },
     { id: 't_link', name: 'Redwood deeplinks', type: 'deep_link', description: 'Returns a deeplink to a Redwood page for a record.' },
     { id: 't_mail', name: 'Notify by email', type: 'email', description: 'Sends an email through the configured email account (sandbox outbox).' },
     { id: 't_fx', name: 'Exchange rates', type: 'external_rest', connectorId: 'c_fx', description: 'Daily FX rates from an external REST connector.' },
     { id: 't_mcp', name: 'Carrier tracking', type: 'mcp', connectorId: 'c_track', description: 'Shipment tracking status from a third-party MCP server.' },
     { id: 't_appr', name: 'Approval request', type: 'human_approval', processId: 'ap_po', description: 'Creates a human-in-the-loop approval task.' },
-    { id: 't_dg', name: 'Generate expedite letter', type: 'docgen', templateId: 'dt_exp', description: 'Fills the PO expedite email template with live data.' }
+    { id: 't_dg', name: 'Generate expedite letter', type: 'docgen', templateId: 'dt_exp', description: 'Fills the PO expedite email template with live data.' },
+    { id: 't_trace', name: 'Lot genealogy trace', type: 'genealogy', description: 'Forward genealogy from a supplier lot or internal lot: receipts, downstream semi-finished and finished lots, work orders, shipments and customers.' },
+    { id: 't_lots', name: 'Inventory lots', type: 'business_object', resource: 'lots', ops: ['GET'], description: 'Lot master with supplier lot, origin, on-hand, reserved quantity and material status.' },
+    { id: 't_rcpt', name: 'Receipts', type: 'business_object', resource: 'receipts', ops: ['GET'], description: 'Receiving transactions: PO, ASN, supplier lot, internal lot, shipped and received dates.' },
+    { id: 't_gen', name: 'Lot genealogy', type: 'business_object', resource: 'lotGenealogy', ops: ['GET'], description: 'Work order component issues and product completions by lot.' },
+    { id: 't_ship', name: 'Shipment lines', type: 'business_object', resource: 'shipments', ops: ['GET'], description: 'Shipped and pending delivery lines by sales order, customer and lot.' },
+    { id: 't_cust', name: 'Customer accounts', type: 'business_object', resource: 'customers', ops: ['GET'], description: 'Customer accounts with quality contact and email.' },
+    { id: 't_rma', name: 'Return orders (RMA)', type: 'business_object', resource: 'rmas', ops: ['GET'], description: 'Return material authorisations raised against original sales order lines.' },
+    { id: 't_rts', name: 'Supplier returns', type: 'business_object', resource: 'supplierReturns', ops: ['GET'], description: 'Returns to supplier raised against receipts.' }
   ],
   topics: [
     { id: 'tp_scope', name: 'Stay in scope', instructions: 'Only answer questions about this organisation\'s supply chain, finance, maintenance and HR data. Politely decline anything else.' },
@@ -300,6 +410,8 @@ const seed = () => ({
     { id: 'a_mnt', name: 'Maintenance Planner', role: 'Plans and expedites maintenance work', instructions: 'Find overdue PM, work orders waiting for parts, and check spare part stock.', tools: ['t_ast', 't_mwo', 't_onhand', 't_docs'], topics: ['tp_scope', 'tp_cite', 'tp_policy', 'tp_fmt'] },
     { id: 'a_ord', name: 'Order Status Agent', role: 'Answers customer order questions', instructions: 'Give sales order status, hold reasons and shipment tracking.', tools: ['t_so', 't_onhand', 't_mcp'], topics: ['tp_scope', 'tp_cite', 'tp_fmt'] },
     { id: 'a_pol', name: 'Policy Advisor', role: 'Answers policy questions from documents', instructions: 'Search the policy documents and answer with the document title.', tools: ['t_docs'], topics: ['tp_policy', 'tp_fmt'] },
+    { id: 'a_recall', name: 'Recall Investigator', role: 'Traces recalled supplier lots through receipts, work orders and shipments', instructions: 'Given a supplier recall, call the lot genealogy trace first. Report where the lot came from (supplier, ASN, ship and receipt dates), every work order that consumed it, the semi-finished and finished lots produced, on-hand quantities, open work orders, and customers who received affected goods. Propose containment but never take actions; actions need the recall plan approval.', tools: ['t_trace', 't_lots', 't_rcpt', 't_gen', 't_ship', 't_wo', 't_sup', 't_docs'], topics: ['tp_cite', 'tp_policy', 'tp_fmt'] },
+    { id: 'a_cs', name: 'Customer Recall Coordinator', role: 'Prepares customer returns and notices', instructions: 'For shipped sales order lines with affected lots, list customer, order, line, item, lot and quantity, and the quality contact. Explain which RMAs will be raised.', tools: ['t_ship', 't_so', 't_cust', 't_rma'], topics: ['tp_cite', 'tp_fmt'] },
     { id: 'a_hr', name: 'Employee Helper', role: 'Directory and leave lookups', instructions: 'Find workers, managers and leave balances.', tools: ['t_wrk', 't_link'], topics: ['tp_scope', 'tp_fmt'] }
   ],
   workflows: [
@@ -309,9 +421,11 @@ const seed = () => ({
       nodes: [{ id: 'n1', type: 'agent', agentId: 'a_ap', prompt: 'List invoices that need revalidation and explain each variance against the tolerance policy.' }, { id: 'n2', type: 'condition', expr: 'contains:variance' }, { id: 'n3', type: 'approval', processId: 'ap_inv' }, { id: 'n4', type: 'docgen', templateId: 'dt_inv' }, { id: 'n5', type: 'email', to: 'ap-team@example.com' }],
       starters: ['Run the validation for this week'] },
     { id: 'wf_pol', name: 'Policy Q&A', seeded: false, description: 'Document-grounded answers over procurement, AP, inventory and maintenance policies.', type: 'supervisor', llmId: 'l_basic', agentType: 'custom', family: 'SCM', product: 'Procurement', status: 'Draft', version: 0, agents: ['a_pol'], nodes: [], minutesSaved: 5, starters: ['What is the AP invoice tolerance?', 'How often do high criticality assets get PM?'] },
+    { id: 'wf_recall', name: 'Supplier Lot Recall', seeded: false, description: 'Traces a recalled supplier lot forward through genealogy and prepares a containment plan for approval.', type: 'supervisor', llmId: 'l_prem', agentType: 'custom', family: 'SCM', product: 'Inventory', status: 'Published', version: 1, agents: ['a_recall', 'a_cs'], nodes: [], minutesSaved: 240, starters: ['Supplier BlueLine Chemicals recalled lot BLC-240917. Trace the genealogy.', 'Trace recalled supplier lot PLM-LI-5521', 'Which customers received product made from supplier lot BLC-240917?'] },
     { id: 'wf_ord', name: 'Order Status Assistant', seeded: false, description: 'Order status, holds and carrier tracking. Uses a BYO LLM that still needs a credential.', type: 'supervisor', llmId: 'l_byo', agentType: 'custom', family: 'SCM', product: 'Order Management', status: 'Draft', version: 0, agents: ['a_ord', 'a_hr'], nodes: [], minutesSaved: 6, starters: ['Which sales orders are on hold?', 'Track shipment for SO88003'] }
   ],
   applications: [
+    { id: 'app_recall', kind: 'recall', name: 'Supplier lot recall', family: 'SCM', product: 'Inventory', description: 'Trace a recalled supplier lot through receipts, work orders, semi-finished and finished lots to customers, then quarantine, hold, return and raise RMAs after one approval.', workflows: ['wf_recall'], prompt: 'BLC-240917', status: 'Deployed', version: 1, insights: [] },
     { id: 'app_inv', name: 'Inventory balance analyst', family: 'SCM', product: 'Inventory', description: 'Workspace that surfaces shortages and supply risk, then lets planners ask follow-ups.', workflows: ['wf_short'], prompt: 'Which items are below min at MEL1?', status: 'Draft', version: 0,
       insights: [{ label: 'Lines below min', res: 'onhand', q: 'BelowMin=Y', agg: 'count' }, { label: 'Late POs', res: 'purchaseOrders', q: 'Late=Y', agg: 'count' }, { label: 'Work orders with shortage', res: 'workOrders', q: 'ShortageFlag=Y', agg: 'count' }] },
     { id: 'app_spend', name: 'Spend anomaly radar', family: 'ERP', product: 'Payables', description: 'Flags invoice variances and routes them through approval.', workflows: ['wf_inv'], prompt: 'Run the validation for this week', status: 'Draft', version: 0,
@@ -334,6 +448,7 @@ const seed = () => ({
   docTemplates: [
     { id: 'dt_exp', name: 'PO expedite email', format: 'Email', res: 'purchaseOrders', q: 'Late=Y', body: 'Subject: Expedite request for late purchase orders\n\nDear {{Supplier}},\n\nThe following purchase orders are past their promised date as of {{today}}:\n{{rows:OrderNumber,ItemNumber,Quantity,PromisedDate}}\n\nPlease confirm revised ship dates within 2 business days.\n\nRegards,\n{{Buyer}}' },
     { id: 'dt_inv', name: 'Invoice hold summary', format: 'Report', res: 'invoices', q: 'ValidationStatus=Needs revalidation', body: 'Invoice hold summary, {{today}}\n\n{{count}} invoices need revalidation:\n{{rows:InvoiceNumber,Supplier,InvoiceAmount,Variance,HoldName}}\n\nAction: buyers review price holds within 5 business days.' },
+    { id: 'dt_recall', name: 'Customer recall notice', format: 'Email', res: 'shipments', q: 'Status=Shipped', body: 'Subject: Product recall notice for {{Customer}} (recall {{RecallNumber}})\n\nDear {{Contact}},\n\nOur supplier has recalled a component lot ({{SupplierLot}}) used in products we shipped to you. The affected shipments are:\n{{rows:OrderNumber,ItemNumber,LotNumber,Quantity,ShipDate}}\n\nPlease stop using these items and keep them aside. We have raised return authorisations {{RMAs}} and will contact you within one business day to arrange collection and replacement.\n\nReason given by the supplier: {{Reason}}\n\nRegards,\nQuality team' },
     { id: 'dt_pm', name: 'Maintenance backlog report', format: 'Report', res: 'maintenanceWorkOrders', q: 'Status=Waiting for parts', body: 'Maintenance backlog, {{today}}\n\n{{count}} work orders are waiting for parts:\n{{rows:WorkOrderNumber,AssetDescription,Priority,MaterialItem}}' }
   ],
   policyTemplates: [
@@ -351,7 +466,8 @@ const seed = () => ({
   ],
   approvalProcesses: [
     { id: 'ap_po', name: 'PO change approval', approvers: 'Aisha Rahman', rule: 'Any approver', escalateDays: 2 },
-    { id: 'ap_inv', name: 'Invoice hold release', approvers: 'Grace Okafor, Noah Kim', rule: 'All approvers', escalateDays: 3 }
+    { id: 'ap_inv', name: 'Invoice hold release', approvers: 'Grace Okafor, Noah Kim', rule: 'All approvers', escalateDays: 3 },
+    { id: 'ap_recall', name: 'Recall containment plan', approvers: 'Daniel Rossi (Quality)', rule: 'Any approver', escalateDays: 1 }
   ],
   creds: {
     connections: [{ id: 'cn_fx', name: 'FX API key', type: 'API key', user: '', secret: '••••3f9a' }, { id: 'cn_fusion', name: 'Sandbox pod service account', type: 'Basic', user: 'SIM_INTEGRATION', secret: '••••77aa' }],
@@ -361,12 +477,13 @@ const seed = () => ({
     channels: [{ id: 'ch_page', name: 'Redwood page embed', status: 'Enabled' }, { id: 'ch_teams', name: 'Microsoft Teams', status: 'Not configured' }, { id: 'ch_slack', name: 'Slack', status: 'Not configured' }],
     dataSources: [{ id: 'ds1', name: 'Sandbox pod SIM-DEV', url: 'https://sim-pod.example.test', status: 'Connected' }]
   },
-  deeplinks: [{ id: 'dl_po', name: 'Purchase order', page: 'purchase-order', pattern: '/fscmUI/redwood/purchase-order/view?id={OrderNumber}' }, { id: 'dl_item', name: 'Item', page: 'item', pattern: '/fscmUI/redwood/item/view?id={ItemNumber}' }, { id: 'dl_inv', name: 'Invoice', page: 'invoice', pattern: '/fscmUI/redwood/invoice/view?id={InvoiceNumber}' }, { id: 'dl_wo', name: 'Work order', page: 'work-order', pattern: '/fscmUI/redwood/work-order/view?id={WorkOrderNumber}' }],
+  deeplinks: [{ id: 'dl_po', name: 'Purchase order', page: 'purchase-order', pattern: '/fscmUI/redwood/purchase-order/view?id={OrderNumber}' }, { id: 'dl_item', name: 'Item', page: 'item', pattern: '/fscmUI/redwood/item/view?id={ItemNumber}' }, { id: 'dl_inv', name: 'Invoice', page: 'invoice', pattern: '/fscmUI/redwood/invoice/view?id={InvoiceNumber}' }, { id: 'dl_wo', name: 'Work order', page: 'work-order', pattern: '/fscmUI/redwood/work-order/view?id={WorkOrderNumber}' }, { id: 'dl_rma', name: 'Return order', page: 'return-order', pattern: '/fscmUI/redwood/return-order/view?id={RMANumber}' }, { id: 'dl_lot', name: 'Lot genealogy', page: 'lot-genealogy', pattern: '/fscmUI/redwood/lot-genealogy/view?lot={LotNumber}' }],
   functions: [{ id: 'fn_calc', name: 'calculate', description: 'Arithmetic on numbers', signature: 'calculate(expression)' }, { id: 'fn_days', name: 'days_between', description: 'Days between two ISO dates', signature: 'days_between(from, to)' }, { id: 'fn_today', name: 'today', description: 'Sandbox business date', signature: 'today()' }],
   schemas: [{ id: 'sc_inv', name: 'Supplier invoice', fields: [{ name: 'InvoiceNumber', type: 'string' }, { name: 'Supplier', type: 'string' }, { name: 'InvoiceDate', type: 'date' }, { name: 'PONumber', type: 'string' }, { name: 'TotalAmount', type: 'number' }, { name: 'Currency', type: 'string' }] }, { id: 'sc_pack', name: 'Packing slip', fields: [{ name: 'ShipmentNumber', type: 'string' }, { name: 'PONumber', type: 'string' }, { name: 'ItemNumber', type: 'string' }, { name: 'QuantityShipped', type: 'number' }] }],
   evalSets: [
     { id: 'ev1', name: 'Shortage advisor regression', wfId: 'wf_short', cases: [{ q: 'Which items are below min at MEL1?', expect: 'AS1, below' }, { q: 'What approval is needed for a AUD 30,000 PO?', expect: 'category manager' }, { q: 'Are there late POs?', expect: 'PO4' }], runs: [] },
-    { id: 'ev2', name: 'Policy Q&A accuracy', wfId: 'wf_pol', cases: [{ q: 'What is the AP invoice tolerance?', expect: '2 percent, 50' }, { q: 'How often do high criticality assets get PM?', expect: '30 days, 500' }, { q: 'Can I pay a supplier in bitcoin?', expect: 'not cover' }], runs: [] }
+    { id: 'ev2', name: 'Policy Q&A accuracy', wfId: 'wf_pol', cases: [{ q: 'What is the AP invoice tolerance?', expect: '2 percent, 50' }, { q: 'How often do high criticality assets get PM?', expect: '30 days, 500' }, { q: 'Can I pay a supplier in bitcoin?', expect: 'not cover' }], runs: [] },
+    { id: 'ev3', name: 'Recall trace accuracy', wfId: 'wf_recall', cases: [{ q: 'Trace recalled supplier lot BLC-240917', expect: 'SO88101, SO88102, SO88103, SO88106, WO33106' }, { q: 'Trace recalled supplier lot PLM-LI-5521', expect: 'Al Noor, SO88105' }, { q: 'Trace recalled supplier lot SPP-7781', expect: 'L-1007-1110A' }], runs: [] }
   ]
 });
 const DEF_RATES = { basic: 0, premium: 5, byo: 15, tokenCeiling: 10000, docGen: 25, meterTools: false, toolRate: 1, freeGrant: 20000, unitPrice: 0.01 };
@@ -378,13 +495,20 @@ const DEF_EST = { growth: 5, platform: false, platformFee: 500000, platformUnits
 
 /* ---------- state ---------- */
 let S;
-const fresh = () => ({ ...seed(), usage: [], daily: [], events: [], outbox: [], tasks: [], chats: {}, rates: { ...DEF_RATES }, est: clone(DEF_EST), hourly: 65, ui: { mode: 'live', play: 'wf_short' } });
+const fresh = () => ({ ...seed(), recalls: [], usage: [], daily: [], events: [], outbox: [], tasks: [], chats: {}, rates: { ...DEF_RATES }, est: clone(DEF_EST), hourly: 65, ui: { mode: 'live', play: 'wf_short' } });
 const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
 const byId = (arr, id) => (arr === 'llms' ? S.creds.llms : arr === 'connections' ? S.creds.connections : S[arr]).find(x => x.id === id);
 const tierOf = wf => byId('llms', wf.llmId)?.tier || 'basic';
 const event = (kind, text) => { S.events.unshift({ ts: new Date().toISOString(), kind, text }); S.events = S.events.slice(0, 300); };
 try { S = JSON.parse(localStorage.getItem(KEY)); } catch (e) { S = null; }
 if (!S || !S.workflows) { S = fresh(); S.workflows.filter(w => w.status === 'Published').forEach(w => { w.deployedOn = '2026-10-26'; synth(w, 30); }); }
+/* migration: add seeded objects that older saved sandboxes do not have yet */
+(() => { const sd = seed(); let added = [];
+  ['tools', 'topics', 'agents', 'workflows', 'applications', 'connectorDefs', 'connectors', 'docTemplates', 'policyTemplates', 'policies', 'approvalProcesses', 'deeplinks', 'functions', 'schemas', 'evalSets'].forEach(k => { S[k] = S[k] || []; sd[k].forEach(x => { if (!S[k].some(y => y.id === x.id)) { S[k].push(x); added.push(x); } }); });
+  const docs = S.tools.find(t => t.id === 't_docs'); if (docs && !docs.docIds.includes('DOC-6')) docs.docIds.push('DOC-6');
+  S.recalls = S.recalls || [];
+  added.filter(x => x.status === 'Published' && x.agents).forEach(w => { if (!S.daily.some(d => d.wf === w.id)) { w.deployedOn = '2026-10-26'; synth(w, 30); } });
+})();
 if (!(window.claude && window.claude.use) && S.ui.mode === 'live') S.ui.mode = 'api'; if (!S.ui.model) S.ui.model = 'claude-sonnet-5-5';
 S.rates = { ...DEF_RATES, ...S.rates }; S.est = { ...clone(DEF_EST), ...S.est }; S.ui = { mode: 'live', play: 'wf_short', ...S.ui };
 
@@ -419,16 +543,18 @@ function createTask(processId, summary, action) {
   const t = { id: 'APR-' + (1001 + S.tasks.length), ts: new Date().toISOString(), processId, process: pr.name, approvers: pr.approvers, wf: CUR?.wf?.name || '', summary: String(summary).slice(0, 400), action: action || null, status: 'Pending' };
   S.tasks.unshift(t); event('approval', `${t.id} created for ${pr.approvers}`); return t;
 }
+const handlers = {};
 function decideTask(id, ok) {
   const t = S.tasks.find(x => x.id === id); if (!t || t.status !== 'Pending') return;
   t.status = ok ? 'Approved' : 'Rejected'; t.decided = new Date().toISOString();
-  if (ok && t.action) { try { FDB.update(t.action.res, t.action.key, t.action.changes); t.result = 'Update applied'; } catch (e) { t.result = 'Update failed: ' + e.message; } }
+  if (t.action && t.action.type && handlers[t.action.type]) { try { t.result = handlers[t.action.type](t.action, ok) || ''; } catch (e) { t.result = 'Action failed: ' + e.message; } }
+  else if (ok && t.action) { try { FDB.update(t.action.res, t.action.key, t.action.changes); t.result = 'Update applied'; } catch (e) { t.result = 'Update failed: ' + e.message; } }
   event('approval', `${t.id} ${t.status.toLowerCase()}${t.result ? ' · ' + t.result : ''}`);
 }
 
 /* ---------- document templates ---------- */
-function renderTemplate(tpl, overrideQ) {
-  const r = FDB.query(tpl.res, { q: overrideQ ?? tpl.q, limit: 50 }), first = r.items[0] || {};
+function renderTemplate(tpl, overrideQ, rowsOverride, vars = {}) {
+  const r = rowsOverride ? { items: rowsOverride, totalResults: rowsOverride.length } : FDB.query(tpl.res, { q: overrideQ ?? tpl.q, limit: 50 }), first = { ...(r.items[0] || {}), ...vars };
   return tpl.body.replace(/\{\{rows:([^}]+)\}\}/g, (_, f) => r.items.map(x => '• ' + f.split(',').map(k => x[k.trim()]).join(' · ')).join('\n') || '(no matching records)')
     .replace(/\{\{count\}\}/g, r.totalResults).replace(/\{\{today\}\}/g, TODAY).replace(/\{\{(\w+)\}\}/g, (_, k) => first[k] ?? '');
 }
@@ -440,7 +566,7 @@ function connectorGate(tool) { const c = byId('connectors', tool.connectorId); i
 function toolFns(tool) {
   const out = [], wrap = run => i => { checkBlocked(tool); return run(i || {}); };
   if (tool.type === 'business_object') {
-    const meta = FDB.resources[tool.resource], attrs = Object.keys(FDB[tool.resource][0] || {}).join(', ');
+    const meta = FDB.resources[tool.resource], attrs = FDB.cols(tool.resource).join(', ');
     out.push({ name: 'get_' + tool.resource, description: `${tool.name} (${meta.path}). ${tool.description} Attributes: ${attrs}. Filter q like Status=Open;Late=Y;Quantity>100;Supplier LIKE '*lead*'.`, inputSchema: { type: 'object', properties: { q: { type: 'string' }, limit: { type: 'integer' }, fields: { type: 'string' } } },
       run: wrap(i => applyReadPolicies(tool.resource, FDB.query(tool.resource, { q: i.q || '', limit: i.limit || 15, fields: i.fields || '' }))) });
     if ((tool.ops || []).includes('PATCH')) out.push({ name: 'update_' + tool.resource, description: `Update one ${tool.name} record by ${meta.key}. changes = { attribute: newValue }.`, inputSchema: { type: 'object', properties: { key: { type: 'string' }, changes: { type: 'object' } }, required: ['key', 'changes'] },
@@ -462,7 +588,29 @@ function toolFns(tool) {
   if (tool.type === 'human_approval') out.push({ name: 'request_approval', description: tool.description, inputSchema: { type: 'object', properties: { summary: { type: 'string' } }, required: ['summary'] }, run: wrap(i => createTask(tool.processId, i.summary)) });
   if (tool.type === 'docgen') out.push({ name: 'generate_document', description: tool.description + ' Optional q overrides the template filter.', inputSchema: { type: 'object', properties: { q: { type: 'string' } } },
     run: wrap(i => { const t = byId('docTemplates', tool.templateId); if (!t) throw new Error('Template missing'); CUR && (CUR.docs = (CUR.docs || 0) + 1); return { template: t.name, document: renderTemplate(t, i.q || undefined) }; }) });
+  if (tool.type === 'genealogy') out.push({ name: 'trace_lot_genealogy', description: tool.description + ' Input: supplier lot number or internal lot number.', inputSchema: { type: 'object', properties: { lotNumber: { type: 'string' } }, required: ['lotNumber'] },
+    run: wrap(i => compactTrace(FDB.traceLot(i.lotNumber))) });
   return out.map(f => ({ ...f, toolId: tool.id, toolName: tool.name }));
+}
+function compactTrace(t) {
+  return { supplier: t.supplier, supplierLot: t.supplierLot, item: `${t.item} ${t.itemDescription}`, summary: t.summary,
+    receipts: t.receipts.map(r => ({ receipt: r.ReceiptNumber, po: r.PONumber, asn: r.ASNNumber, lot: r.LotNumber, qty: r.Quantity + ' ' + r.UOM, shipped: r.ShippedDate, received: r.ReceivedDate })),
+    lots: t.lots.map(l => ({ lot: l.LotNumber, item: l.ItemNumber, stage: l.Stage, parentLot: l.ParentLot, viaWorkOrder: l.ViaWorkOrder, onhand: l.OnhandQuantity + ' ' + l.UOM, reserved: l.ReservedQuantity, status: l.MaterialStatus, location: l.OrganizationCode + '/' + l.Subinventory })),
+    workOrders: t.workOrders.map(w => ({ wo: w.WorkOrderNumber, status: w.WorkOrderStatus, consumedLot: w.ComponentLot, issued: w.IssuedQuantity, producedItem: w.ProductItem, producedLot: w.ProductLot || '(not completed)', produced: w.ProducedQuantity })),
+    shipments: t.shipments.map(s => ({ order: s.OrderNumber, line: s.LineNumber, customer: s.Customer, item: s.ItemNumber, lot: s.LotNumber, qty: s.Quantity, shipDate: s.ShipDate || '(not shipped)', status: s.Status })) };
+}
+function traceNarrative(t) {
+  const shipped = t.shipments.filter(s => s.Status === 'Shipped'), pend = t.shipments.filter(s => s.Status !== 'Shipped'), open = t.workOrders.filter(w => !['Completed', 'Closed'].includes(w.WorkOrderStatus));
+  const by = st => t.lots.filter(l => l.Stage === st);
+  return [`Recall trace for supplier lot ${t.supplierLot} (${t.item} ${t.itemDescription}) from ${t.supplier || 'unknown supplier'}.`,
+    'Received: ' + t.receipts.map(r => `${r.ReceiptNumber} on PO ${r.PONumber}, shipped ${r.ShippedDate}, received ${r.ReceivedDate}, ${r.Quantity} ${r.UOM} as lot ${r.LotNumber}`).join('; ') + '.',
+    t.workOrders.length ? 'Work orders: ' + t.workOrders.map(w => `${w.WorkOrderNumber} (${w.WorkOrderStatus}) consumed ${w.IssuedQuantity} of ${w.ComponentLot}` + (w.ProductLot ? ` and produced ${w.ProducedQuantity} ${w.ProductItem} lot ${w.ProductLot}` : ', not yet completed')).join('; ') + '.' : 'No work order has consumed this lot.',
+    `Affected lots: ${t.lots.length} (${by('Component').length} component, ${by('Semi-finished').length} semi-finished, ${by('Finished good').length} finished).`,
+    'On hand to contain: ' + (t.lots.filter(l => l.OnhandQuantity > 0).map(l => `${l.LotNumber} ${l.OnhandQuantity} ${l.UOM} at ${l.OrganizationCode}/${l.Subinventory}${l.ReservedQuantity ? ` (${l.ReservedQuantity} reserved)` : ''}`).join('; ') || 'none') + '.',
+    shipped.length ? 'Shipped to customers: ' + shipped.map(s => `${s.Customer} on ${s.OrderNumber} line ${s.LineNumber}, ${s.Quantity} x ${s.ItemNumber} lot ${s.LotNumber} on ${s.ShipDate}`).join('; ') + '.' : 'Nothing has shipped to customers.',
+    pend.length ? 'Allocated but not shipped: ' + pend.map(s => `${s.OrderNumber} line ${s.LineNumber} for ${s.Customer}, ${s.Quantity} from ${s.LotNumber}`).join('; ') + '. Stop these shipments.' : '',
+    open.length ? 'Open work orders using affected lots: ' + open.map(w => w.WorkOrderNumber).join(', ') + '.' : '',
+    `Suggested containment: ${[shipped.length && 'raise RMAs for ' + shipped.length + ' shipped line(s)', t.summary.onhandLots && 'quarantine ' + t.summary.onhandLots + ' lot(s)', open.length && 'hold ' + open.length + ' work order(s)', t.lots.some(l => l.Level === 0 && l.OnhandQuantity > 0) && 'return unused supplier material', shipped.length && 'notify ' + t.summary.customers.length + ' customer(s)'].filter(Boolean).join(', ') || 'no action needed'}. Nothing is changed until the recall plan is approved.`].filter(Boolean).join('\n');
 }
 function wfTools(wf, agentIds) {
   const map = new Map();
@@ -552,10 +700,10 @@ async function liveCall(wf, agentIds, messages, trace, onText, extra) {
   chars += (r.text || '').length; return { text: r.text || '', chars, calls };
 }
 const KW = { items: ['item', 'product', 'sku', 'lead time', 'obsolete'], onhand: ['on hand', 'onhand', 'stock', 'inventory', 'shortage', 'below min', 'available', 'spare'], purchaseOrders: ['po', 'purchase order', 'late', 'buyer', 'promised'], suppliers: ['supplier', 'vendor', 'rating', 'on-time', 'on time'],
-  salesOrders: ['sales order', 'customer', 'on hold', 'ship'], workOrders: ['work order', 'production', 'manufactur'], invoices: ['invoice', 'variance', 'payable', 'validat', 'revalidation'], assets: ['asset', 'machine', 'forklift', 'equipment', 'out of service'], maintenanceWorkOrders: ['maintenance', 'mwo', 'preventive', 'repair', 'waiting for parts'], workers: ['employee', 'worker', 'manager', 'leave', 'who is'] };
-const FN_KW = { search_documents: ['policy', 'approval', 'tolerance', 'guideline', 'standard', 'rule', 'how often', 'need', 'required', 'allowed', 'can i'], calculate: ['calculate', 'compute'], send_email: ['email', 'notify'], get_exchange_rate: ['exchange', 'convert', 'fx rate'], track_shipment: ['track', 'shipment', 'carrier'], request_approval: ['request approval', 'raise approval'], get_deep_link: ['link', 'open page'], generate_document: ['letter', 'draft', 'expedite', 'generate', 'report'] };
+  salesOrders: ['sales order', 'customer', 'on hold', 'ship'], workOrders: ['work order', 'production', 'manufactur'], invoices: ['invoice', 'variance', 'payable', 'validat', 'revalidation'], assets: ['asset', 'machine', 'forklift', 'equipment', 'out of service'], maintenanceWorkOrders: ['maintenance', 'mwo', 'preventive', 'repair', 'waiting for parts'], workers: ['employee', 'worker', 'manager', 'leave', 'who is'], receipts: ['receipt', 'received', 'asn'], shipments: ['shipment line', 'delivery', 'shipped to'], rmas: ['rma', 'return order'], supplierReturns: ['supplier return'], customers: ['customer contact', 'account'] };
+const FN_KW = { trace_lot_genealogy: ['recall', 'genealogy', 'trace', 'recalled', 'lot'], search_documents: ['policy', 'approval', 'tolerance', 'guideline', 'standard', 'rule', 'how often', 'need', 'required', 'allowed', 'can i'], calculate: ['calculate', 'compute'], send_email: ['email', 'notify'], get_exchange_rate: ['exchange', 'convert', 'fx rate'], track_shipment: ['track', 'shipment', 'carrier'], request_approval: ['request approval', 'raise approval'], get_deep_link: ['link', 'open page'], generate_document: ['letter', 'draft', 'expedite', 'generate', 'report'] };
 function mockFilters(res, text) {
-  const t = text.toLowerCase(), f = [], row = FDB[res][0] || {}, add = (k, v) => { if (k in row) f.push(`${k}=${v}`); }, m = (re, k) => { const x = text.match(re); if (x) add(k, x[0].toUpperCase()); };
+  const t = text.toLowerCase(), f = [], row = Object.fromEntries(FDB.cols(res).map(k => [k, 1])), add = (k, v) => { if (k in row) f.push(`${k}=${v}`); }, m = (re, k) => { const x = text.match(re); if (x) add(k, x[0].toUpperCase()); };
   m(/\bAS\d{4}\b/i, 'ItemNumber'); m(/\b(MEL1|SYD2|DXB3)\b/i, res === 'purchaseOrders' ? 'ShipToOrganization' : res === 'salesOrders' ? 'FulfillOrganization' : 'OrganizationCode');
   if (res === 'purchaseOrders') m(/\bPO\d{5}\b/i, 'OrderNumber'); if (res === 'salesOrders') m(/\bSO\d{5}\b/i, 'OrderNumber'); if (res === 'invoices') { m(/\bINV-\d{4}\b/i, 'InvoiceNumber'); m(/\bPO\d{5}\b/i, 'PONumber'); }
   if (res === 'workOrders' || res === 'maintenanceWorkOrders') m(/\b(MWO-\d{4}|WO\d{5})\b/i, 'WorkOrderNumber'); m(/\bAST-\d{3}\b/i, 'AssetNumber');
@@ -568,7 +716,7 @@ function mockFilters(res, text) {
 function mockAnswer(wf, agentIds, text, trace) {
   const fns = wfTools(wf, agentIds), t = text.toLowerCase(); let chars = text.length + systemPrompt(wf, agentIds).length, calls = 0; const parts = [];
   trace.push({ k: 'llm', t: 'Mock planner · keyword intent match (no LLM)', d: { tools: fns.map(f => f.name) } });
-  const score = f => { const res = f.name.replace(/^(get|update)_/, ''); return (KW[res] || FN_KW[f.name] || []).reduce((a, k) => a + (t.includes(k) ? (k.length > 4 ? 2 : 1) : 0), 0); };
+  const score = f => { const res = f.name.replace(/^(get|update)_/, ''); const b = f.name === 'trace_lot_genealogy' && FDB.lots.some(l => (l.SupplierLotNumber && t.includes(l.SupplierLotNumber.toLowerCase())) || t.includes(l.LotNumber.toLowerCase())) ? 10 : 0; return b + (KW[res] || FN_KW[f.name] || []).reduce((a, k) => a + (t.includes(k) ? (k.length > 4 ? 2 : 1) : 0), 0); };
   const ranked = fns.filter(f => !f.name.startsWith('update_')).map(f => ({ f, s: score(f) })).filter(x => x.s > 0).sort((a, b) => b.s - a.s);
   const run = (f, input) => { calls++; try { const o = f.run(input); chars += JSON.stringify(o).length; trace.push({ k: 'tool', t: `Tool · ${f.toolName} → ${f.name} (${f.agents.join(', ')})`, d: { input, output: o } }); return o; } catch (e) { trace.push({ k: 'err', t: 'Tool error · ' + f.name, d: { input, error: e.message } }); parts.push('Tool error: ' + e.message); return null; } };
   const upd = text.match(/(?:update|set|change)\s+(\S+)\s+.*?status\s+to\s+([A-Za-z ]+?)\.?$/i);
@@ -576,7 +724,10 @@ function mockAnswer(wf, agentIds, text, trace) {
     if (f) { const o = run(f, { key, changes: { Status: upd[2].trim() } }); if (o) parts.push(o.status === 'PENDING_APPROVAL' ? `Change to ${key} sent for approval (${o.task}, approver ${o.approvers}). Current status: ${o.before.Status}.` : `Updated ${key}: Status ${o.before.Status} → ${o.after.Status}.`); return { text: parts.join('\n'), chars, calls }; } }
   if (!ranked.length) return { text: `The mock runtime could not map this to a tool on "${wf.name}". The documents and data do not cover it, or try naming a record type (PO, item, invoice). Tools: ${[...new Set(fns.map(f => f.toolName))].join(', ')}.`, chars, calls };
   ranked.slice(0, ranked[1] && ranked[1].s === ranked[0].s ? 2 : 1).forEach(({ f }) => {
-    if (f.name === 'search_documents') { const o = run(f, { query: text }); if (o) parts.push(o.passages.length ? 'From policy documents:\n' + o.passages.slice(0, 3).map(p => `• ${p.text} (${p.doc})`).join('\n') : 'The documents do not cover this.'); }
+    if (f.name === 'trace_lot_genealogy') { const up = text.toUpperCase(), hit = FDB.lots.find(l => (l.SupplierLotNumber && up.includes(l.SupplierLotNumber.toUpperCase())) || up.includes(l.LotNumber.toUpperCase()));
+      if (!hit) { parts.push('Name the supplier lot or lot number to trace, for example BLC-240917.'); return; }
+      const key = hit.SupplierLotNumber && up.includes(hit.SupplierLotNumber.toUpperCase()) ? hit.SupplierLotNumber : hit.LotNumber; const o = run(f, { lotNumber: key }); if (o) parts.push(traceNarrative(FDB.traceLot(key))); }
+    else if (f.name === 'search_documents') { const o = run(f, { query: text }); if (o) parts.push(o.passages.length ? 'From policy documents:\n' + o.passages.slice(0, 3).map(p => `• ${p.text} (${p.doc})`).join('\n') : 'The documents do not cover this.'); }
     else if (f.name === 'calculate') { const ex = (text.match(/[\d\s+\-*/().%]{3,}/) || [''])[0].trim(); const o = ex && run(f, { expression: ex }); if (o) parts.push(`${ex} = ${o.result}`); }
     else if (f.name === 'track_shipment') { const so = (text.match(/\bSO\d{5}\b/i) || ['SO88000'])[0].toUpperCase(); const o = run(f, { orderNumber: so }); if (o) parts.push(`${so}: ${o.status} with ${o.carrier}${o.eta ? ', ETA ' + o.eta : ''}.`); }
     else if (f.name === 'get_exchange_rate') { const c = text.toUpperCase().match(/\b(AUD|USD|AED)\b.*?\b(AUD|USD|AED)\b/); const o = c && run(f, { from: c[1], to: c[2] }); if (o) parts.push(`${o.pair} rate ${o.rate} as of ${o.asOf}.`); }
@@ -636,6 +787,10 @@ async function runWorkflow(wf, userText, onText, opts = {}) {
   return { text, m, mode, error };
 }
 
+function recordUsage(wf, au, tokens, src, note) {
+  S.usage.unshift({ ts: new Date().toISOString(), wf: wf.id, name: wf.name + (note ? ' · ' + note : ''), tier: tierOf(wf), mode: 'system', src, tokens, actions: 0, tools: 0, au, error: false }); S.usage = S.usage.slice(0, 500);
+  const row = S.daily.find(x => x.d === TODAY && x.wf === wf.id && x.src === src); if (row) { row.au += au; row.tok += tokens; } else S.daily.push({ d: TODAY, wf: wf.id, s: 0, au, e: 0, src, tok: tokens });
+}
 /* ---------- deployment ---------- */
 function validate(wf) {
   const c = [], add = (ok, t, sev = 'error') => c.push({ ok, t, sev });
@@ -666,7 +821,7 @@ async function deploy(wf) {
 }
 
 window.CORE = { $, esc, uid, clone, fmt, usd, TODAY, codeOf, TOOL_TYPES, AGENT_TYPES, FAMILIES, seed, fresh, DEF_RATES, DEF_EST, get S() { return S; }, set S(v) { S = v; }, save, byId, tierOf, event,
-  synth, createTask, decideTask, renderTemplate, toolFns, wfTools, systemPrompt, runWorkflow, validate, deploy, inputBlocked,
+  synth, createTask, decideTask, renderTemplate, registerAction: (type, fn) => { handlers[type] = fn; }, recordUsage, traceNarrative, compactTrace, toolFns, wfTools, systemPrompt, runWorkflow, validate, deploy, inputBlocked,
   setSample: x => { sample = x; }, get sample() { return sample; }, runtime, askJson, keyStore, MODELS, IN_CLAUDE, setOnTrace: f => { onTrace = f; } };
 })();
 
@@ -731,15 +886,16 @@ async function needLLM(reason) { if (ui().mode === 'api' && !C.keyStore.get()) a
 V.home = () => {
   const s = S(), sessions = s.daily.reduce((a, x) => a + x.s, 0), au = s.daily.reduce((a, x) => a + x.au, 0);
   const rows = [['Applications', 'Packaged agentic applications: workflows plus a user-facing workspace (insight cards and an ask box). Deploy to make them available.', 'applications'], ['Workflows', 'Agent teams. Supervisor workflows route requests to agents; sequential workflows run nodes (agent, condition, approval, document, email). Publish after validation.', 'workflows'], ['Resources', 'Reusable building blocks: agents, supervisor agents, tools, topics, business objects, deeplinks, functions and document schemas.', 'resources'], ['Connectors', 'Links to external systems and content (REST, MCP, web pages, integration flows). Tools use them; they must be tested before deployment.', 'connectors'], ['Document Templates', 'Templates that turn agent results and records into emails, letters and reports.', 'templates'], ['Policy Models', 'Governance. Policy templates become policies that mask data, block tools, force approvals, cap rows or refuse inputs at runtime.', 'policies'], ['Approvals', 'Approval processes for human-in-the-loop steps, plus the task inbox to approve or reject.', 'approvals'], ['Credentials', 'Connections (secrets), LLM configuration, chat experience, email accounts, channels, data source applications and the CLI.', 'credentials'], ['Monitoring and Evaluation', 'Sessions, AI Units and errors per workflow; evaluation sets; activity log; value realised.', 'monitoring']];
-  const keyCard = !C.IN_CLAUDE ? `<div class="card" style="margin-bottom:16px;border-color:var(--gold)"><div class="row"><div style="flex:1;min-width:240px"><h2 style="margin:0 0 4px">${C.keyStore.get() ? 'Live runs use your Claude API key' : 'Add your Claude API key to run agents live'}</h2><p class="note" style="margin:0">${C.keyStore.get() ? 'Model: ' + esc(C.MODELS[ui().model] || ui().model) + '. You can change or remove the key in Credentials → LLM.' : 'Without a key everything still works on the deterministic mock runtime. With a key, agents reason and call tools with Claude, and token usage is metered from real API usage.'}</p></div><button class="pri" data-a="keySet">${C.keyStore.get() ? 'Change key' : 'Enter API key'}</button>${C.keyStore.get() ? '<button data-a="keyClear">Remove key</button>' : ''}</div></div>` : '';
-  return keyCard + `<div class="hero"><svg class="art" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g1" cx=".75" cy=".3" r=".7"><stop offset="0" stop-color="#1d5a6c"/><stop offset="1" stop-color="#062631"/></radialGradient></defs><rect width="1200" height="420" fill="url(#g1)"/><path d="M820 -20C980 -40 1120 60 1110 220 1100 360 980 430 860 420 760 410 700 330 720 230 740 130 700 0 820 -20z" fill="#a9cfd6" opacity=".55"/><path d="M1000 210c80-30 190 10 210 120s-60 170-150 160-140-80-130-160 20-100 70-120z" fill="#e0a361" opacity=".85"/><path d="M1080 300c50-10 120 30 120 90s-80 60-120 40-50-120 0-130z" fill="#d97a6a" opacity=".7"/>${Array.from({ length: 26 }, (_, i) => `<ellipse cx="${700 + i * 17 + (i % 5) * 9}" cy="${40 + (i % 7) * 16 + Math.floor(i / 7) * 10}" rx="9" ry="2.6" transform="rotate(${18 + i % 4 * 6} ${700 + i * 17} ${40 + (i % 7) * 16})" fill="${i % 3 ? '#f3c49a' : '#e57b5e'}" opacity=".85"/>`).join('')}</svg>
+  const keyCard = !C.IN_CLAUDE ? `<div class="card" style="margin-top:16px;border-color:var(--gold)"><div class="row"><div style="flex:1;min-width:240px"><h2 style="margin:0 0 4px">${C.keyStore.get() ? 'Live runs use your Claude API key' : 'Add your Claude API key to run agents live'}</h2><p class="note" style="margin:0">${C.keyStore.get() ? 'Model: ' + esc(C.MODELS[ui().model] || ui().model) + '. You can change or remove the key in Credentials → LLM.' : 'Without a key everything still works on the deterministic mock runtime. With a key, agents reason and call tools with Claude, and token usage is metered from real API usage.'}</p></div><button class="pri" data-a="keySet">${C.keyStore.get() ? 'Change key' : 'Enter API key'}</button>${C.keyStore.get() ? '<button data-a="keyClear">Remove key</button>' : ''}</div></div>` : '';
+  const recallCard = `<div class="card" style="margin-top:16px"><div class="row"><div style="flex:1;min-width:240px"><h2 style="margin:0 0 4px">Supplier lot recall application</h2><p class="note" style="margin:0">Trace a recalled supplier lot through receipts, work orders, semi-finished and finished lots to customer shipments, then quarantine, hold, return and raise RMAs after one approval. Demo lots: BLC-240917, PLM-LI-5521, SPP-7781.</p></div><button class="pri" data-a="appOpen" data-id="app_recall">Open recall app</button></div></div>`;
+  return `<div class="hero"><svg class="art" viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><defs><radialGradient id="g1" cx=".75" cy=".3" r=".7"><stop offset="0" stop-color="#1d5a6c"/><stop offset="1" stop-color="#062631"/></radialGradient></defs><rect width="1200" height="420" fill="url(#g1)"/><path d="M820 -20C980 -40 1120 60 1110 220 1100 360 980 430 860 420 760 410 700 330 720 230 740 130 700 0 820 -20z" fill="#a9cfd6" opacity=".55"/><path d="M1000 210c80-30 190 10 210 120s-60 170-150 160-140-80-130-160 20-100 70-120z" fill="#e0a361" opacity=".85"/><path d="M1080 300c50-10 120 30 120 90s-80 60-120 40-50-120 0-130z" fill="#d97a6a" opacity=".7"/>${Array.from({ length: 26 }, (_, i) => `<ellipse cx="${700 + i * 17 + (i % 5) * 9}" cy="${40 + (i % 7) * 16 + Math.floor(i / 7) * 10}" rx="9" ry="2.6" transform="rotate(${18 + i % 4 * 6} ${700 + i * 17} ${40 + (i % 7) * 16})" fill="${i % 3 ? '#f3c49a' : '#e57b5e'}" opacity=".85"/>`).join('')}</svg>
    <p class="hi">Hi, sandbox builder!</p><h1>What would you like to build?</h1>
-   <form id="buildf"><div class="ask"><span class="ring"></span><textarea id="buildin" style="background:transparent;border:0;min-height:70px;font-size:17px" placeholder="Describe an agent, e.g. a workflow that finds late POs for critical items and drafts expedite emails"></textarea><button class="pri" id="buildb">Build</button></div></form>
+   <form id="buildf"><div class="ask"><span class="ring"></span><textarea id="buildin" style="background:transparent;border:0;min-height:70px;font-size:15px" placeholder="Describe an agent, e.g. a workflow that finds late POs for critical items and drafts expedite emails"></textarea><button class="pri" id="buildb">Build</button></div></form>
    <div class="chips">${['Inventory balance analyst', 'Spend anomaly radar', 'Supplier risk monitor', 'Maintenance backlog planner', 'Customer order status helper'].map(c => `<button class="chip" data-a="chip" data-id="${esc(c)}">${esc(c)}</button>`).join('')}</div></div>
-  <div class="grid" style="margin-bottom:16px">${[['Workflows', s.workflows.length, 'Published: ' + s.workflows.filter(w => w.status === 'Published').length], ['Applications', s.applications.length, 'Deployed: ' + s.applications.filter(a => a.status === 'Deployed').length], ['Sessions recorded', fmt(sessions), 'Synthetic + test'], ['AI Units recorded', fmt(au), usd(au * s.rates.unitPrice)], ['Approvals pending', pending(), 'In Approvals']].map(([l, v, n]) => `<div class="card"><div class="kpi">${esc(v)}</div><div class="kl">${esc(l)} · ${esc(n)}</div></div>`).join('')}</div>
+  ${recallCard}<div class="grid" style="margin:16px 0">${[['Workflows', s.workflows.length, 'Published: ' + s.workflows.filter(w => w.status === 'Published').length], ['Applications', s.applications.length, 'Deployed: ' + s.applications.filter(a => a.status === 'Deployed').length], ['Sessions recorded', fmt(sessions), 'Synthetic + test'], ['AI Units recorded', fmt(au), usd(au * s.rates.unitPrice)], ['Approvals pending', pending(), 'In Approvals']].map(([l, v, n]) => `<div class="card"><div class="kpi">${esc(v)}</div><div class="kl">${esc(l)} · ${esc(n)}</div></div>`).join('')}</div>
   <div class="card"><h2>What each area does</h2><p class="note">Sandbox interpretation of the AI Agent Studio navigation. Behaviour in your release can differ; check the Oracle documentation for your version.</p>
    <div class="scroll"><table class="stack"><thead><tr><th>Area</th><th>Purpose</th><th>Practice here</th></tr></thead><tbody>${rows.map(r => `<tr><td><b>${r[0]}</b></td><td>${r[1]}</td><td><a href="#${r[2]}" style="color:var(--seed)">Open</a></td></tr>`).join('')}</tbody></table></div>
-   <h3 style="margin-top:14px">Suggested practice path</h3><ol style="margin:4px 0 0;padding-left:20px;color:var(--mute)"><li>Run a seeded workflow (Workflows → ▷) and read the trace.</li><li>Deploy "Order Status Assistant". It fails on the BYO LLM credential and the untested carrier connector; fix both in Credentials and Connectors.</li><li>Ask a workflow to set a PO status. The policy turns it into an approval; approve it and check the PO in Sandbox Data.</li><li>Run an evaluation set, then compare AI Units in Monitoring and the Cost Estimator.</li></ol></div>`;
+   <h3 style="margin-top:14px">Suggested practice path</h3><ol style="margin:4px 0 0;padding-left:20px;color:var(--mute)"><li>Run a seeded workflow (Workflows → ▷) and read the trace.</li><li>Deploy "Order Status Assistant". It fails on the BYO LLM credential and the untested carrier connector; fix both in Credentials and Connectors.</li><li>Ask a workflow to set a PO status. The policy turns it into an approval; approve it and check the PO in Sandbox Data.</li><li>Run an evaluation set, then compare AI Units in Monitoring and the Cost Estimator.</li></ol></div>` + keyCard;
 };
 
 /* ---------- Applications ---------- */
@@ -750,6 +906,7 @@ V.applications = () => {
 };
 V.app = () => {
   const a = byId('applications', ui().app); if (!a) return V.applications();
+  if (a.kind === 'recall' && V.recall) return V.recall(a);
   const ins = a.insights.map(i => { const r = FDB.query(i.res, { q: i.q, limit: 500 }); const v = i.agg === 'count' ? r.totalResults : r.items.reduce((s, x) => s + (+x[i.agg.split(':')[1]] || 0), 0); return `<div class="card"><div class="kpi">${esc(i.agg === 'count' ? fmt(v) : v.toLocaleString('en-US', { maximumFractionDigits: 2 }))}</div><div class="kl">${esc(i.label)}</div></div>`; }).join('');
   return `<div class="note"><a href="#applications" style="color:var(--seed)">Applications</a></div><div class="row"><h1 style="margin:0">${esc(a.name)}</h1>${stTag(a.status)}</div><p class="sub" style="margin-top:6px">${esc(a.description)}</p>
   <div class="grid" style="margin-bottom:14px">${ins}</div>
@@ -805,7 +962,7 @@ V.resources = () => {
   if (t === 'supervisors') body = `<div class="list">${s.workflows.filter(w => w.type === 'supervisor' && match('res', w.name)).map(w => `<div class="li"><div><h3>${esc(w.name)}</h3>${stTag(w.status)}</div><div><div class="k">Routes to</div><div class="v">${w.agents.map(id => esc(byId('agents', id)?.name)).join(', ')}</div></div><div><div class="k">LLM</div><div class="v">${esc(byId('llms', w.llmId)?.name)}</div></div><div></div><div></div><div><button class="link" data-a="wfEdit" data-id="${w.id}">Open</button></div></div>`).join('')}</div>`;
   if (t === 'tools') body = addBtn('toolEdit') + `<div class="scroll"><table class="stack"><thead><tr><th>Tool</th><th>Type</th><th>Target</th><th>Description</th><th></th></tr></thead><tbody>${s.tools.filter(x => match('res', x.name, x.type)).map(x => `<tr><td><b>${esc(x.name)}</b></td><td>${esc(TOOL_TYPES[x.type])}</td><td class="mono">${esc(x.type === 'business_object' ? FDB.resources[x.resource]?.path + ' · ' + (x.ops || []).join('/') : x.connectorId ? 'Connector: ' + byId('connectors', x.connectorId)?.name : x.templateId ? 'Template: ' + byId('docTemplates', x.templateId)?.name : x.processId ? 'Process: ' + byId('approvalProcesses', x.processId)?.name : (x.docIds || []).join(', ') || '—')}</td><td>${esc(x.description)}</td><td><button class="link" data-a="toolEdit" data-id="${x.id}">Edit</button></td></tr>`).join('')}</tbody></table></div>`;
   if (t === 'topics') body = addBtn('topicEdit') + `<div class="grid">${s.topics.filter(x => match('res', x.name, x.instructions)).map(x => `<div class="card"><h3>${esc(x.name)}</h3><p class="note">${esc(x.instructions)}</p><button class="link" data-a="topicEdit" data-id="${x.id}">Edit</button></div>`).join('')}</div>`;
-  if (t === 'bo') body = `<p class="note">Business objects are the REST resources tools can call. Browse and query them in Sandbox Data.</p><div class="scroll"><table class="stack"><thead><tr><th>Object</th><th>Area</th><th>Path</th><th>Key</th><th class="n">Rows</th><th>Attributes</th></tr></thead><tbody>${Object.entries(FDB.resources).filter(([k]) => match('res', k)).map(([k, m]) => `<tr><td><b>${esc(k)}</b></td><td>${esc(m.area)}</td><td class="mono">${esc(m.path)}</td><td>${esc(m.key)}</td><td class="n">${FDB[k].length}</td><td class="note">${esc(Object.keys(FDB[k][0]).join(', '))}</td></tr>`).join('')}</tbody></table></div>`;
+  if (t === 'bo') body = `<p class="note">Business objects are the REST resources tools can call. Browse and query them in Sandbox Data.</p><div class="scroll"><table class="stack"><thead><tr><th>Object</th><th>Area</th><th>Path</th><th>Key</th><th class="n">Rows</th><th>Attributes</th></tr></thead><tbody>${Object.entries(FDB.resources).filter(([k]) => match('res', k)).map(([k, m]) => `<tr><td><b>${esc(k)}</b></td><td>${esc(m.area)}</td><td class="mono">${esc(m.path)}</td><td>${esc(m.key)}</td><td class="n">${FDB[k].length}</td><td class="note">${esc(FDB.cols(k).join(', '))}</td></tr>`).join('')}</tbody></table></div>`;
   if (t === 'deeplinks') body = addBtn('dlAdd') + `<div class="scroll"><table class="stack"><thead><tr><th>Name</th><th>Page</th><th>Pattern</th></tr></thead><tbody>${s.deeplinks.map(d => `<tr><td><b>${esc(d.name)}</b></td><td>${esc(d.page)}</td><td class="mono">${esc(d.pattern)}</td></tr>`).join('')}</tbody></table></div>`;
   if (t === 'functions') body = `<p class="note">Functions are deterministic helpers agents call instead of letting the LLM do arithmetic or date maths.</p><div class="scroll"><table class="stack"><thead><tr><th>Function</th><th>Signature</th><th>Description</th></tr></thead><tbody>${s.functions.map(f => `<tr><td><b>${esc(f.name)}</b></td><td class="mono">${esc(f.signature)}</td><td>${esc(f.description)}</td></tr>`).join('')}</tbody></table></div>
    <div class="card" style="margin-top:12px"><h3>Try calculate()</h3><div class="row" style="flex-wrap:nowrap"><input id="fnin" value="(450-120)*0.6"><button data-a="fnTry">Run</button></div><pre id="fnout" style="margin-top:8px">Result</pre></div>`;
@@ -841,7 +998,7 @@ V.policies = () => {
 /* ---------- Approvals ---------- */
 V.approvals = () => {
   const s = S(), t = curTab('apTab', 'inbox');
-  const body = t === 'inbox' ? `<div class="list">${s.tasks.filter(x => match('ap', x.summary, x.process)).slice(0, 60).map(x => `<div class="li"><div><h3>${esc(x.id)} · ${esc(x.process)}</h3>${stTag(x.status)}<div class="note" style="margin-top:4px;white-space:pre-wrap">${esc(x.summary)}</div></div><div><div class="k">Approvers</div><div class="v">${esc(x.approvers)}</div></div><div><div class="k">From workflow</div><div class="v">${esc(x.wf || '—')}</div></div><div><div class="k">Action on approval</div><div class="v mono">${esc(x.action ? `${x.action.res} ${x.action.key} ${JSON.stringify(x.action.changes)}` : 'none')}</div>${x.result ? `<div class="note">${esc(x.result)}</div>` : ''}</div><div><div class="k">Created</div><div class="v">${esc(x.ts.slice(0, 16).replace('T', ' '))}</div></div><div class="row">${x.status === 'Pending' ? `<button class="pri" data-a="taskOk" data-id="${x.id}">Approve</button><button data-a="taskNo" data-id="${x.id}">Reject</button>` : ''}</div></div>`).join('') || '<p>No approval tasks yet. Ask a workflow to change a PO status, or run Invoice Validation Workflow.</p>'}</div>`
+  const body = t === 'inbox' ? `<div class="list">${s.tasks.filter(x => match('ap', x.summary, x.process)).slice(0, 60).map(x => `<div class="li"><div><h3>${esc(x.id)} · ${esc(x.process)}</h3>${stTag(x.status)}<div class="note" style="margin-top:4px;white-space:pre-wrap">${esc(x.summary)}</div></div><div><div class="k">Approvers</div><div class="v">${esc(x.approvers)}</div></div><div><div class="k">From workflow</div><div class="v">${esc(x.wf || '—')}</div></div><div><div class="k">Action on approval</div><div class="v mono">${esc(x.action ? (x.action.type === 'recall' ? `Execute recall plan ${x.action.caseId}` : `${x.action.res} ${x.action.key} ${JSON.stringify(x.action.changes)}`) : 'none')}</div>${x.result ? `<div class="note">${esc(x.result)}</div>` : ''}</div><div><div class="k">Created</div><div class="v">${esc(x.ts.slice(0, 16).replace('T', ' '))}</div></div><div class="row">${x.status === 'Pending' ? `<button class="pri" data-a="taskOk" data-id="${x.id}">Approve</button><button data-a="taskNo" data-id="${x.id}">Reject</button>` : ''}</div></div>`).join('') || '<p>No approval tasks yet. Ask a workflow to change a PO status, or run Invoice Validation Workflow.</p>'}</div>`
     : `<div class="row" style="margin-bottom:12px"><button data-a="apEdit" data-id="">Add</button></div><div class="list">${s.approvalProcesses.filter(p => match('ap', p.name)).map(p => `<div class="li"><div><h3>${esc(p.name)}</h3></div><div><div class="k">Approvers</div><div class="v">${esc(p.approvers)}</div></div><div><div class="k">Rule</div><div class="v">${esc(p.rule)}</div></div><div><div class="k">Escalate after</div><div class="v">${esc(p.escalateDays)} days</div></div><div></div><div><button class="link" data-a="apEdit" data-id="${p.id}">Edit</button></div></div>`).join('')}</div>`;
   return `<h1>Approval Processes</h1>${tabs('apTab', [['inbox', `Task inbox (${pending()} pending)`], ['processes', 'Processes']])}${ask('Search approvals', 'ap')}${body}`;
 };
@@ -943,7 +1100,7 @@ V.data = () => {
   <div class="row" style="margin-bottom:12px"><select id="dres" style="width:auto">${opts(Object.keys(FDB.resources).map(k => ({ id: k, name: `${k} (${FDB[k].length})` })), r)}</select></div>
   <div class="card" style="margin-bottom:14px"><h2>REST explorer</h2><div class="row" style="flex-wrap:nowrap"><select id="rm" style="width:auto"><option>GET</option><option>PATCH</option></select><input id="ru" class="mono" value="${esc(m.path)}?q=&amp;limit=5"></div>
    <label for="rb">PATCH body; path ends with /{${esc(m.key)}}</label><textarea id="rb" class="mono" style="min-height:60px">{ "Status": "Approved" }</textarea><div class="row" style="margin-top:8px"><button class="pri" data-a="rest">Send</button><span class="note">q: Field=Val;Field&gt;10;Field LIKE '*text*'</span></div><pre id="rout" style="margin-top:10px">Response appears here.</pre></div>
-  <div class="card"><h2>${esc(r)} <span class="note">${esc(m.area)} · ${esc(m.path)}</span></h2><div class="scroll"><table><thead><tr>${Object.keys(FDB[r][0]).map(k => `<th class="${typeof FDB[r][0][k] === 'number' ? 'n' : ''}">${esc(k)}</th>`).join('')}</tr></thead><tbody>${FDB[r].slice(0, 60).map(row => `<tr>${Object.values(row).map(v => `<td class="${typeof v === 'number' ? 'n' : ''}">${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  <div class="card"><h2>${esc(r)} <span class="note">${esc(m.area)} · ${esc(m.path)}</span></h2><div class="scroll"><table><thead><tr>${FDB.cols(r).map(k => `<th class="${typeof (FDB[r][0] || {})[k] === 'number' ? 'n' : ''}">${esc(k)}</th>`).join('')}</tr></thead><tbody>${FDB[r].slice(0, 60).map(row => `<tr>${FDB.cols(r).map(k => row[k]).map(v => `<td class="${typeof v === 'number' ? 'n' : ''}">${esc(v)}</td>`).join('')}</tr>`).join('') || `<tr><td colspan="${FDB.cols(r).length}">No records yet.</td></tr>`}</tbody></table></div></div>`;
 };
 function rest() {
   const meth = $('#rm').value, u = $('#ru').value.trim(), out = $('#rout');
@@ -1125,7 +1282,7 @@ function render() {
   if (ro) { ro.disconnect(); ro = null; }
   if (v === 'run') { renderTrace(); $('#chatf').onsubmit = e => { e.preventDefault(); send(); }; $('#pwf').onchange = e => { ui().play = e.target.value; s.trace = []; C.save(); render(); }; const m = $('#msgs'); m.scrollTop = m.scrollHeight; }
   if (v === 'home') $('#buildf').onsubmit = e => { e.preventDefault(); buildFromPrompt($('#buildin').value); };
-  if (v === 'app') $('#appf').onsubmit = async e => { e.preventDefault(); await needLLM('Applications run their workflows live.'); const a = byId('applications', ui().app), out = $('#appout'), q = $('#appin').value; out.textContent = 'Running…'; let txt = '';
+  if (v === 'app' && $('#appf')) $('#appf').onsubmit = async e => { e.preventDefault(); await needLLM('Applications run their workflows live.'); const a = byId('applications', ui().app), out = $('#appout'), q = $('#appin').value; out.textContent = 'Running…'; let txt = '';
     for (const id of a.workflows) { const w = byId('workflows', id); if (!w) continue; const r = await C.runWorkflow(w, q, null, { src: a.status === 'Deployed' ? 'app' : 'test', trace: false }); txt += `${w.name} (${r.m.au} AU)\n${r.text}\n\n`; out.textContent = txt; } };
   if (v === 'data') $('#dres').onchange = e => { ui().dataRes = e.target.value; C.save(); render(); };
   if (v === 'monitoring' && (ui().monTab || 'monitoring') === 'monitoring' && $('#sesfig')) { ro = new ResizeObserver(drawSessions); ro.observe($('#sesfig')); }
@@ -1154,8 +1311,218 @@ $('#colb').onclick = () => $('#shell').classList.toggle('col');
 function syncMode() { const sel = $('#rtmode'); sel.innerHTML = opts(modeOpts(), modeVal()); }
 $('#rtmode').onchange = e => { ui().mode = e.target.value; C.save(); render(); if (e.target.value === 'api' && !C.keyStore.get()) keyDialog(); };
 addEventListener('hashchange', render);
+window.UI = { V, A, render: () => render(), dialog, toast, tag, stTag, opts, needLLM, ui, S };
 render(); syncMode();
 if (window.claude && window.claude.use) window.claude.use('sample').then(x => { C.setSample(x); syncMode(); if ((location.hash || '#home') === '#run') render(); }).catch(() => syncMode());
+}
+
+</script>
+<script>
+/* Supplier lot recall agentic application: intake -> genealogy trace -> containment options -> one approval -> execution */
+{
+const C = window.CORE, U = window.UI, { $, esc, fmt, TODAY, byId } = C;
+const S = () => C.S, ui = () => C.S.ui;
+const SAMPLE_NOTICE = `URGENT: Voluntary product recall
+From: BlueLine Chemicals Pty Ltd, Quality Assurance
+Date: 21 November 2026
+
+Product: Electrolyte solution (your item AS1006)
+Supplier lot number: BLC-240917
+Shipped to you: 20 September 2026 and 30 September 2026
+
+Reason: Iron contamination above specification (52 ppm against a 10 ppm limit) found in retained samples. Affected material can cause premature cell failure.
+
+Action required: stop using this lot immediately, quarantine remaining stock, identify finished products that contain it, and return unused material for credit. Contact quality@blueline.example.com.`;
+const DEMOS = [
+  { lot: 'BLC-240917', sup: 'BlueLine Chemicals', item: 'AS1006', reason: 'Iron contamination above specification', label: 'BLC-240917: multi-level, shipped to 4 customers' },
+  { lot: 'PLM-LI-5521', sup: 'Pacific Lead Metals', item: 'AS1029', reason: 'Antimony content out of tolerance', label: 'PLM-LI-5521: single level, export customer' },
+  { lot: 'SPP-7781', sup: 'Southern Plastics Pty', item: 'AS1007', reason: 'Casing wall thickness below drawing', label: 'SPP-7781: received, not used yet' }
+];
+const ACTIONS = [['rma', 'Create RMAs for shipped sales order lines', 'Return order per shipped line of an affected finished or semi-finished lot.'], ['quarantine', 'Quarantine on-hand lots', 'Set material status to Recall hold and stop allocated lines that have not shipped.'], ['holdWo', 'Hold open work orders', 'Put released work orders that consumed an affected lot on hold.'], ['rts', 'Return unused material to supplier', 'Raise a supplier return for remaining quantity of the recalled supplier lot.'], ['notify', 'Notify customers by email', 'Send the Customer recall notice template to each affected customer.']];
+const STEPS = ['Intake', 'Trace', 'Containment options', 'Approval', 'Executed'];
+const caseNo = c => +c.id.split('-').pop();
+const draft = () => { const s = S(); s.recallDraft = s.recallDraft || { mode: 'lot', supplier: '', lot: '', item: '', reason: '', notice: SAMPLE_NOTICE }; return s.recallDraft; };
+const cur = () => S().recalls.find(c => c.id === ui().recallCase);
+const traceOf = c => FDB.traceLot(c.supplierLot || c.lotEntered);
+const st = s => U.tag(s, s === 'Active' ? '' : s === 'Recall hold' || s === 'On Hold' || s.startsWith('On hold') ? 't-bad' : 't-warn');
+
+/* ---------- plan + execution ---------- */
+function buildPlan(t) {
+  const shipped = t.shipments.filter(s => s.Status === 'Shipped'), pend = t.shipments.filter(s => s.Status !== 'Shipped' && !s.Status.startsWith('On hold')), cust = n => FDB.customers.find(c => c.CustomerName === n) || {};
+  return {
+    rma: shipped.map(s => ({ OrderNumber: s.OrderNumber, LineNumber: s.LineNumber, Customer: s.Customer, ItemNumber: s.ItemNumber, LotNumber: s.LotNumber, Quantity: s.Quantity, UOM: s.UOM, ShipDate: s.ShipDate })),
+    quarantine: { lots: t.lots.filter(l => l.OnhandQuantity > 0 && l.MaterialStatus !== 'Recall hold').map(l => ({ LotNumber: l.LotNumber, ItemNumber: l.ItemNumber, Stage: l.Stage, Location: l.OrganizationCode + '/' + l.Subinventory, Quantity: l.OnhandQuantity, UOM: l.UOM, Reserved: l.ReservedQuantity })),
+      lines: pend.map(s => ({ DeliveryNumber: s.DeliveryNumber, OrderNumber: s.OrderNumber, LineNumber: s.LineNumber, Customer: s.Customer, LotNumber: s.LotNumber, Quantity: s.Quantity })) },
+    holdWo: [...new Map(t.workOrders.filter(w => !['Completed', 'Closed', 'On Hold'].includes(w.WorkOrderStatus)).map(w => [w.WorkOrderNumber, { WorkOrderNumber: w.WorkOrderNumber, Status: w.WorkOrderStatus, ComponentLot: w.ComponentLot, IssuedQuantity: w.IssuedQuantity, ProductItem: w.ProductItem }])).values()],
+    rts: t.lots.filter(l => l.Level === 0 && l.OnhandQuantity > 0).map(l => { const r = t.receipts.find(x => x.LotNumber === l.LotNumber) || {}; return { LotNumber: l.LotNumber, SupplierLotNumber: l.SupplierLotNumber, ItemNumber: l.ItemNumber, Quantity: l.OnhandQuantity, UOM: l.UOM, ReceiptNumber: r.ReceiptNumber, PONumber: r.PONumber, Supplier: r.Supplier, SupplierNumber: r.SupplierNumber }; }),
+    notify: [...new Set(shipped.map(s => s.Customer))].map(n => ({ Customer: n, Contact: cust(n).Contact || 'Quality contact', Email: cust(n).Email || '', lines: shipped.filter(s => s.Customer === n) }))
+  };
+}
+const count = (k, p) => k === 'quarantine' ? p.quarantine.lots.length + p.quarantine.lines.length : p[k].length;
+function applyRecall(c, replay) {
+  const p = c.plan, a = c.actions, n = caseNo(c), res = { rmas: [], lots: [], lines: [], wos: [], rts: [], emails: 0 }, day = c.decidedOn || TODAY;
+  if (a.rma) p.rma.forEach((l, i) => { const no = `RMA-${70000 + n * 20 + i}`; if (!FDB.rmas.some(r => r.RMANumber === no)) FDB.rmas.push({ RMANumber: no, OriginalOrder: l.OrderNumber, OriginalLine: l.LineNumber, Customer: l.Customer, ItemNumber: l.ItemNumber, LotNumber: l.LotNumber, Quantity: l.Quantity, UOM: l.UOM, Reason: `Supplier recall ${c.id}`, Disposition: 'Return to quarantine for inspection', Status: 'Awaiting receipt', CreatedDate: day, RecallCase: c.id }); res.rmas.push(no); });
+  if (a.quarantine) {
+    p.quarantine.lots.forEach(l => { const x = FDB.lots.find(z => z.LotNumber === l.LotNumber); if (x) { x.MaterialStatus = 'Recall hold'; res.lots.push(l.LotNumber); } });
+    p.quarantine.lines.forEach(l => { const x = FDB.shipments.find(z => z.DeliveryNumber === l.DeliveryNumber); if (x) x.Status = 'On hold - recall'; const so = FDB.salesOrders.find(z => z.OrderNumber === l.OrderNumber); if (so) { so.Status = 'On Hold'; so.HoldReason = 'Supplier recall ' + c.id; } res.lines.push(`${l.OrderNumber} line ${l.LineNumber}`); });
+  }
+  if (a.holdWo) p.holdWo.forEach(w => { const x = FDB.workOrders.find(z => z.WorkOrderNumber === w.WorkOrderNumber); if (x) { x.Status = 'On Hold'; res.wos.push(w.WorkOrderNumber); } });
+  if (a.rts) p.rts.forEach((l, i) => { const no = `RTS-${50000 + n * 20 + i}`;
+    if (!FDB.supplierReturns.some(r => r.ReturnNumber === no)) FDB.supplierReturns.push({ ReturnNumber: no, Supplier: l.Supplier, SupplierNumber: l.SupplierNumber, PONumber: l.PONumber, ReceiptNumber: l.ReceiptNumber, ItemNumber: l.ItemNumber, LotNumber: l.LotNumber, SupplierLotNumber: l.SupplierLotNumber, Quantity: l.Quantity, UOM: l.UOM, Reason: `Supplier recall of ${c.supplierLot}: ${c.reason || 'quality issue'}`, Status: 'Awaiting pickup', CreatedDate: day, RecallCase: c.id });
+    const x = FDB.lots.find(z => z.LotNumber === l.LotNumber); if (x && x.MaterialStatus === 'Active') x.MaterialStatus = 'Pending supplier return'; res.rts.push(no); });
+  if (a.notify) { res.emails = p.notify.length;
+    if (!replay) { const tpl = byId('docTemplates', 'dt_recall'), acct = S().creds.email.find(e => e.status === 'Verified');
+      p.notify.forEach(nt => { const rmas = FDB.rmas.filter(r => r.RecallCase === c.id && r.Customer === nt.Customer).map(r => r.RMANumber).join(', ') || '(to follow)';
+        const body = tpl ? C.renderTemplate(tpl, null, nt.lines, { Customer: nt.Customer, Contact: nt.Contact, RecallNumber: c.id, SupplierLot: c.supplierLot, RMAs: rmas, Reason: c.reason || 'quality issue' }) : `Recall ${c.id}`;
+        const [first, ...rest] = body.split('\n'); S().outbox.unshift({ ts: new Date().toISOString(), from: acct ? acct.address : '', to: nt.Email, subject: first.replace(/^Subject:\s*/, ''), body: rest.join('\n').trim(), recall: c.id }); }); } }
+  c.results = res; return res;
+}
+C.registerAction('recall', (action, ok) => {
+  const c = S().recalls.find(x => x.id === action.caseId); if (!c) return 'Recall case missing';
+  c.decidedOn = TODAY; c.decidedAt = new Date().toISOString();
+  if (!ok) { c.status = 'Rejected'; C.event('recall', c.id + ' plan rejected'); return 'Recall plan rejected'; }
+  c.status = 'Executed'; const r = applyRecall(c, false), wf = byId('workflows', 'wf_recall');
+  if (wf && r.emails) C.recordUsage(wf, r.emails * S().rates.docGen, 0, 'app', 'customer notices');
+  const msg = `${r.rmas.length} RMA(s), ${r.lots.length} lot(s) on hold, ${r.lines.length} unshipped line(s) stopped, ${r.wos.length} work order(s) held, ${r.rts.length} supplier return(s), ${r.emails} customer notice(s)`;
+  C.event('recall', `${c.id} executed: ${msg}`); return 'Executed: ' + msg;
+});
+S().recalls.filter(c => c.status === 'Executed').forEach(c => { try { applyRecall(c, true); } catch (e) {} });
+
+/* ---------- intake ---------- */
+function readIntake() { const d = draft(); document.querySelectorAll('[data-rd]').forEach(el => { d[el.dataset.rd] = el.value; }); return d; }
+async function extract() {
+  const d = readIntake(); if (!d.notice.trim()) return U.toast('Paste a recall notice first');
+  await U.needLLM('Reading the recall notice uses Claude.'); let x = null;
+  if (C.runtime() !== 'mock') { const b = $('#rx'); if (b) { b.disabled = true; b.textContent = 'Reading notice…'; }
+    try { x = await C.askJson(`Read this supplier recall notice and return JSON {"supplier":string,"supplierLotNumber":string,"itemNumber":string|null,"itemDescription":string|null,"shippedDates":[string],"reason":string,"actionsRequested":string}. Use null when a field is absent.\nNotice:\n${d.notice}`); d.extractedBy = 'Claude'; }
+    catch (e) { U.toast('LLM extraction failed, using pattern matching'); } }
+  if (!x) { const t = d.notice;
+    x = { supplier: (FDB.suppliers.find(s => t.toLowerCase().includes(s.Supplier.toLowerCase().split(' ')[0])) || {}).Supplier || '', supplierLotNumber: (t.match(/lot(?:\s*(?:number|no\.?|#))?\s*[:#]?\s*([A-Z0-9][A-Z0-9-]{3,})/i) || [])[1] || '', itemNumber: (t.match(/\bAS\d{4}\b/i) || [''])[0].toUpperCase(), reason: ((t.match(/reason\s*[:\-]\s*([^\n]+)/i) || [])[1] || '').trim() };
+    d.extractedBy = 'pattern matching (mock runtime)'; }
+  const sm = FDB.suppliers.find(s => String(x.supplier || '').toLowerCase().includes(s.Supplier.toLowerCase().split(' ')[0]));
+  Object.assign(d, { supplier: sm ? sm.Supplier : (x.supplier || ''), lot: x.supplierLotNumber || '', item: x.itemNumber || '', reason: x.reason || '', mode: 'lot', extracted: true });
+  C.save(); U.render(); U.toast(d.lot ? 'Details extracted. Check them, then trace.' : 'No lot number found in the notice');
+}
+async function startTrace() {
+  const d = readIntake(); if (!d.lot.trim()) return U.toast('Enter the supplier lot number');
+  let t; try { t = FDB.traceLot(d.lot); } catch (e) { return U.toast(e.message); }
+  const s = S(), id = 'RC-2026-' + String(s.recalls.length + 1).padStart(3, '0'), warnings = [];
+  if (d.supplier && t.supplier && !t.supplier.toLowerCase().includes(d.supplier.toLowerCase().split(' ')[0])) warnings.push(`The recall names ${d.supplier}, but lot ${t.supplierLot || d.lot} was received from ${t.supplier}. Confirm with the supplier before acting.`);
+  if (d.item && d.item.toUpperCase() !== t.item) warnings.push(`The recall names item ${d.item.toUpperCase()}, but the lot is item ${t.item}.`);
+  if (!t.supplierLot) warnings.push('You entered an internal lot, so the trace starts from that lot rather than the supplier lot.');
+  const c = { id, created: new Date().toISOString(), source: d.extracted ? 'Recall notice (' + (d.extractedBy || '') + ')' : 'Lot number', supplier: t.supplier || d.supplier, supplierLot: t.supplierLot || '', lotEntered: d.lot.trim(), item: t.item, reason: d.reason, status: 'Traced', narrative: '', actions: {}, warnings };
+  s.recalls.unshift(c); ui().recallCase = id; s.recallDraft = null; C.event('recall', `${id} opened for lot ${c.supplierLot || c.lotEntered}`); C.save(); U.render();
+  await U.needLLM('The Recall Investigator agent summarises the trace.');
+  const wf = byId('workflows', 'wf_recall'), app = byId('applications', 'app_recall');
+  if (!wf) { c.narrative = C.traceNarrative(t); C.save(); return U.render(); }
+  c.narrative = '…'; U.render();
+  const r = await C.runWorkflow(wf, `Supplier ${c.supplier} recalled supplier lot ${c.supplierLot || c.lotEntered} of item ${t.item}. Reason: ${c.reason || 'not given'}. Trace the recalled lot genealogy with the trace tool and summarise the impact for the quality manager: receipts with ship and receipt dates, work orders, semi-finished and finished lots, on-hand to quarantine, open work orders, customers and sales order lines shipped, and allocations not yet shipped. Do not take any action.`, null, { src: app && app.status === 'Deployed' ? 'app' : 'test', trace: false });
+  c.narrative = r.text; c.narrativeMeta = `${r.mode === 'api' ? 'Claude API' : r.mode === 'live' ? 'Live LLM' : 'Mock runtime'} · ${r.m.au} AI Units`; C.save(); U.render();
+}
+
+/* ---------- views ---------- */
+function flow(t) {
+  const by = s => t.lots.filter(l => l.Stage === s).length;
+  const parts = [['Supplier lot', t.supplierLot || '—'], ['Receipts', new Set(t.receipts.map(r => r.ReceiptNumber)).size], ['Component lots', by('Component')], ['Work orders', new Set(t.workOrders.map(w => w.WorkOrderNumber)).size], ['Semi-finished lots', by('Semi-finished')], ['Finished lots', by('Finished good')], ['Customers', t.summary.customers.length]];
+  return `<div class="flow">${parts.map(([l, v], i) => `${i ? '<span class="arr" aria-hidden="true">→</span>' : ''}<div class="fstep"><div class="kpi" style="font-size:18px">${esc(v)}</div><div class="kl">${esc(l)}</div></div>`).join('')}</div>`;
+}
+function tree(t) {
+  const cls = { Component: 'g-comp', 'Semi-finished': 'g-semi', 'Finished good': 'g-fg' };
+  const node = l => `<li><div class="gnode ${cls[l.Stage]}"><div class="row" style="gap:6px"><b class="mono">${esc(l.LotNumber)}</b>${U.tag(l.Stage)}${st(l.MaterialStatus)}</div><div class="note">${esc(l.ItemNumber)} ${esc(l.ItemDescription)}${l.ViaWorkOrder ? ` · made on ${esc(l.ViaWorkOrder)}` : ''}<br>On hand ${fmt(l.OnhandQuantity)} ${esc(l.UOM)} at ${esc(l.OrganizationCode)}/${esc(l.Subinventory)}${l.ReservedQuantity ? ` · ${fmt(l.ReservedQuantity)} reserved` : ''}</div></div>
+    <ul>${t.lots.filter(x => x.ParentLot === l.LotNumber).map(node).join('')}${t.workOrders.filter(w => w.ComponentLot === l.LotNumber && !w.ProductLot).map(w => `<li><div class="gnode g-wo"><div class="row" style="gap:6px"><b class="mono">${esc(w.WorkOrderNumber)}</b>${st(w.WorkOrderStatus === 'Released' ? 'Open work order' : w.WorkOrderStatus)}</div><div class="note">Issued ${fmt(w.IssuedQuantity)} ${esc(l.UOM)} to make ${esc(w.ProductItem)} ${esc(w.ProductDescription || '')}, not completed</div></div></li>`).join('')}
+    ${t.shipments.filter(s => s.LotNumber === l.LotNumber).map(s => `<li><div class="gnode g-ship"><div class="row" style="gap:6px"><b class="mono">${esc(s.OrderNumber)} line ${esc(s.LineNumber)}</b>${s.Status === 'Shipped' ? U.tag('Shipped') : st(s.Status)}</div><div class="note">${esc(s.Customer)} · ${fmt(s.Quantity)} x ${esc(s.ItemNumber)}${s.ShipDate ? ` · shipped ${esc(s.ShipDate)} on ${esc(s.DeliveryNumber)}` : ' · allocated, not shipped'}</div></div></li>`).join('')}</ul></li>`;
+  const rcpt = [...new Map(t.receipts.map(r => [r.ReceiptNumber, r])).values()];
+  return `<ul class="gtree"><li><div class="gnode g-sup"><b>${esc(t.supplier || 'Supplier')}</b> · supplier lot <b class="mono">${esc(t.supplierLot || '—')}</b><div class="note">${rcpt.map(r => `${esc(r.ReceiptNumber)} on ${esc(r.PONumber)} (${esc(r.ASNNumber)}): shipped ${esc(r.ShippedDate)}, received ${esc(r.ReceivedDate)} at ${esc(r.OrganizationCode)}`).join('<br>')}</div></div><ul>${t.lots.filter(l => l.Level === 0).map(node).join('')}</ul></li></ul>`;
+}
+const tbl = (cols, rows) => `<div class="scroll"><table class="stack"><thead><tr>${cols.map(c => `<th class="${/Quantity|Qty|Line/.test(c) ? 'n' : ''}">${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr>${cols.map(c => `<td class="${/Quantity|Qty|Line/.test(c) ? 'n' : ''}">${esc(r[c])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+function details(k, p) {
+  if (k === 'rma') return tbl(['Customer', 'OrderNumber', 'LineNumber', 'ItemNumber', 'LotNumber', 'Quantity', 'ShipDate'], p.rma);
+  if (k === 'quarantine') return tbl(['LotNumber', 'ItemNumber', 'Stage', 'Location', 'Quantity', 'Reserved'], p.quarantine.lots) + (p.quarantine.lines.length ? '<p class="note">Allocated lines to stop:</p>' + tbl(['OrderNumber', 'LineNumber', 'Customer', 'LotNumber', 'Quantity'], p.quarantine.lines) : '');
+  if (k === 'holdWo') return tbl(['WorkOrderNumber', 'Status', 'ComponentLot', 'IssuedQuantity', 'ProductItem'], p.holdWo);
+  if (k === 'rts') return tbl(['Supplier', 'PONumber', 'ReceiptNumber', 'LotNumber', 'SupplierLotNumber', 'Quantity', 'UOM'], p.rts);
+  if (k === 'notify') return tbl(['Customer', 'Contact', 'Email'], p.notify) + (S().creds.email.some(e => e.status === 'Verified') ? '' : '<p class="bad">No verified email account in Credentials → Email Accounts. Notices cannot be sent.</p>');
+}
+function intake() {
+  const d = draft(), m = d.mode;
+  return `<div class="card"><h2>Recall intake</h2><div class="tabs" role="tablist"><button role="tab" class="${m === 'lot' ? 'on' : ''}" data-a="recallMode" data-id="lot">Lot number</button><button role="tab" class="${m === 'notice' ? 'on' : ''}" data-a="recallMode" data-id="notice">Recall notice</button></div>
+  ${m === 'notice' ? `<label for="rnotice">Paste the supplier's recall notice</label><textarea id="rnotice" data-rd="notice" style="min-height:240px">${esc(d.notice)}</textarea><div class="row" style="margin-top:10px"><button class="pri" id="rx" data-a="recallExtract">Extract details</button><span class="note">Live: Claude reads the notice. Mock: pattern matching.</span></div>`
+  : `${d.extracted ? `<p class="note">Extracted by ${esc(d.extractedBy || '')}. Check the fields before tracing.</p>` : ''}<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(min(100%,230px),1fr))">
+     <div><label for="rs">Supplier</label><input id="rs" data-rd="supplier" list="rsl" value="${esc(d.supplier)}"><datalist id="rsl">${FDB.suppliers.map(s => `<option value="${esc(s.Supplier)}">`).join('')}</datalist></div>
+     <div><label for="rl">Supplier lot or lot number</label><input id="rl" data-rd="lot" class="mono" list="rll" value="${esc(d.lot)}" placeholder="e.g. BLC-240917"><datalist id="rll">${DEMOS.map(x => `<option value="${esc(x.lot)}">`).join('')}</datalist></div>
+     <div><label for="ri">Item (optional)</label><input id="ri" data-rd="item" class="mono" value="${esc(d.item)}"></div></div>
+     <label for="rr">Recall reason</label><textarea id="rr" data-rd="reason" style="min-height:70px">${esc(d.reason)}</textarea>
+     <div class="row" style="margin-top:10px"><button class="pri" data-a="recallTrace">Trace lot genealogy</button></div>`}
+  <h3 style="margin-top:18px">Demo scenarios</h3><div class="chips">${DEMOS.map((x, i) => `<button class="chip" data-a="recallDemo" data-id="${i}">${esc(x.label)}</button>`).join('')}</div></div>`;
+}
+function traceView(c, t) {
+  return `${c.warnings && c.warnings.length ? `<div class="card" style="border-color:var(--warn);margin-bottom:14px">${c.warnings.map(w => `<p style="margin:4px 0">! ${esc(w)}</p>`).join('')}</div>` : ''}
+  <div class="card" style="margin-bottom:14px"><div class="row"><h2 style="margin:0">Genealogy for ${esc(t.supplierLot || c.lotEntered)}</h2>${U.tag(t.item + ' ' + (t.itemDescription || ''))}<span class="sp"></span><span class="note">${esc(c.reason || '')}</span></div>${flow(t)}<div class="gwrap">${tree(t)}</div></div>
+  <div class="card" style="margin-bottom:14px"><div class="row"><h2 style="margin:0">Recall Investigator</h2>${c.narrativeMeta ? U.tag(c.narrativeMeta) : ''}<span class="sp"></span><button data-a="wfRun" data-id="wf_recall">Ask follow-up questions</button></div><pre style="margin-top:10px">${esc(c.narrative === '…' ? 'Analysing the genealogy…' : c.narrative || 'No summary yet.')}</pre></div>`;
+}
+function optionsView(c, t) {
+  const p = buildPlan(t), a = c.actions || {};
+  return `<div class="card"><h2>Containment options</h2><p class="note">Choose what to do. Nothing is created until the quality manager approves the plan.</p>
+  ${ACTIONS.map(([k, l, desc]) => { const n = count(k, p), dis = !n || (k === 'notify' && !S().creds.email.some(e => e.status === 'Verified')); return `<div class="box"><label class="row" style="color:var(--ink);margin:0;font-size:14px;font-weight:600"><input type="checkbox" data-ra="${k}" ${a[k] && !dis ? 'checked' : ''} ${dis ? 'disabled' : ''}> ${esc(l)} ${U.tag(n + ' record' + (n === 1 ? '' : 's'), n ? 't-seed' : '')}</label><p class="note" style="margin:4px 0 8px">${esc(desc)}${n ? '' : ' Nothing applies to this recall.'}</p>${n ? `<details><summary>Show ${n} record${n === 1 ? '' : 's'}</summary>${details(k, p)}</details>` : ''}</div>`; }).join('')}
+  <div class="row" style="margin-top:10px"><button data-a="recallAll">Select all that apply</button><span class="sp"></span><button class="pri" data-a="recallSubmit">Submit plan for approval</button></div></div>`;
+}
+function planSummary(c) {
+  const p = c.plan, a = c.actions;
+  return ACTIONS.filter(([k]) => a[k]).map(([k, l]) => `<div class="box"><b>${esc(l)}</b> ${U.tag(count(k, p) + ' record(s)')}<details><summary>Details</summary>${details(k, p)}</details></div>`).join('') || '<p>No actions selected.</p>';
+}
+function resultsView(c) {
+  const r = c.results || {}, sec = (l, list, res) => `<div class="box"><div class="row"><b>${esc(l)}</b>${U.tag(String((list || []).length))}<span class="sp"></span>${res ? `<button class="link" data-a="recallData" data-id="${res}">View in Sandbox Data</button>` : ''}</div><div class="note mono">${esc((list || []).join(', ') || 'Not selected')}</div></div>`;
+  return `<div class="card"><h2>Recall executed</h2><p class="note">Approved on ${esc(c.decidedOn || '')}. These records now exist in the sandbox data.</p>
+   ${sec('RMAs created', r.rmas, 'rmas')}${sec('Lots on recall hold', r.lots, 'lots')}${sec('Unshipped lines stopped', r.lines, 'shipments')}${sec('Work orders on hold', r.wos, 'workOrders')}${sec('Supplier returns', r.rts, 'supplierReturns')}
+   <div class="box"><div class="row"><b>Customer notices sent</b>${U.tag(String(r.emails || 0))}<span class="sp"></span><button class="link" data-a="recallOutbox">View outbox</button></div></div>
+   <div class="row" style="margin-top:10px"><button class="pri" data-a="recallCopy">Copy recall report</button><button data-a="recallNew">Start another recall</button></div></div>`;
+}
+U.V.recall = a => {
+  const s = S(), c = cur(); let t = null, body;
+  if (c) { try { t = traceOf(c); } catch (e) { body = `<p class="bad">${esc(e.message)}</p>`; } }
+  const step = !c ? 0 : c.status === 'Traced' ? 2 : c.status === 'Pending approval' || c.status === 'Rejected' ? 3 : 4;
+  if (!c) body = intake();
+  else if (t) {
+    if (c.status === 'Traced') body = traceView(c, t) + optionsView(c, t);
+    else if (c.status === 'Pending approval') { const task = s.tasks.find(x => x.id === c.taskId); const pr = byId('approvalProcesses', 'ap_recall');
+      body = `<div class="card" style="margin-bottom:14px;border-color:var(--gold)"><div class="row"><h2 style="margin:0">Waiting for approval</h2>${U.stTag('Pending')}<span class="sp"></span><span class="note">${esc(task ? task.id : '')} · ${esc(pr ? pr.approvers : '')}</span></div>
+        <p class="note">For the demo you can act as the approver here. The same task is in Approvals.</p>${planSummary(c)}<div class="row" style="margin-top:10px"><button class="pri" data-a="recallDecide" data-id="ok">Approve and execute</button><button class="danger" data-a="recallDecide" data-id="no">Reject</button></div></div>` + traceView(c, t); }
+    else if (c.status === 'Rejected') body = `<div class="card" style="margin-bottom:14px;border-color:var(--bad)"><h2>Plan rejected</h2><p>Nothing was created. Revise the options and submit again.</p><button class="pri" data-a="recallRevise">Revise plan</button></div>` + traceView(c, t);
+    else body = resultsView(c) + `<div style="margin-top:14px"></div>` + traceView(c, t);
+  }
+  return `<div class="note"><a href="#applications" style="color:var(--seed)">Applications</a></div><div class="row"><h1 style="margin:0">Supplier lot recall</h1>${U.stTag(a.status)}</div><p class="sub" style="margin-top:6px">${esc(a.description)}</p>
+  <div class="row" style="margin-bottom:12px"><label for="rsel" style="margin:0">Recall case</label><select id="rsel" data-rsel="1" style="width:auto;max-width:100%"><option value="">New recall</option>${s.recalls.map(x => `<option value="${esc(x.id)}" ${c && c.id === x.id ? 'selected' : ''}>${esc(x.id)} · ${esc(x.supplierLot || x.lotEntered)} · ${esc(x.status)}</option>`).join('')}</select><button data-a="recallNew">New recall</button>${s.recalls.length ? '<button class="link" data-a="recallReset">Reset recall demo</button>' : ''}</div>
+  <ol class="steps">${STEPS.map((x, i) => `<li class="${i < step ? 'done' : i === step ? 'now' : ''}">${esc(x)}</li>`).join('')}</ol>${body}`;
+};
+
+/* ---------- actions ---------- */
+Object.assign(U.A, {
+  recallMode: id => { readIntake(); draft().mode = id; },
+  recallDemo: i => { const x = DEMOS[+i], d = draft(); Object.assign(d, { mode: 'lot', supplier: x.sup, lot: x.lot, item: x.item, reason: x.reason, extracted: false }); },
+  recallExtract: async () => { await extract(); return 'keep'; },
+  recallTrace: async () => { await startTrace(); return 'keep'; },
+  recallNew: () => { ui().recallCase = null; ui().app = 'app_recall'; location.hash = 'app'; },
+  recallAll: () => { const c = cur(), p = buildPlan(traceOf(c)); ACTIONS.forEach(([k]) => { c.actions[k] = count(k, p) > 0 && !(k === 'notify' && !S().creds.email.some(e => e.status === 'Verified')); }); },
+  recallSubmit: () => { const c = cur(); if (!ACTIONS.some(([k]) => c.actions[k])) { U.toast('Select at least one containment option'); return 'keep'; }
+    c.plan = buildPlan(traceOf(c)); Object.keys(c.actions).forEach(k => { if (c.actions[k] && !count(k, c.plan)) c.actions[k] = false; });
+    const summary = `${c.id}: recall of supplier lot ${c.supplierLot || c.lotEntered} (${c.supplier}). ` + ACTIONS.filter(([k]) => c.actions[k]).map(([k, l]) => `${l} (${count(k, c.plan)})`).join('; ');
+    const task = C.createTask('ap_recall', summary, { type: 'recall', caseId: c.id }); task.wf = 'Supplier lot recall'; c.taskId = task.id; c.status = 'Pending approval'; U.toast('Plan sent for approval as ' + task.id); },
+  recallDecide: id => { const c = cur(); C.decideTask(c.taskId, id === 'ok'); U.toast(id === 'ok' ? 'Approved. Containment actions executed.' : 'Plan rejected'); },
+  recallRevise: () => { const c = cur(); c.status = 'Traced'; c.taskId = null; },
+  recallData: res => { ui().dataRes = res; location.hash = 'data'; },
+  recallOutbox: () => { ui().crTab = 'email'; location.hash = 'credentials'; },
+  recallReset: () => { U.dialog('<h2>Reset the recall demo?</h2><p>Deletes all recall cases and reloads the page so lots, work orders, RMAs and supplier returns return to their starting state.</p>', () => { const s = S(); const ids = new Set(s.recalls.map(r => r.id)); s.recalls = []; s.tasks = s.tasks.filter(t => !(t.action && t.action.type === 'recall' && ids.has(t.action.caseId))); s.outbox = s.outbox.filter(o => !o.recall); ui().recallCase = null; C.save(); location.reload(); }, 'Reset'); return 'keep'; },
+  recallCopy: async () => { const c = cur(), t = traceOf(c), r = c.results || {};
+    const txt = [`Recall report ${c.id}`, `Supplier: ${c.supplier}`, `Supplier lot: ${c.supplierLot || c.lotEntered} (${t.item} ${t.itemDescription})`, `Reason: ${c.reason || 'not given'}`, `Opened: ${c.created.slice(0, 10)} from ${c.source}`, `Approved: ${c.decidedOn || '-'} (${(byId('approvalProcesses', 'ap_recall') || {}).approvers || ''})`, '', 'Genealogy', C.traceNarrative(t), '', 'Actions executed',
+      `RMAs: ${(r.rmas || []).join(', ') || 'none'}`, `Lots on recall hold: ${(r.lots || []).join(', ') || 'none'}`, `Unshipped lines stopped: ${(r.lines || []).join(', ') || 'none'}`, `Work orders on hold: ${(r.wos || []).join(', ') || 'none'}`, `Supplier returns: ${(r.rts || []).join(', ') || 'none'}`, `Customer notices: ${r.emails || 0}`, '', 'Generated in a training sandbox with synthetic data.'].join('\n');
+    try { await navigator.clipboard.writeText(txt); U.toast('Recall report copied'); } catch (e) { U.dialog(`<h2>Recall report</h2><pre>${esc(txt)}</pre>`); } return 'keep'; }
+});
+document.addEventListener('change', e => {
+  const el = e.target;
+  if (el.dataset.ra) { const c = cur(); if (c) { c.actions[el.dataset.ra] = el.checked; C.save(); } }
+  if (el.dataset.rsel) { ui().recallCase = el.value || null; C.save(); U.render(); }
+  if (el.dataset.rd) { draft()[el.dataset.rd] = el.value; C.save(); }
+});
+U.render();
 }
 
 </script>
